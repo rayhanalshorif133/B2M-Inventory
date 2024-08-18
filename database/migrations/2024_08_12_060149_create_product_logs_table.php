@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('product_logs', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('product_attribute_id')->constrained('product_attributes');
+            $table->bigInteger('type')->comment('1 for Purchase, 2 for Purchase Return,
+            3 for Sales,  4 for Sales Return');
+            $table->date('opt_date')->now();
+            $table->integer('qty')->default(0)->nullable();
+            $table->unsignedBigInteger('ref_id')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('product_logs');
+    }
+};

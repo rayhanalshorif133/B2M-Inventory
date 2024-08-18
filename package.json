@@ -1,0 +1,32 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "start": "vite",
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@popperjs/core": "^2.11.6",
+        "@vitejs/plugin-vue": "^4.5.0",
+        "axios": "^1.7.2",
+        "bootstrap": "^5.2.3",
+        "laravel-vite-plugin": "^1.0.0",
+        "sass": "^1.56.1",
+        "vite": "^5.0.0",
+        "vue": "^3.4.31",
+        "vue-axios": "^3.5.2",
+        "vue-loader": "^17.4.2",
+        "vue-router": "^4.4.0",
+        "vue-template-compiler": "^0.1.0",
+        "vuex": "^4.1.0"
+    },
+    "dependencies": {
+        "datatables.net-dt": "^2.1.2",
+        "datatables.net-select": "^2.0.3",
+        "datatables.net-vue3": "^3.0.2",
+        "moment": "^2.30.1",
+        "sweetalert2": "^11.6.13",
+        "vue-good-table": "^2.21.11"
+    }
+}
