@@ -94,13 +94,14 @@
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label
-                                                    for="selectCategory"
+                                                    for="selectSubCategory"
                                                     class="required"
                                                     >Select a Subcategory</label
                                                 >
                                                 <select
                                                     class="custom-select"
-                                                    id="selectCategory"
+                                                    id="selectSubCategory"
+                                                    v-model="subCategorySelect"
                                                 >
                                                     <option
                                                         value=""
@@ -113,6 +114,7 @@
                                                         v-for="(
                                                             item, index
                                                         ) in subCategories"
+                                                        :value="item.id"
                                                         :key="index"
                                                     >
                                                         {{ item.name }}
@@ -294,6 +296,7 @@ export default {
         var categories = ref([]);
         var subCategories = ref("");
         var selectCategory = ref("");
+        var subCategorySelect = ref("");
         var productDetailsInfos = ref([]);
         var code_check_status = ref("d-none");
         var code_check_msg = ref("");
@@ -370,6 +373,8 @@ export default {
             });
         };
 
+
+
         const handleSubmit = () => {
             if (
                 productName.value == "" ||
@@ -386,9 +391,11 @@ export default {
             const data = {
                 productName: productName.value,
                 category_id: selectCategory.value,
-                sub_category_id: selectCategory.value,
+                sub_category_id: subCategorySelect.value,
                 productDetailsInfos: productDetailsInfos.value,
             };
+
+
 
             sendCreateDataToBackend("/product/create", data);
         };
@@ -531,6 +538,7 @@ export default {
             handleSelectCategory,
             jsonData,
             subCategories,
+            subCategorySelect,
             productName,
             addNewVarientBtn,
             productDetailsInfos,
