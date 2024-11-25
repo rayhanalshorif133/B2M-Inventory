@@ -14,6 +14,7 @@ class Purchase extends Model
         'supplier_id',
         'code',
         'invoice_date',
+        'status',
         'total_amount',
         'sub_amount',
         'discount',

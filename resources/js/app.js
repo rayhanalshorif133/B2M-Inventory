@@ -12,6 +12,10 @@ import './purchase-invoice-app.js';
 import './purchase-pay-slip.js';
 
 
+import './sales-invoice-app.js';
+import './sales-pay-slip.js';
+
+
 
 
 

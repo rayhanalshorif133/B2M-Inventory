@@ -1,6 +1,6 @@
 <template>
     <div class="row px-5">
-        <div class="col-md-12">
+        <div class="col-md-12" v-if="category_list.length > 0">
             <div
                 class="timeline"
                 v-for="(category_item, index) in category_list"
@@ -15,8 +15,14 @@
                                         category_item.id
                                     ),
                                 }"
-                                >{{ category_item.name }}</span
                             >
+                                {{ category_item.name }}
+                                <i
+                                    v-if="category_item.status == '1'"
+                                    class="fa-solid fa-check"
+                                ></i>
+                                <i v-else class="fa-solid fa-xmark"></i>
+                            </span>
                             <span
                                 :class="{
                                     'd-none': !isMainBtnVisible(
@@ -34,6 +40,21 @@
                             </span>
                         </div>
                         <div class="btn-group mx-2">
+                            <span
+                                v-if="category_item.status == '0'"
+                                class="btn btn-success btn-sm mx-1"
+                                @click="handleStatusBtn(category_item.id)"
+                            >
+                                Active
+                            </span>
+                            <span
+                                v-else
+                                class="btn btn-danger btn-sm mx-1"
+                                @click="handleStatusBtn(category_item.id)"
+                            >
+                                Inactive
+                            </span>
+
                             <span
                                 @click="
                                     categoryEditBtnMain(
@@ -64,7 +85,15 @@
                                     Update</span
                                 >
                             </span>
-                            <span class="btn btn-danger btn-sm" @click="categoryDeleteBtn(category_item.id, 'parent')">
+                            <span
+                                class="btn btn-danger btn-sm d-none"
+                                @click="
+                                    categoryDeleteBtn(
+                                        category_item.id,
+                                        'parent'
+                                    )
+                                "
+                            >
                                 Delete <i class="fa-solid fa-trash"></i>
                             </span>
                         </div>
@@ -83,8 +112,8 @@
                                     'd-none': isVisibleInputField(item.id),
                                 }"
                             >
-                                {{ item.name }}</span
-                            >
+                                {{ item.name }}
+                            </span>
                             <span
                                 :class="{
                                     'd-none': !isVisibleInputField(item.id),
@@ -96,8 +125,27 @@
                                     class="form-control"
                                 />
                             </span>
+                            <i
+                                v-if="item.status == '1'"
+                                class="fa-solid fa-check mx-1"
+                            ></i>
+                            <i v-else class="fa-solid fa-xmark mx-1"></i>
                         </h3>
                         <div class="btn-group mx-2 d-flex-centerd">
+                            <span
+                                v-if="item.status == '0'"
+                                class="btn btn-success btn-sm mx-1"
+                                @click="handleStatusBtn(item.id)"
+                            >
+                                Active
+                            </span>
+                            <span
+                                v-else
+                                class="btn btn-danger btn-sm mx-1"
+                                @click="handleStatusBtn(item.id)"
+                            >
+                                Inactive
+                            </span>
                             <span @click="category_editBtn(item.id, item.name)">
                                 <span
                                     class="btn btn-sm btn-teal h-30px"
@@ -119,7 +167,7 @@
                             </span>
                             <span
                                 @click="categoryDeleteBtn(item.id, 'child')"
-                                class="btn btn-brown btn-sm h-30px"
+                                class="btn btn-brown btn-sm h-30px d-none"
                             >
                                 Delete <i class="fa-solid fa-trash"></i>
                             </span>
@@ -156,6 +204,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-else class="col-md-12 mx-auto">
+            <p  class="alert alert-danger text-center" style="font-size: 20px;" role="alert" >
+                <b>Notice:</b> Empty Category List
+            </p>
         </div>
     </div>
 </template>
@@ -301,6 +354,38 @@ export default {
                 });
         };
 
+        const handleStatusBtn = (category_id) => {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to update this category status?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, update it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .put(`/category/update/${category_id}?action=status`)
+                        .then((response) => {
+                            console.clear();
+                            console.log(response.data.data);
+                            fetchCategory();
+                            Toastr.fire({
+                                icon: "success",
+                                title: "Successfully updated category",
+                            });
+                        });
+                } else {
+                    Swal.fire({
+                        title: "Cancelled",
+                        text: "Your file is safe :)",
+                        icon: "error",
+                    });
+                }
+            });
+        };
+
         return {
             category_list: categories, // Use default category list
             toggleAccordion,
@@ -315,6 +400,7 @@ export default {
             categoryEditBtnMain,
             isMainBtnVisible,
             mainCategoryInput,
+            handleStatusBtn,
         };
     },
 };

@@ -12,16 +12,33 @@ class CategoryController extends Controller
 
     public function list()
     {
+
         return view('category.list');
     }
 
-    public function fetch()
+    public function fetch(Request $request)
     {
-        $categories = Category::select('id', 'name')
-            ->where('created_by', Auth::user()->id)
-            ->where('parent_category_id', null)->get();
-        foreach ($categories as $category) {
-            $category->subCategories = Category::select('id', 'name')->where('parent_category_id', $category->id)->get();
+
+
+        if ($request->type == 'product-create') {
+            $categories = Category::select('id', 'name', 'status')
+                ->where('created_by', Auth::user()->id)
+                ->where('parent_category_id', null)
+                ->where('status', 1)
+                ->get()
+                ->each(function ($item) {
+                    $item->subCategories = Category::select('id', 'name', 'status')
+                        ->where('status', 1)
+                        ->where('parent_category_id', $item->id)->get();
+                });
+        } else {
+            $categories = Category::select('id', 'name', 'status')
+                ->where('created_by', Auth::user()->id)
+                ->where('parent_category_id', null)
+                ->get()
+                ->each(function ($item) {
+                    $item->subCategories = Category::select('id', 'name', 'status')->where('parent_category_id', $item->id)->get();
+                });
         }
         return $this->respondWithSuccess('Fetched categories successfully', $categories);
     }
@@ -45,11 +62,13 @@ class CategoryController extends Controller
             $category->created_by = Auth::user()->id;
             $category->save();
 
-            $subCategories = $request['sub_category'];
+
+
+            $subCategories = $request['sub_categories'];
             foreach ($subCategories as $item) {
                 $subCategory = new Category();
                 $subCategory->company_id = $category->company_id;
-                $subCategory->name = $item;
+                $subCategory->name = $item['name'];
                 $subCategory->status = 1;
                 $subCategory->parent_category_id = $category->id;
                 $subCategory->created_by = Auth::user()->id;
@@ -81,11 +100,19 @@ class CategoryController extends Controller
     {
         try {
             $category = Category::select()->where('id', $category_id)->first();
-            $category->name = $request->name;
+            if ($request->action == 'status') {
+                $category->status = $category->status == "1" ? "0" : "1";
+            }
+
+            if ($request->name) {
+                $category->name = $request->name;
+            }
+
             $category->save();
             return $this->respondWithSuccess('Updated category successfully', $category);
         } catch (\Throwable $th) {
-            return $this->respondWithError('error', 'Something went wrong');
+            // return $this->respondWithError('error', 'Something went wrong');
+            return $this->respondWithError('error', $th->getMessage());
         }
     }
 

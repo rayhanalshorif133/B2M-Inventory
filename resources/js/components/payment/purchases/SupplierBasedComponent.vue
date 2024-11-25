@@ -1,6 +1,13 @@
 <template>
     <div class="col-md-6 col-12">
-        <div class="card card-outline card-info">
+        <div class="card card-outline card-info relative">
+            <div class="purchase_payment_supplier_based_card"></div>
+            <div class="tooltip-content hidden">
+                <i class="fa-solid fa-caret-up"></i>
+                <div class="typing-text">
+                    You can make payment based on Supplier based
+                </div>
+            </div>
             <div class="card-header">
                 <h3 class="card-title">Supplier Based</h3>
             </div>

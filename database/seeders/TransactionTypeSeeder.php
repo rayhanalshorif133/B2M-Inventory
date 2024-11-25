@@ -6,6 +6,7 @@ use App\Models\TransactionType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+
 class TransactionTypeSeeder extends Seeder
 {
     /**
@@ -33,5 +34,10 @@ class TransactionTypeSeeder extends Seeder
         $transactionType->name = 'rocket';
         $transactionType->added_by = 1;
         $transactionType->save();
+
+
+
+
+
     }
 }

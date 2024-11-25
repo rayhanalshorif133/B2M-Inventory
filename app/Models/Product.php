@@ -14,6 +14,7 @@ class Product extends Model
         'category_id',
         'sub_category_id',
         'name',
+        'status',
         'created_by',
     ];
 

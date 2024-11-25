@@ -1,8 +1,13 @@
 /* remove increment and decrement btn from input number */
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
-   -webkit-appearance: none;
-   margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+.dt-length select{
+    margin-right: 5px!important;
 }
 
 .d-flex-item-center {
@@ -11,20 +16,29 @@ input[type='number']::-webkit-outer-spin-button {
     align-items: center !important;
 }
 
-.text-xs{
+.text-xs {
     font-size: 12px !important;
 }
 
-.font-semibold{
+.btn-fit {
+    width: 4.5rem !important;
+    height: fit-content !important;
+}
+
+.w-max-content {
+    width: max-content;
+}
+
+.font-semibold {
     font-weight: 600;
 }
 
 .form-control-red {
     border-color: #cb1100;
-    box-shadow: 0 0 0 0.25rem rgb(234 11 11 / 45%);
+    box-shadow: 0 0 0 0.25rem rgb(234 11 11 / 45%) !important;
 }
 
-.text-blue{
+.text-blue {
     color: rgb(45, 45, 160)44;
 }
 
@@ -40,6 +54,10 @@ input[type='number']::-webkit-outer-spin-button {
     font-weight: normal;
 }
 
+.print {
+    color: #ffffff !important;
+}
+
 .tk::after {
     content: "৳";
     color: #000;
@@ -48,6 +66,12 @@ input[type='number']::-webkit-outer-spin-button {
 
 .underline-none {
     text-decoration: none;
+}
+
+.underline {
+    height: 3px;
+    width: fit-content;
+    background: #969696;
 }
 
 .font-semibold {
@@ -65,6 +89,37 @@ input[type='number']::-webkit-outer-spin-button {
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+
+.text-cyan {
+    color: cyan;
+}
+
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+    position: relative !important;
+    width: fit-content;
+}
+
+.nav-tabs .nav-link.active::before,
+.nav-tabs .nav-item.show .nav-link::before {
+    content: '';
+    background-color: var(--setColor) !important;
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.profile-container {
+    width: 50% !important;
+}
+
+.h-fit {
+    height: fit-content !important;
 }
 
 .underline-none {
@@ -158,13 +213,14 @@ input[type='number']::-webkit-outer-spin-button {
     width: 20% !important;
 }
 
-.w-3{
+.w-3 {
     width: 1.5rem !important;
 }
 
 .w-8rem {
     width: 8rem !important;
 }
+
 .w-10rem {
     width: 10rem !important;
 }
@@ -177,7 +233,7 @@ input[type='number']::-webkit-outer-spin-button {
     font-size: 14px !important;
 }
 
-.text-base{
+.text-base {
     font-size: 14px !important;
 }
 
@@ -303,18 +359,30 @@ input[type='number']::-webkit-outer-spin-button {
     margin-bottom: 15px;
 }
 
-.form-select-red{
+.form-select-red {
     box-shadow: 0 0 0 0.25rem rgba(245, 22, 22, 0.25);
 }
 
-.form-select-green{
+.form-select-green {
     box-shadow: 0 0 0 0.25rem rgba(18, 127, 8, 0.25);
 }
 
 
 
 
+.relative {
+    position: relative !important;
+}
 
+.absolute {
+    position: absolute !important;
+}
+
+.company-logo,
+.image-preview {
+    height: 150px;
+    width: auto !important;
+}
 
 
 .colored-toast.swal2-icon-success {
@@ -349,19 +417,304 @@ input[type='number']::-webkit-outer-spin-button {
     color: white;
 }
 
+button {
+    color: #ffffff !important;
+}
+
 .logo-upload-btn {
     border: 1px solid rgb(222, 226, 230) !important;
     font-weight: 400 !important;
     color: #7f7f7f !important;
 }
 
+.text-white {
+    color: #ffffff;
+}
+
+
+
+/* tour and tips */
+.tips_skips_container .modal-header {
+    background: #031931;
+    height: 15px;
+}
+
+.tips_skips_container .title {
+    color: #ffffff !important;
+    display: flex;
+    margin: 6px 0 0 0;
+    align-items: center !important;
+    justify-content: center;
+    width: -webkit-fill-available;
+    position: relative;
+}
+
+.tips_skips_container .title button {
+    margin-bottom: 6px;
+    position: absolute !important;
+    right: 6px;
+    top: -2px !important;
+}
+
+.tips_skips_container .modal-body {
+    background: #A5C6D8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.tips_skips_container .modal-body img {
+    height: 60px !important;
+    width: 60px !important;
+}
+
+.tips_skips_container .modal-body .welcome_inventory {
+    font-weight: bold !important;
+    text-shadow: #001121 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 20px;
+}
+
+.tips_skips_container .modal-body p {
+    padding: 10px 0;
+    font-size: 16px;
+    text-shadow: #9f9f9f !important;
+    text-align: justify !important;
+}
+
+.tips_skips_container .modal-body b {
+    font-weight: bold !important;
+}
+
+.btn-no-thanks {
+    background: transparent !important;
+    color: #174a63 !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+}
+
+.tips_skips_container .modal-body .btn-container {
+    display: flex !important;
+    flex-direction: column;
+    color: #3BB5A0 !important;
+}
+
+.btn-guided-tour {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    /* Text color */
+    background-color: #031931;
+    /* Button background color */
+    border: none;
+    border-radius: 5px;
+    /* Rounded corners */
+    text-decoration: none;
+    /* Remove underline from link */
+    transition: background-color 0.3s, transform 0.3s;
+    /* Smooth transition */
+}
+
+.btn-no-thanks:hover {
+    transform: scale(1.05);
+    /* Slightly enlarge the button */
+    text-decoration: underline;
+    ;
+}
+
+.btn-guided-tour:hover {
+    background-color: #0295c9;
+    /* Lighter blue on hover */
+    transform: scale(1.05);
+    /* Slightly enlarge the button */
+}
+
+.btn-no-thanks:active,
+.btn-guided-tour:active {
+    transform: scale(0.95);
+    /* Slightly shrink the button when active */
+}
+
+
+
+
+
+:root {
+    --tooltip-bg-color: #06BED7;
+    --tooltip-text-color: #000000;
+    --tooltip-btn-border-color: #000000;
+    --tooltip-btn-bg-color: #000000;
+    --tooltip-btn-text-color: #000000;
+    --tooltip-btn-hover-text-color: #ffffff;
+}
+
+.tour-tips {
+    position: absolute;
+    top: var(--top);
+    left: var(--left);
+    z-index: 99999999;
+    transition: all 0.5s ease-in-out;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.block {
+    display: block !important;
+}
+
+.hand {
+    height: 50px;
+    width: 50px;
+    animation: animatePopAndDown 1s infinite;
+}
+
+
+
+
+
+.purchase_payment_supplier_based_card.active,
+.purchase_payment_invoice_based_card.active {
+    position: absolute;
+    border: 3px red solid;
+    height: 100%;
+    width: 100%;
+    animation: heightHanlde 2s linear 1;
+}
+
+.tooltip-content {
+    position: absolute;
+    bottom: -2.5rem;
+    text-align: center;
+    margin-left: 2rem;
+    height: fit-content;
+    width: fit-content;
+    background: #000;
+    padding: 2px 10px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.tooltip-content i{
+    position: relative;
+    top: -12px;
+    font-size: 20px;
+    color: black!important;
+
+}
+
+.typing-text {
+    font-family: 'Courier', monospace; /* Monospace font for typewriter effect */
+    white-space: nowrap; /* Prevents the text from wrapping */
+    overflow: hidden; /* Ensures content is clipped when it overflows */
+    border-right: 2px solid; /* Creates the cursor effect */
+    width: 100%; /* Start with no width */
+    animation: typing 4s steps(50, end), blink 0.75s step-end infinite;
+}
+
+/* Typing effect */
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+/* Blinking cursor effect */
+@keyframes blink {
+    50% { border-color: transparent; }
+}
+
+
+
+@keyframes heightHanlde {
+    0% {
+        height: 0%;
+        width: 0%;
+    }
+
+    100% {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+@keyframes animatePopAndDown {
+    0% {
+        transform: scale(1.5);
+        /* Start slightly smaller */
+    }
+
+    100% {
+        transform: scale(1);
+        /* Normal size */
+    }
+}
+
+
+.tour-tips-box {
+    border-radius: 10px;
+    left: 5rem;
+    position: relative;
+    top: -2.5rem;
+}
+
+.tour-tips-box .content {
+    background: var(--tooltip-bg-color);
+    color: var(--tooltip-text-color);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+
+
+
+
+.tour-tips-box-text::after {
+    content: '\f0d7';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color: var(--tooltip-bg-color);
+    margin-left: 15px;
+    font-size: 30px;
+    position: relative;
+    top: -23px;
+}
+
+.btn-next,
+.btn-skip {
+    padding: 0 10px;
+    border: 1px solid var(--tooltip-btn-border-color);
+    border-radius: 10%;
+    font-size: 12px;
+    margin: 0 5px;
+    color: var(--tooltip-btn-text-color);
+}
+
+.btn-next:hover,
+.btn-skip:hover {
+    background: var(--tooltip-btn-bg-color);
+    color: var(--tooltip-btn-hover-text-color);
+}
+
 
 /* media tag devices:start */
 /*  320px — 480px: Mobile devices */
 @media screen and (min-width: 320px) and (max-width: 480px) {
+    .profile-container {
+        width: 100% !important;
+    }
 }
+
 /* 481px — 768px: iPads, Tablets */
 @media screen and (min-width: 481px) and (max-width: 768px) {
+    .profile-container {
+        width: 100% !important;
+    }
 }
 
 
@@ -370,9 +723,14 @@ input[type='number']::-webkit-outer-spin-button {
         width: 590px !important;
         padding: 0;
     }
+
     .reset-password-box {
         width: 590px !important;
         padding: 0 10px;
+    }
+
+    .profile-container {
+        width: 100% !important;
     }
 
 }
@@ -388,32 +746,49 @@ input[type='number']::-webkit-outer-spin-button {
         margin: 10px auto auto auto;
     }
 
+    .profile-container {
+        width: 100% !important;
+    }
+
 }
+
 /* 768px iPads, Tablets */
-@media only screen and (min-width: 768px){
+@media only screen and (min-width: 768px) {
+    .profile-container {
+        width: 100% !important;
+    }
 }
+
 /* 769px — 1024px: Small screens, laptops */
 @media screen and (min-width: 769px) and (max-width: 1024px) {
+    .profile-container {
+        width: 100% !important;
+    }
 }
+
 /* 1025px — 1200px: Desktops, large screens */
 @media screen and (min-width: 1025px) and (max-width: 1200px) {
+    .profile-container {
+        width: 90% !important;
+    }
 }
+
 /* 1201px and more —  Extra large screens, TV */
 @media screen and (min-width: 1201px) {
-    .product_customization_note_amount{
+    .product_customization_note_amount {
         display: flex;
         justify-content: space-between;
         width: 100%
     }
 
-    .product_customization_note{
+    .product_customization_note {
         width: 100%;
         margin-right: 2rem;
     }
+
+    .profile-container {
+        width: 50% !important;
+    }
 }
+
 /* media tag devices:end */
-
-
-
-
-

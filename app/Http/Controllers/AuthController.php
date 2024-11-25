@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ForgotPasswordMail;
@@ -72,6 +73,7 @@ class AuthController extends Controller
     {
 
 
+
         if ($request->method() == 'GET') {
             return view('auth.register');
         }
@@ -82,6 +84,7 @@ class AuthController extends Controller
             if ($request->user_info && $request->company_info) {
                 $GET_User = $request->user_info;
                 $GET_Company = $request->company_info;
+
 
                 $find_user_email = User::findByEmail($GET_User);
 
@@ -97,20 +100,14 @@ class AuthController extends Controller
                 $company = new Company();
                 $company->name = $GET_Company['name'];
                 $company->email = $GET_Company['email'];
-
-
-
-                $img = $GET_Company['logo'];
-                $img = str_replace('data:image/png;base64,', '', $img);
-                $img = str_replace(' ', '+', $img);
-                $data = base64_decode($img);
-                $file_name = 'images/' . uniqid() . '.png';
-                Storage::disk('public')->put($file_name, $data);
-                $company->logo = $file_name;
-
+              
+                $company->logo = $this->newStoreImage($GET_Company['logo']);
+                     
                 $company->address = $GET_Company['address'];
                 $company->other_info = $GET_Company['other_info'];
                 $company->save();
+                
+             
 
 
                 $user = new User();
@@ -128,7 +125,7 @@ class AuthController extends Controller
             }
         } catch (Exception $th) {
             DB::rollBack();
-            return $this->respondWithError("error", $th->getMessage());
+            return $this->respondWithError("error", 'Something went wrong.');
         }
     }
 

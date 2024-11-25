@@ -76,8 +76,8 @@
 export default {
     data() {
         return {
-            email: "test@b2m-tech.com",
-            password: "password",
+            email: "",
+            password: "",
             loginBtnText: "Log in",
             isLoginBtn: false,
         };

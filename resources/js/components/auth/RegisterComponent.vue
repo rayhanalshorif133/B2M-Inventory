@@ -93,11 +93,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="input-group mb-3">
+                        <div class="col-md-6" :class="!company_phone && 'mb-3'">
+                            <div class="input-group">
                                 <input
                                     type="text"
                                     v-model="company_phone"
+                                    @input="isValidPhone"
                                     class="form-control"
                                     placeholder="Contact number"
                                 />
@@ -107,6 +108,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <small v-if="company_phone && isValidNumber" class="text-success fw-bold">Valid phone number <i class="fa-solid fa-check"></i></small>
+                            <small v-if="company_phone && !isValidNumber" class="text-danger fw-bold">Invalid phone number <i class="fa-solid fa-xmark"></i></small>
                         </div>
                     </div>
                     <div class="input-group mb-3">
@@ -233,6 +236,7 @@ export default {
             placeholder_logo_upload: null,
             uploadIcon: "fa fa-upload",
             registerBtnText: "Register Now",
+            isValidNumber: false,
         };
     },
     computed: {
@@ -300,7 +304,6 @@ export default {
 
                 this.registerBtnText = "Processing ...";
 
-
                 axios
                     .post("register", data)
                     .then((response) => {
@@ -316,12 +319,14 @@ export default {
                                 window.location.href = "/login";
                             }, 1600);
                         }
+                        this.registerBtnText = 'Submit';
                     })
                     .catch((error) => {
                         Toastr.fire({
                             icon: "error",
                             title: "Something went wrong, please try again!",
                         });
+                        this.registerBtnText = 'Submit';
                     });
             } else {
                 Toastr.fire({
@@ -329,6 +334,10 @@ export default {
                     title: "Passwords do not match.",
                 });
             }
+        },
+        isValidPhone(e) {
+            const GETNUMBER = e.target.value;
+            this.isValidNumber = window.checkBDPhoneNumber(GETNUMBER);
         },
     },
 };

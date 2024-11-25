@@ -17,10 +17,10 @@ return new class extends Migration
             $table->foreignId('transaction_type_id')->constrained('transaction_types');
             $table->foreignId('company_id')->constrained('companies');
             $table->double('amount', 8, 2)->default(0)->nullable();
+            $table->float('discount', 8, 2)->default(0)->nullable();
             $table->string('receipt_no')->default(0)->nullable()->unique();
             $table->foreignId('supplier_id')->constrained('suppliers');
             $table->foreignId('added_by')->constrained('users');
-            $table->double('discount', 8, 2)->default(0)->nullable();
             $table->date('created_date')->nullable();
             $table->timestamps();
         });

@@ -1265,8 +1265,8 @@ VectorCanvas.prototype.pathSvgToVml = function (path) {
 
 VectorCanvas.prototype.setSize = function (width, height) {
   if (this.mode === 'svg') {
-    this.canvas.setAttribute('width', width);
-    this.canvas.setAttribute('height', height);
+    // this.canvas.setAttribute('width', width);
+    // this.canvas.setAttribute('height', height);
   } else {
     this.canvas.style.width = width + 'px';
     this.canvas.style.height = height + 'px';

@@ -45,10 +45,17 @@
                                 <input
                                     type="text"
                                     id="contact"
+                                    @input="contact.handler"
                                     class="form-control"
                                     placeholder="Enter your contact"
-                                    v-model="contact"
+                                    v-model="contact.input"
+                                    :class="contact.className"
                                 />
+                                <small
+                                    class="text-danger fw-bolder"
+                                    v-if="contact.status"
+                                    >Invalid Number</small
+                                >
                             </div>
                         </div>
                         <div class="col-12">
@@ -58,9 +65,16 @@
                                     type="email"
                                     id="email"
                                     class="form-control"
+                                    @input="email.handler"
+                                    :class="email.className"
                                     placeholder="Enter your email address"
-                                    v-model="email"
+                                    v-model="email.input"
                                 />
+                                <small
+                                    class="text-danger fw-bolder"
+                                    v-if="email.status"
+                                    >Invalid Email</small
+                                >
                             </div>
                         </div>
                         <div class="col-12">
@@ -121,10 +135,39 @@ const props = defineProps({
 });
 
 var name = ref("");
-var contact = ref("");
-var email = ref("");
+var email = ref({
+    handler: function () {
+        const isValidEmail = window.checkEmail(email.value.input);
+        if (isValidEmail == false) {
+            email.value.status = true;
+            email.value.className = "form-control-red";
+        } else {
+            email.value.status = false;
+            email.value.className = "";
+        }
+    },
+    status: false,
+    className: "",
+    input: "",
+});
 var address = ref("");
 var others_info = ref("");
+
+var contact = ref({
+    handler: function () {
+        const isValidNumber = window.checkBDPhoneNumber(contact.value.input);
+        if (isValidNumber == false) {
+            contact.value.status = true;
+            contact.value.className = "form-control-red";
+        } else {
+            contact.value.status = false;
+            contact.value.className = "";
+        }
+    },
+    status: false,
+    className: "",
+    input: "",
+});
 
 // Call the method
 onMounted(() => {
@@ -134,8 +177,8 @@ onMounted(() => {
 const handleSubmit = () => {
     const data = {
         name: name.value,
-        contact: contact.value,
-        email: email.value,
+        contact: contact.value.input,
+        email: email.value.input,
         address: address.value,
         others_info: others_info.value,
     };
@@ -149,8 +192,8 @@ const handleSubmit = () => {
         });
         props.fetchSuppliers();
         name.value = "";
-        contact.value = "";
-        email.value = "";
+        contact.value.input = "";
+        email.value.input = "";
         address.value = "";
         others_info.value = "";
     });

@@ -317,13 +317,11 @@
 
 <script>
 import { onMounted, ref } from "vue";
-import ProductCustomization from "./_partials/ProductCustomization.vue";
 import ProductCustomizationTr from "./_partials/ProductCustomizationTr.vue";
 import AddNewSupplierModal from "./AddNewSupplierModal.vue";
 import ProductDetails from "./_partials/ProductDetails.vue";
 export default {
     components: {
-        ProductCustomization,
         ProductCustomizationTr,
         AddNewSupplierModal,
         ProductDetails,

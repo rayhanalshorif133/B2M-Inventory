@@ -15,7 +15,8 @@ return new class extends Migration
         Schema::create('transaction_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('added_by')->constrained('users');
-            $table->string('name')->unique();
+            $table->foreignId('company_id')->constrained('companies');
+            $table->string('name');
             $table->integer('status')->nullable()->default(1);
             $table->timestamps();
         });

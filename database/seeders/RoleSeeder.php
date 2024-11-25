@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Company;
+use App\Models\Customer;
 use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -23,7 +24,11 @@ class RoleSeeder extends Seeder
 
         Role::create(['name' => 'super-admin']);
         Role::create(['name' => 'admin']);
-        // $permission = Permission::create(['name' => 'edit articles']);
+        Role::create(['name' => 'inventory-manager']);
+        Role::create(['name' => 'stock-keeper']);
+        Role::create(['name' => 'purchasing-agent']);
+        Role::create(['name' => 'warehouse-supervisor']);
+        Role::create(['name' => 'inventory-analyst']);
 
 
 
@@ -100,6 +105,31 @@ class RoleSeeder extends Seeder
             $supplier->contact = '019283928323';
             $supplier->address = 'Dhaka';
             $supplier->email = 'testsupplier__' . $index .'@example.com';
+            $supplier->company_id = 1;
+            $supplier->others_info = 'Nothing';
+            $supplier->added_by = 2;
+            $supplier->save();
+        }
+
+
+        // Supplier
+        $supplier = new Customer();
+        $supplier->name = 'Test Customer';
+        $supplier->contact = '01928392839';
+        $supplier->address = 'Dhaka';
+        $supplier->email = 'testcustomer@example.com';
+        $supplier->company_id = 1;
+        $supplier->others_info = 'Nothing';
+        $supplier->added_by = 2;
+        $supplier->save();
+
+
+        for ($index=0; $index < 5; $index++) {
+            $supplier = new Customer();
+            $supplier->name = 'Test Customer - ' . $index;
+            $supplier->contact = '019283928323';
+            $supplier->address = 'Dhaka';
+            $supplier->email = 'testcustomer__' . $index .'@example.com';
             $supplier->company_id = 1;
             $supplier->others_info = 'Nothing';
             $supplier->added_by = 2;

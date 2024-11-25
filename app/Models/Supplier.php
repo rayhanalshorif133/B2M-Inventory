@@ -18,4 +18,10 @@ class Supplier extends Model
         'others_info',
         'added_by',
     ];
+
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }

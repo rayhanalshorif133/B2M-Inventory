@@ -1,6 +1,13 @@
 <template>
     <div class="col-md-6 col-12">
-        <div class="card card-outline card-primary">
+        <div class="card card-outline card-primary relative">
+            <div class="purchase_payment_invoice_based_card"></div>
+            <div class="tooltip-content hidden">
+                <i class="fa-solid fa-caret-up"></i>
+                <div class="typing-text">
+                    You can make payment based on purchase invoice
+                </div>
+            </div>
             <div class="card-header">
                 <h3 class="card-title">Purchase Invoice Based</h3>
             </div>
@@ -68,9 +75,7 @@
                         </p>
                         <p>
                             Due Amount:
-                            {{
-                                selectedInvoiceInfo.due_amount
-                            }}
+                            {{ selectedInvoiceInfo.due_amount }}
                             tk
                             <button
                                 class="btn btn-sm btn-info"
@@ -195,7 +200,8 @@ export default {
                 .then((response) => {
                     const data = response.data.data;
                     selectedInvoiceInfo.value = data;
-                    selectedInvoiceInfo.value.due_amount =  data.total_amount - data.paid_amount;
+                    selectedInvoiceInfo.value.due_amount =
+                        data.total_amount - data.paid_amount;
                     hasSelectedInvoiceInfo.value = "";
                 });
         };
@@ -219,7 +225,6 @@ export default {
 
         const payFullPayment = () => {
             paymentAmount.value = selectedInvoiceInfo.value.due_amount;
-
         };
 
         const payNow = () => {
@@ -231,7 +236,11 @@ export default {
                 return false;
             }
 
-            if (paymentAmount.value == "" || (parseFloat(paymentAmount.value) > parseFloat(selectedInvoiceInfo.value.due_amount))) {
+            if (
+                paymentAmount.value == "" ||
+                parseFloat(paymentAmount.value) >
+                    parseFloat(selectedInvoiceInfo.value.due_amount)
+            ) {
                 Toastr.fire({
                     icon: "error",
                     title: "Please enter a valid payment amount",

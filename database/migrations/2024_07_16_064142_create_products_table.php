@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('sub_category_id')->constrained('categories');
             $table->foreignId('created_by')->constrained('users');
             $table->string('name');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
 
