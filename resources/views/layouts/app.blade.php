@@ -47,8 +47,7 @@
                 height="60" width="60">
         </div> --}}
 
-        <nav-bar-component></nav-bar-component>
-
+        @include('_partials.navbar')
 
 
         <side-bar-component></side-bar-component>

@@ -104,7 +104,8 @@ class AuthController extends Controller
                 $destinationPath = public_path('images/user');
 
                 // Generate a unique file name
-                $fileName = uniqid() . '_' . $file->getClientOriginalName();
+                $fileExtension = $file->getClientOriginalExtension();  // Get the file extension
+                $fileName = uniqid() . '.' . $fileExtension;
 
                 // Move the file to the destination path
                 $file->move($destinationPath, $fileName);
@@ -223,7 +224,7 @@ class AuthController extends Controller
     {
         Auth::logout();
         $request->session()->forget('loginId');
-        return $this->respondWithSuccess('success', 'logout successful');
+        return redirect()->route('auth.login');
     }
 
 

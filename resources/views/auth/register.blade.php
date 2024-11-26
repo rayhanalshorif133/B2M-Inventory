@@ -89,9 +89,9 @@
 
                             <div class="col-md-6 col-12">
                                 <!-- Email -->
-                                <label for="email" class="form-label required">Email</label>
-                                <div class="input-group mb-3">
-                                    <input type="email" class="form-control" name="company_email" id="email"
+                                <label for="company_email" class="form-label required">Email</label>
+                                <div class="input-group">
+                                    <input type="email" class="form-control" name="company_email" id="company_email"
                                         placeholder="Email" value="{{ old('company_email') }}">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
@@ -99,6 +99,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <small class="company_email_check_status" style="font-weight: 700"></small>
                             </div>
 
                             <div class="col-md-6 col-12">
@@ -245,10 +246,28 @@
                 const isValidNumber = bdPhoneNumberPattern.test(GETNUMBER);
                 if (isValidNumber) {
                     $(".phone_number_check_status").addClass("text-success").removeClass("text-danger");
-                    $(".phone_number_check_status").html('Valid phone number <i class="fa-solid fa-check"></i>');
+                    $(".phone_number_check_status").html(
+                        'Valid phone number <i class="fa-solid fa-check"></i>');
                 } else {
                     $(".phone_number_check_status").removeClass("text-success").addClass("text-danger");
-                    $(".phone_number_check_status").html('Invalid phone number <i class="fa-solid fa-xmark"></i>');
+                    $(".phone_number_check_status").html(
+                        'Invalid phone number <i class="fa-solid fa-xmark"></i>');
+                }
+            });
+
+
+            $("#company_email").on('keyup', function(e) {
+                const GETEmail = e.target.value;
+                const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                const isValidEmail = regex.test(GETEmail);
+                if (isValidEmail) {
+                    $(".company_email_check_status").addClass("text-success").removeClass("text-danger");
+                    $(".company_email_check_status").html(
+                        'Valid Email <i class="fa-solid fa-check"></i>');
+                } else {
+                    $(".company_email_check_status").removeClass("text-success").addClass("text-danger");
+                    $(".company_email_check_status").html(
+                        'Invalid Email <i class="fa-solid fa-xmark"></i>');
                 }
             });
 
