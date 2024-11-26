@@ -54,7 +54,7 @@
                             <div class="col-md-6 col-12">
                                 <!-- Company Name -->
                                 <label for="company_name" class="form-label required">Name</label>
-                                <div class="input-group mb-3">
+                                <div class="input-group">
                                     <input type="text" class="form-control" name="company_name" id="company_name"
                                         placeholder="Name" value="{{ old('company_name') }}">
                                     <div class="input-group-append">
@@ -68,7 +68,7 @@
                             <div class="col-md-6 col-12">
                                 <!-- Company Logo Upload -->
                                 <label for="company_logo" class="form-label optional">Logo</label>
-                                <div class="input-group mb-3">
+                                <div class="input-group">
                                     <label for="logo-upload" class="btn logo-upload-btn" style="width: 87%;">
                                         <span>Upload Your Company Logo</span>
                                     </label>
@@ -105,7 +105,7 @@
                             <div class="col-md-6 col-12">
                                 <!-- Company Address -->
                                 <label for="address" class="form-label required">Company Address</label>
-                                <div class="input-group mb-3">
+                                <div class="input-group">
                                     <input type="text" class="form-control" name="company_address" id="address"
                                         placeholder="Address" value="{{ old('company_address') }}">
                                     <div class="input-group-append">
@@ -116,7 +116,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6 col-12 mb-3">
+                            <div class="col-md-6 col-12">
                                 <!-- Phone Number -->
                                 <label for="phone" class="form-label required">Phone Number</label>
                                 <div class="input-group">
