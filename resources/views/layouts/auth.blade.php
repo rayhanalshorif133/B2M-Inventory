@@ -26,6 +26,19 @@
 
 <body class="hold-transition login-page">
 
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     @yield('content')
 
     <script src="{{ asset('adminLTE/plugins/jquery/jquery.min.js') }}"></script>

@@ -52,8 +52,8 @@ class User extends Authenticatable
     }
 
 
-    static function findByEmail($user){
-        $hasUser = User::select('id')->where('email', $user['email'])->first();
+    static function findByEmail($email){
+        $hasUser = User::select('id')->where('email', $email)->first();
         if($hasUser){
             return true;
         }else{

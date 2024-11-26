@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use App\Mail\ForgotPasswordMail;
 use Exception;
 
@@ -81,51 +82,62 @@ class AuthController extends Controller
 
         try {
 
-            if ($request->user_info && $request->company_info) {
-                $GET_User = $request->user_info;
-                $GET_Company = $request->company_info;
+            $find_user_email = User::findByEmail($request->user_email);
 
-
-                $find_user_email = User::findByEmail($GET_User);
-
-                if ($find_user_email) {
-                    return $this->respondWithError("error", 'Duplicate email address');
-                }
-
-                DB::beginTransaction();
-
-
-
-
-                $company = new Company();
-                $company->name = $GET_Company['name'];
-                $company->email = $GET_Company['email'];
-              
-                $company->logo = $this->newStoreImage($GET_Company['logo']);
-                     
-                $company->address = $GET_Company['address'];
-                $company->other_info = $GET_Company['other_info'];
-                $company->save();
-                
-             
-
-
-                $user = new User();
-                $user->name = $GET_User['name'];
-                $user->name = $GET_User['name'];
-                $user->email = $GET_User['email'];
-                $user->password = Hash::make($GET_User['password']);
-                $user->company_id = $company->id;
-                $user->save();
-                $user->assignRole('super-admin');
-
-                DB::commit();
-
-                return $this->respondWithSuccess('success', 'Registration successful');
+            if ($find_user_email) {
+                Session::flash('error', 'Duplicate email address');
+                return redirect()->back()->withInput();
             }
+
+            DB::beginTransaction();
+
+
+
+            $company = new Company();
+            $company->name = $request->company_name;
+            $company->email = $request->company_email;
+            if ($request->hasFile('logo')) {
+                // $logoPath = $request->file('logo')->store('logos', 'public');
+                $file = $request->file('logo');
+
+                // Define the custom directory path
+                $destinationPath = public_path('images/user');
+
+                // Generate a unique file name
+                $fileName = uniqid() . '_' . $file->getClientOriginalName();
+
+                // Move the file to the destination path
+                $file->move($destinationPath, $fileName);
+
+                // Store the file path to save in the database
+                $logoPath = 'images/user/' . $fileName;
+
+                // Example of saving it to a model
+                $company->logo = $logoPath;
+            }
+            $company->address = $request->company_address;
+            $company->other_info = $request->other_info;
+            $company->save();
+
+
+
+
+            $user = new User();
+            $user->name = $request->user_name;
+            $user->email = $request->user_email;
+            $user->password = Hash::make($request->user_password);
+            $user->company_id = $company->id;
+            $user->save();
+            $user->assignRole('super-admin');
+
+            DB::commit();
+
+            Session::flash('success', 'User created successfully!');
+            return redirect()->route('auth.login');
         } catch (Exception $th) {
             DB::rollBack();
-            return $this->respondWithError("error", 'Something went wrong.');
+            Session::flash('error', 'Something went wrong.');
+            return redirect()->back()->withInput();
         }
     }
 

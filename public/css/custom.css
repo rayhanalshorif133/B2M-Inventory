@@ -724,12 +724,12 @@ button {
 
 @media only screen and (min-width:590px) {
     .register-box {
-        width: 590px !important;
+        width: 690px !important;
         padding: 0;
     }
 
     .reset-password-box {
-        width: 590px !important;
+        width: 690px !important;
         padding: 0 10px;
     }
 
