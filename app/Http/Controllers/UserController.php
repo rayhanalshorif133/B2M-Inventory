@@ -97,7 +97,7 @@ class UserController extends Controller
 
             $user = User::find(Auth::user()->id);
             $user->name = $request->user_name;
-            $user->name = $request->user_email;
+            $user->email = $request->user_email;
             if($request->user_image){
                 $user->image = $this->storeImage($request->user_image);
             }
@@ -110,7 +110,7 @@ class UserController extends Controller
                 $company->logo = $this->storeImage($request->company['logo']);
             }
             $company->email = $request->company['email'];
-            $company->phone = $request->company['name'];
+            $company->phone = $request->company['phone'];
             $company->address = $request->company['address'];
             $company->other_info = $request->company['other_info'];
             $company->save();

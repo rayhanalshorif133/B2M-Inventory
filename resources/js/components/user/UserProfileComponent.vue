@@ -14,7 +14,7 @@
                                     v-if="!isActiveEdit"
                                     class="btn btn-success btn-sm float-right btn-tool"
                                     type="button"
-                                    @click="handleEditProfileBtn('edit')"
+              0                      @click="handleEditProfileBtn('edit')"
                                 >
                                     Edit Profile
                                     <i class="fa-solid fa-pen-to-square"></i>
