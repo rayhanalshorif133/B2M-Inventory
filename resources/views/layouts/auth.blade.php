@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> @yield('title') | Inventory</title>
+    <title> {{ $title }} | Inventory</title>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Google Font: Source Sans Pro -->
@@ -61,7 +61,22 @@
         });
 
         window.Toastr = Toastr;
+
+        $('.password').click(function() {
+            var passwordField = $(this).parent().find('input');
+            var icon = $(this).find('span');
+            if (passwordField.attr('type') === 'password') {
+                passwordField.attr('type', 'text');
+                icon.toggleClass('fa fa-unlock').toggleClass('fa fa-lock');
+            } else {
+                passwordField.attr('type', 'password');
+                icon.toggleClass('fa fa-unlock').toggleClass('fa fa-lock');
+            }
+        });
     </script>
+
+
+
 
     @stack('scripts')
 

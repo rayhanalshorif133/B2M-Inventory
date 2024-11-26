@@ -1,5 +1,4 @@
-@extends('layouts.auth')
-@section('title', 'Login')
+@extends('layouts.auth', ['title' => 'Login'])
 
 @section('content')
     <div class="login-box" id="auth">
@@ -22,8 +21,8 @@
                     </div>
                     <div class="input-group mb-3">
                         <input type="password" class="form-control" id="password" placeholder="Password" />
-                        <div class="input-group-append">
-                            <div class="input-group-text">
+                        <div class="input-group-append password cursor-pointer icon-btn">
+                            <div class="input-group-text cursor-pointer icon-btn">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>

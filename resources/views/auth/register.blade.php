@@ -1,31 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.auth', ['title' => 'Register a new account'])
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Register | Inventory</title>
-
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
-    <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-
-</head>
-
-<body class="hold-transition login-page">
-
+@section('content')
     <div class="register-box" id="auth">
         <div class="card card-outline card-primary mt-5">
             <div class="card-header text-center">
@@ -137,7 +112,7 @@
                         </div>
                         <label for="company_name" class="form-label optional">Other Information</label>
                         <div class="input-group mb-3">
-                            <textarea type="text" class="form-control" name="other_info" placeholder="Others information"></textarea>
+                            <textarea type="text" class="form-control" name="other_info" placeholder="Others information">{{ old('other_info') }}</textarea>
                             <div class="input-group-append">
                                 <div class="input-group-text"><span class="fa-solid fa-circle-info"></span></div>
                             </div>
@@ -150,7 +125,7 @@
                                 <label for="user_name" class="form-label required">User Name</label>
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" placeholder="Enter your name"
-                                        id="user_name" name="user_name">
+                                        id="user_name" name="user_name" value="{{ old('user_name') }}">
                                     <div class="input-group-append">
                                         <div class="input-group-text"><span class="fas fa-user"></span></div>
                                     </div>
@@ -158,8 +133,8 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="user_email" class="form-label required">User Email</label>
-                                <div class="input-group mb-3"><input type="email" id="user_email"
-                                        name="user_email" class="form-control" placeholder="Email">
+                                <div class="input-group mb-3"><input type="email" id="user_email" name="user_email"
+                                        class="form-control" placeholder="Email" value="{{ old('user_email') }}">
                                     <div class="input-group-append">
                                         <div class="input-group-text"><span class="fas fa-envelope"></span></div>
                                     </div>
@@ -168,21 +143,23 @@
                             <div class="col-md-6">
                                 <label for="user_password" class="form-label required">Password</label>
                                 <div class="input-group mb-3">
-                                    <input type="password" class="form-control" id="user_password"
-                                        name="user_password" placeholder="Password">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text cursor-pointer"><span
-                                                class="fa-solid fa-unlock"></span></div>
+                                    <input type="password" class="form-control" id="user_password" name="user_password"
+                                        placeholder="Password">
+                                    <div class="input-group-append password">
+                                        <div class="input-group-text cursor-pointer">
+                                            <span class="fa-solid fa-unlock icon-btn"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label for="user_password" class="form-label required">Confirm Password</label>
-                                <div class="input-group mb-3"><input type="password" class="form-control"
-                                        placeholder="Confirm Password" name="user_confirm_password" required="">
-                                    <div class="input-group-append">
+                                <div class="input-group mb-3">
+                                    <input type="password" class="form-control " placeholder="Confirm Password"
+                                        name="user_confirm_password" required="">
+                                    <div class="input-group-append password">
                                         <div class="input-group-text cursor-pointer"><span
-                                                class="fa-solid fa-unlock"></span></div>
+                                                class="fa-solid fa-unlock icon-btn"></span></div>
                                     </div>
                                 </div>
                             </div>
@@ -197,34 +174,17 @@
 
                 <p class="mb-0 mx-auto text-center mt-2">
                     Already signed in?
-                    <a href="/login" class="text-center">Login Now</a>
+                    <a href="{{ route('auth.login') }}" class="text-center">Login Now</a>
                 </p>
             </div>
             <!-- /.card-body -->
         </div>
     </div>
+@endsection
 
-    <script src="{{ asset('adminLTE/plugins/jquery/jquery.min.js') }}"></script>
-    <!-- Bootstrap 4 -->
-    <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- AdminLTE App -->
-    <script src="{{ asset('adminLTE/dist/js/adminlte.min.js') }}"></script>
 
+@push('scripts')
     <script>
-        const Toastr = Swal.mixin({
-            toast: true,
-            position: "top",
-            iconColor: "white",
-            customClass: {
-                popup: "colored-toast",
-            },
-            showConfirmButton: false,
-            timer: 3500,
-            timerProgressBar: true,
-        });
-
-        window.Toastr = Toastr;
-
         $(document).ready(function() {
             $('#logo-upload').on('change', function() {
                 const file = this.files[0];
@@ -271,10 +231,8 @@
                 }
             });
 
+
+
         });
     </script>
-
-
-</body>
-
-</html>
+@endpush

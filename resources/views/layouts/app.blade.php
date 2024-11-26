@@ -118,6 +118,8 @@
     <script src="{{ asset('adminLTE/dist/js/pages/dashboard.js') }}"></script>
     <script src="{{ asset('/js/guideline-tour.js') }}"></script>
 
+    @stack('scripts')
+
 </body>
 
 </html>

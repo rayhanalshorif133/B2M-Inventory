@@ -89,7 +89,13 @@ class UserController extends Controller
     public function profile(Request $request)
     {
         if ($request->method() == 'GET') {
-            return view('user.profile');
+            $roles = Role::select('id', 'name')->orderBy('id', 'asc')->get();
+            $user = User::select()
+                ->where('company_id', Auth::user()->company_id)
+                ->where('id', Auth::user()->id)
+                ->with('company', 'roles')
+                ->first();
+            return view('user.profile', compact('user', 'roles'));
         }
 
         try {
@@ -98,7 +104,7 @@ class UserController extends Controller
             $user = User::find(Auth::user()->id);
             $user->name = $request->user_name;
             $user->email = $request->user_email;
-            if($request->user_image){
+            if ($request->user_image) {
                 $user->image = $this->storeImage($request->user_image);
             }
             $user->save();
@@ -106,7 +112,7 @@ class UserController extends Controller
 
             $company = Company::find($user->company_id);
             $company->name = $request->company['name'];
-            if($request->company['logo']){
+            if ($request->company['logo']) {
                 $company->logo = $this->storeImage($request->company['logo']);
             }
             $company->email = $request->company['email'];
