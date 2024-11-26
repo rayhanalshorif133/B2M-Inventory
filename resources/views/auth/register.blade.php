@@ -119,7 +119,7 @@
                                 <!-- Phone Number -->
                                 <label for="phone" class="form-label required">Phone Number</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="phone" name="company_phone"
+                                    <input type="number" class="form-control" id="phone" name="company_phone"
                                         placeholder="Contact number" value="{{ old('company_phone') }}">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
@@ -127,6 +127,9 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <small class="phone_number_check_status" style="font-weight: 700"></small>
+
                             </div>
 
 
@@ -236,8 +239,19 @@
                 }
             });
 
+            $("#phone").on('keyup', function(e) {
+                const GETNUMBER = e.target.value;
+                const bdPhoneNumberPattern = /^(?:\+8801|8801|01)[3-9]\d{8}$/;
+                const isValidNumber = bdPhoneNumberPattern.test(GETNUMBER);
+                if (isValidNumber) {
+                    $(".phone_number_check_status").addClass("text-success").removeClass("text-danger");
+                    $(".phone_number_check_status").html('Valid phone number <i class="fa-solid fa-check"></i>');
+                } else {
+                    $(".phone_number_check_status").removeClass("text-success").addClass("text-danger");
+                    $(".phone_number_check_status").html('Invalid phone number <i class="fa-solid fa-xmark"></i>');
+                }
+            });
 
-            $("")
         });
     </script>
 
