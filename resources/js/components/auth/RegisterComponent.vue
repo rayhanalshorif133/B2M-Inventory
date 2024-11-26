@@ -1,6 +1,6 @@
 <template>
     <!-- /.login-logo -->
-    <div class="card card-outline card-primary">
+    <div class="card card-outline card-primary mt-5">
         <div class="card-header text-center">
             <a href="#" class="h1 underline-none"><b>INVENTORY</b></a>
         </div>
@@ -11,11 +11,17 @@
                 <div class="card card-outline p-3 card-info">
                     <h2 class="text-sm font-semibold">Company Info</h2>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
+                            <label
+                                for="company_name"
+                                class="form-label required"
+                                >Name</label
+                            >
                             <div class="input-group mb-3">
                                 <input
                                     type="text"
                                     class="form-control"
+                                    id="company_name"
                                     v-model="company_name"
                                     placeholder="Name"
                                 />
@@ -28,7 +34,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
+                            <label
+                                for="company_name"
+                                class="form-label optional"
+                                >Logo</label
+                            >
                             <div class="input-group mb-3">
                                 <label
                                     for="logo-upload"
@@ -59,7 +70,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
+                            <label
+                                for="company_name"
+                                class="form-label required"
+                                >Email</label
+                            >
                             <div class="input-group mb-3">
                                 <input
                                     type="email"
@@ -76,7 +92,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-12">
+                            <label
+                                for="company_name"
+                                class="form-label required"
+                                >Company Address</label
+                            >
                             <div class="input-group mb-3">
                                 <input
                                     type="text"
@@ -93,7 +114,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6" :class="!company_phone && 'mb-3'">
+                        <div
+                            class="col-md-6 col-12"
+                            :class="!company_phone && 'mb-3'"
+                        >
+                            <label
+                                for="company_name"
+                                class="form-label required"
+                                >Phone Number</label
+                            >
                             <div class="input-group">
                                 <input
                                     type="text"
@@ -108,10 +137,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <small v-if="company_phone && isValidNumber" class="text-success fw-bold">Valid phone number <i class="fa-solid fa-check"></i></small>
-                            <small v-if="company_phone && !isValidNumber" class="text-danger fw-bold">Invalid phone number <i class="fa-solid fa-xmark"></i></small>
+                            <small
+                                v-if="company_phone && isValidNumber"
+                                class="text-success fw-bold"
+                                >Valid phone number
+                                <i class="fa-solid fa-check"></i
+                            ></small>
+                            <small
+                                v-if="company_phone && !isValidNumber"
+                                class="text-danger fw-bold"
+                                >Invalid phone number
+                                <i class="fa-solid fa-xmark"></i
+                            ></small>
                         </div>
                     </div>
+                    <label for="company_name" class="form-label optional"
+                        >Other Information</label
+                    >
                     <div class="input-group mb-3">
                         <textarea
                             type="text"
@@ -128,62 +170,83 @@
                 </div>
                 <div class="card card-outline p-3 card-green mt-2">
                     <h2 class="text-sm font-semibold">User Info</h2>
-                    <div class="input-group mb-3">
-                        <input
-                            type="text"
-                            class="form-control"
-                            v-model="user_name"
-                            placeholder="name"
-                        />
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-user"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input
-                            type="email"
-                            class="form-control"
-                            v-model="user_email"
-                            placeholder="Email"
-                        />
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input
-                            :type="passwordFieldType"
-                            class="form-control"
-                            v-model="password"
-                            placeholder="Password"
-                        />
-                        <div
-                            class="input-group-append"
-                            @click="togglePasswordVisibility"
+                    <div>
+                        <label for="user_name" class="form-label required"
+                            >User Name</label
                         >
-                            <div class="input-group-text cursor-pointer">
-                                <span :class="passwordIconClass"></span>
+                        <div class="input-group mb-3">
+                            <input
+                                type="text"
+                                class="form-control"
+                                v-model="user_name"
+                                placeholder="Enter your name"
+                            />
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="input-group mb-3">
-                        <input
-                            :type="passwordFieldType"
-                            v-model="passwordConfirmation"
-                            class="form-control"
-                            placeholder="Confirm Password"
-                            required
-                        />
-                        <div class="input-group-append">
+                    <div>
+                        <label for="user_email" class="form-label required"
+                            >User Email</label
+                        >
+                        <div class="input-group mb-3">
+                            <input
+                                type="email"
+                                class="form-control"
+                                v-model="user_email"
+                                placeholder="Email"
+                            />
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="user_password" class="form-label required"
+                            >User Password</label
+                        >
+                        <div class="input-group mb-3">
+                            <input
+                                :type="passwordFieldType"
+                                class="form-control"
+                                id="user_password"
+                                v-model="password"
+                                placeholder="Password"
+                            />
                             <div
-                                class="input-group-text cursor-pointer"
+                                class="input-group-append"
                                 @click="togglePasswordVisibility"
                             >
-                                <span :class="passwordIconClass"></span>
+                                <div class="input-group-text cursor-pointer">
+                                    <span :class="passwordIconClass"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="user_password" class="form-label required"
+                            >User Password</label
+                        >
+                        <div class="input-group mb-3">
+                            <input
+                                :type="passwordFieldType"
+                                v-model="passwordConfirmation"
+                                class="form-control"
+                                placeholder="Confirm Password"
+                                required
+                            />
+                            <div class="input-group-append">
+                                <div
+                                    class="input-group-text cursor-pointer"
+                                    @click="togglePasswordVisibility"
+                                >
+                                    <span :class="passwordIconClass"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -270,13 +333,7 @@ export default {
         },
         submitForm() {
             if (this.isFormValid) {
-                if (!this.company_logo) {
-                    Toastr.fire({
-                        icon: "warning",
-                        title: "Please select a company logo first!",
-                    });
-                    return;
-                }
+
 
                 if (!this.user_name || !this.user_email || !this.password) {
                     Toastr.fire({
@@ -319,14 +376,14 @@ export default {
                                 window.location.href = "/login";
                             }, 1600);
                         }
-                        this.registerBtnText = 'Submit';
+                        this.registerBtnText = "Submit";
                     })
                     .catch((error) => {
                         Toastr.fire({
                             icon: "error",
                             title: "Something went wrong, please try again!",
                         });
-                        this.registerBtnText = 'Submit';
+                        this.registerBtnText = "Submit";
                     });
             } else {
                 Toastr.fire({

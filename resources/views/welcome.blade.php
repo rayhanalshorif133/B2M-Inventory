@@ -53,6 +53,9 @@
                         <li><a href="#service">Our Services</a></li>
                         <li><a href="#contact">Contact Us</a></li>
                         <div class="loging-register-btn-mobile">
+                            @if(Auth::check())
+                            hello
+                            @endif
 
                             <li class="dropdown_item-1"> <a href="{{ route('auth.login') }}" value="0"
                                     id="login" class="scrollto">Login </a>

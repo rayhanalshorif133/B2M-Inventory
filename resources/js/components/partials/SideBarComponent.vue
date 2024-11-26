@@ -5,7 +5,6 @@
                 :src="companyLogo"
                 alt="AdminLTE Logo"
                 class="brand-image img-circle elevation-3"
-                style="opacity: 0.8"
             />
             <span class="brand-text font-weight-light">Inventory</span>
         </a>
@@ -22,7 +21,7 @@
                 <div class="info">
                     <a
                         href="/user/profile"
-                        class="d-block underline-none text-capitalize"
+                        class="d-block underline-none"
                         >{{ userName }}</a
                     >
                 </div>
@@ -646,7 +645,10 @@ export default {
                 const data = response.data.data;
                 userName.value = data.name;
                 userImage.value = data.image;
-                companyLogo.value = data.company.logo;
+                companyLogo.value =  data.company.logo;
+                if(companyLogo.value === 'Invalid image format'){
+                    companyLogo.value = '/images/inventory_logo.png';
+                }
             });
         };
 
