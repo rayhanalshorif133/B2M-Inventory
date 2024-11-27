@@ -98,6 +98,7 @@ Route::middleware('auth')->controller(ProductController::class)
 
 Route::middleware('auth')
     ->prefix('transaction-types')
+    ->name('transaction-types.')
     ->controller(TransactionTypeController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/fetch', 'fetch')->name('fetch');
@@ -225,7 +226,7 @@ Route::middleware('auth')
             Route::delete('/{id}/delete', 'delete')->name('delete');
         });
         // head
-        Route::prefix('/head')->controller(ExpensesIncomeHeadController::class)->group(function () {
+        Route::prefix('/head')->name('head.')->controller(ExpensesIncomeHeadController::class)->group(function () {
             Route::get('/', 'list')->name('list');
             Route::get('/fetch/{id?}', 'fetch')->name('fetch');
             Route::post('/create', 'create')->name('create');
