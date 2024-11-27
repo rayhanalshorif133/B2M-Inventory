@@ -79,7 +79,7 @@
                                         Company Logo
                                     </strong>
                                     <p>
-                                        <img src="{{ $user->company->logo }}" alt="Company Logo" class="company-logo" />
+                                        <img src="{{ asset($user->company->logo) }}" alt="Company Logo" class="company-logo" />
                                     </p>
 
                                     <!-- Company Email -->
