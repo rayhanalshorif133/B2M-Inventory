@@ -50,9 +50,10 @@
         </div> --}}
 
         @include('_partials.navbar')
+        @include('_partials.sidebar')
 
 
-        <side-bar-component></side-bar-component>
+        {{-- <side-bar-component></side-bar-component> --}}
 
 
         <div id="flash-messages" data-success="{{ session('success') }}" data-error="{{ session('error') }}">
