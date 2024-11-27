@@ -35,6 +35,8 @@
 
     <link rel="stylesheet" href="{{ asset('adminLTE/plugins/summernote/summernote-bs4.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
@@ -53,8 +55,10 @@
         <side-bar-component></side-bar-component>
 
 
-
+        <div id="flash-messages" data-success="{{ session('success') }}" data-error="{{ session('error') }}">
+        </div>
         @yield('content')
+
         <tips-skip-component></tips-skip-component>
         <footer-component></footer-component>
 
@@ -117,6 +121,45 @@
 
     <script src="{{ asset('adminLTE/dist/js/pages/dashboard.js') }}"></script>
     <script src="{{ asset('/js/guideline-tour.js') }}"></script>
+
+
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            iconColor: 'white',
+            customClass: {
+                popup: 'colored-toast',
+            },
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+        });
+
+
+
+        $(document).ready(function() {
+            var successMessage = $('#flash-messages').data('success');
+            var errorMessage = $('#flash-messages').data('error');
+
+
+
+            if (successMessage) {
+                Toast.fire({
+                    icon: 'success',
+                    title: successMessage,
+                })
+            }
+
+            if (errorMessage) {
+                Toast.fire({
+                    icon: 'error',
+                    title: errorMessage,
+                })
+
+            }
+        });
+    </script>
 
     @stack('scripts')
 
