@@ -22,14 +22,12 @@ app.use(vuetify);
 
 
 // Authenticated components
-import SideBarComponent from './components/partials/SideBarComponent.vue';
 import TipsSkipComponent from './components/partials/TipsSkipComponent.vue';
 import BreadcrumbComponent from './components/partials/BreadcrumbComponent.vue';
 import DashboardComponent from './components/DashboardComponent.vue';
 import FooterComponent from './components/partials/FooterComponent.vue';
 import TransactionTypeListComponent from './components/transaction-type/ListComponent.vue';
 
-app.component('side-bar-component', SideBarComponent);
 app.component('breadcrumb-component', BreadcrumbComponent);
 app.component('tips-skip-component', TipsSkipComponent);
 
