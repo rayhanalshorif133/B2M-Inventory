@@ -4,7 +4,9 @@
     <div class="login-box" id="auth">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="#" class="h1 underline-none"><b>INVENTORY</b></a>
+                <a href="#" class="h1 underline-none mr-4">
+                    <img src="{{ asset('new_assets/img/logo.png') }}" alt="">
+                </a>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in to start your session</p>

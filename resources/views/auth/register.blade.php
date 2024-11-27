@@ -4,7 +4,9 @@
     <div class="register-box" id="auth">
         <div class="card card-outline card-primary mt-5">
             <div class="card-header text-center">
-                <a href="#" class="h1 underline-none"><b>INVENTORY</b></a>
+                <a href="#" class="h1 underline-none">
+                    <img src="{{ asset('new_assets/img/logo.png') }}" alt="">
+                </a>
             </div>
             <div class="card-body">
                 <p class="register-msg-box">Register as a new member</p>
