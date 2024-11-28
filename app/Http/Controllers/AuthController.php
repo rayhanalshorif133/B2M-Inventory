@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\User;
+use App\Models\TransactionType;
 use App\Models\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -115,7 +116,7 @@ class AuthController extends Controller
 
                 // Example of saving it to a model
                 $company->logo = $logoPath;
-            }else{
+            } else {
                 $company->logo = '/images/inventory_logo.png';
             }
             $company->address = $request->company_address;
@@ -132,6 +133,12 @@ class AuthController extends Controller
             $user->company_id = $company->id;
             $user->save();
             $user->assignRole('super-admin');
+
+            $transactionType = new TransactionType();
+            $transactionType->name = 'cash';
+            $transactionType->company_id = $company->id;
+            $transactionType->added_by = $user->id;
+            $transactionType->save();
 
             DB::commit();
 
