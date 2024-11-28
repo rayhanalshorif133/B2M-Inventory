@@ -63,9 +63,9 @@
                                             />
                                         </div>
                                     </div>
-                                    <add-new-supplier-modal
+                                    <add-new-customer
                                         :fetchCustomers="fetchCustomers"
-                                    ></add-new-supplier-modal>
+                                    ></add-new-customer>
                                 </div>
                                 <div class="col-12 col-md-7 col-lg-7">
                                     <div class="form-group d-flex">

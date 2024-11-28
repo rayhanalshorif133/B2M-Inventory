@@ -239,7 +239,8 @@ class SalesController extends Controller
             }
         }
 
-        return view('sales.edit');
+        $customers = Customer::all();
+        return view('sales.edit', compact('customers'));
     }
 
     public function invoice(Request $request, $id)
