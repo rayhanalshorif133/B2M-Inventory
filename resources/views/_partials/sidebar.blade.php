@@ -47,6 +47,7 @@
                 <li class="nav-item @if (
                     $currentRouteName == 'sales.index' ||
                         $currentRouteName == 'sales.create' ||
+                        $currentRouteName == 'sales.edit' ||
                         $currentRouteName == 'sales.return.create' ||
                         $currentRouteName == 'payment.sales.pay' ||
                         $currentRouteName == 'sales.payment-list' ||
@@ -55,6 +56,7 @@
                     <a href="#" class="nav-link @if (
                         $currentRouteName == 'sales.index' ||
                             $currentRouteName == 'sales.create' ||
+                            $currentRouteName == 'sales.edit' ||
                             $currentRouteName == 'sales.return.create' ||
                             $currentRouteName == 'sales.payment-list' ||
                             $currentRouteName == 'sales.return.index' ||
@@ -76,7 +78,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('sales.index') }}"
-                                class="nav-link @if ($currentRouteName == 'sales.index') active @endif">
+                                class="nav-link @if ($currentRouteName == 'sales.index' || $currentRouteName == 'sales.edit') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Sales List</p>
                             </a>
@@ -123,6 +125,7 @@
                 @if (
                     $currentRouteName == 'purchase.index' ||
                         $currentRouteName == 'purchase.create' ||
+                        $currentRouteName == 'purchase.edit' ||
                         $currentRouteName == 'purchase.return.create' ||
                         $currentRouteName == 'payment.purchase.pay' ||
                         $currentRouteName == 'purchase.payment-list' ||
@@ -133,6 +136,7 @@
                     @if (
                         $currentRouteName == 'purchase.index' ||
                             $currentRouteName == 'purchase.create' ||
+                            $currentRouteName == 'purchase.edit' ||
                             $currentRouteName == 'purchase.return.create' ||
                             $currentRouteName == 'payment.purchase.pay' ||
                             $currentRouteName == 'purchase.payment-list' ||
@@ -157,7 +161,7 @@
                         <!-- Purchase List -->
                         <li class="nav-item">
                             <a href="{{ route('purchase.index') }}"
-                                class="nav-link @if ($currentRouteName == 'purchase.index') active @endif">
+                                class="nav-link @if ($currentRouteName == 'purchase.index' || $currentRouteName == 'purchase.edit') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Purchase List</p>
                             </a>
@@ -389,7 +393,8 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('ledger.customer') }}" class="nav-link @if ($currentRouteName == 'ledger.customer') active @endif">
+                            <a href="{{ route('ledger.customer') }}"
+                                class="nav-link @if ($currentRouteName == 'ledger.customer') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Customer</p>
                             </a>
@@ -397,8 +402,18 @@
                     </ul>
                 </li>
 
-                <li class="nav-item @if ($currentRouteName == 'transaction-types.index' || $currentRouteName == 'customer.list' || $currentRouteName == 'supplier.list' || $currentRouteName == 'user.list' || $currentRouteName == 'user.create') menu-is-opening menu-open @endif">
-                    <a href="#" class="nav-link @if ($currentRouteName == 'transaction-types.index' || $currentRouteName == 'customer.list' || $currentRouteName == 'supplier.list' || $currentRouteName == 'user.list' || $currentRouteName == 'user.create') active menu-open @endif">
+                <li class="nav-item @if (
+                    $currentRouteName == 'transaction-types.index' ||
+                        $currentRouteName == 'customer.list' ||
+                        $currentRouteName == 'supplier.list' ||
+                        $currentRouteName == 'user.list' ||
+                        $currentRouteName == 'user.create') menu-is-opening menu-open @endif">
+                    <a href="#" class="nav-link @if (
+                        $currentRouteName == 'transaction-types.index' ||
+                            $currentRouteName == 'customer.list' ||
+                            $currentRouteName == 'supplier.list' ||
+                            $currentRouteName == 'user.list' ||
+                            $currentRouteName == 'user.create') active menu-open @endif">
                         <i class="nav-icon fas fa-cogs text-cyan"></i>
                         <p>
                             Settings
@@ -407,31 +422,36 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('transaction-types.index') }}" class="nav-link @if ($currentRouteName == 'transaction-types.index') active @endif">
+                            <a href="{{ route('transaction-types.index') }}"
+                                class="nav-link @if ($currentRouteName == 'transaction-types.index') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Transaction Types</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('customer.list') }}" class="nav-link @if ($currentRouteName == 'customer.list') active @endif">
+                            <a href="{{ route('customer.list') }}"
+                                class="nav-link @if ($currentRouteName == 'customer.list') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Customer List</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('supplier.list') }}" class="nav-link @if ($currentRouteName == 'supplier.list') active @endif">
+                            <a href="{{ route('supplier.list') }}"
+                                class="nav-link @if ($currentRouteName == 'supplier.list') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Supplier List</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('user.create') }}" class="nav-link @if ($currentRouteName == 'user.create') active @endif">
+                            <a href="{{ route('user.create') }}"
+                                class="nav-link @if ($currentRouteName == 'user.create') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Add New User</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('user.list') }}" class="nav-link @if ($currentRouteName == 'user.list') active @endif">
+                            <a href="{{ route('user.list') }}"
+                                class="nav-link @if ($currentRouteName == 'user.list') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>User List</p>
                             </a>
