@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ProductAttribute;
 use App\Models\SalesDetails;
 use App\Models\Sales;
+use App\Models\TransactionType;
 use App\Models\SalesPayment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +24,6 @@ class SalesController extends Controller
     {
         if ($request->type == 'fetch' && request()->ajax()) {
             $query = Sales::where('company_id', Auth::user()->company_id)
-                // ->where('status', '1')
                 ->with('customer')->orderBy('created_at', 'desc')
                 ->get();
             return DataTables::of($query)->toJson();
@@ -62,7 +62,6 @@ class SalesController extends Controller
 
         DB::beginTransaction();
         try {
-
 
             $sales = new Sales();
             $sales->company_id = Auth::user()->company_id;
@@ -239,8 +238,9 @@ class SalesController extends Controller
             }
         }
 
-        $customers = Customer::all();
-        return view('sales.edit', compact('customers'));
+        $customers = Customer::select()->where('company_id', Auth::user()->company_id)->get();
+        $transactionTypes = TransactionType::select()->where('company_id', Auth::user()->company_id)->get();
+        return view('sales.edit', compact('customers','transactionTypes'));
     }
 
     public function invoice(Request $request, $id)

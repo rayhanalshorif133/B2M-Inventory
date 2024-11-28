@@ -20,7 +20,7 @@ class TransactionTypeController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = TransactionType::orderBy('created_at', 'desc')->with('addedBy')->get();
+            $query = TransactionType::where('company_id', Auth::user()->company_id)->orderBy('created_at', 'desc')->with('addedBy')->get();
             return DataTables::of($query)->toJson();
         }
         return view('transactionType.index');
