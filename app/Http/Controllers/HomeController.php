@@ -108,17 +108,19 @@ class HomeController extends Controller
         }
 
 
-        if (!TipsAndTour::select()->where('user_id', Auth::user()->id)->first()) {
-            $tipsAndSkip = new TipsAndTour();
-            $tipsAndSkip->user_id = Auth::user()->id; // Assuming you get the user from the request
-            $tipsAndSkip->company_id = Auth::user()->company_id; // Assuming company_id is passed in the request
-            $tipsAndSkip->is_viewed = false; // Set default
-            $tipsAndSkip->is_skipped = false; // Set default
-            $tipsAndSkip->is_favorite = false; // Set default
-            $tipsAndSkip->first_viewed_at = Carbon::now(); // Set current timestamp as first viewed time
-            $tipsAndSkip->last_viewed_at = Carbon::now(); // Set current timestamp as last viewed time
-            $tipsAndSkip->save();
-        }
+
+
+        // if (!TipsAndTour::select()->where('user_id', Auth::user()->id)->first()) {
+        //     $tipsAndSkip = new TipsAndTour();
+        //     $tipsAndSkip->user_id = Auth::user()->id; // Assuming you get the user from the request
+        //     $tipsAndSkip->company_id = Auth::user()->company_id; // Assuming company_id is passed in the request
+        //     $tipsAndSkip->is_viewed = false; // Set default
+        //     $tipsAndSkip->is_skipped = false; // Set default
+        //     $tipsAndSkip->is_favorite = false; // Set default
+        //     $tipsAndSkip->first_viewed_at = Carbon::now(); // Set current timestamp as first viewed time
+        //     $tipsAndSkip->last_viewed_at = Carbon::now(); // Set current timestamp as last viewed time
+        //     $tipsAndSkip->save();
+        // }
 
 
         return view('home');
