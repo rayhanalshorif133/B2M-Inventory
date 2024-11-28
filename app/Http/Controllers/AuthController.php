@@ -115,6 +115,8 @@ class AuthController extends Controller
 
                 // Example of saving it to a model
                 $company->logo = $logoPath;
+            }else{
+                $company->logo = '/images/inventory_logo.png';
             }
             $company->address = $request->company_address;
             $company->other_info = $request->other_info;
