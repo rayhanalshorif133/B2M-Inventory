@@ -235,7 +235,7 @@
                     ${
                         parseInt(item.current_stock) > 0
                             ? `<button type="button" class="btn btn-sm btn-success"
-                                    onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
+                                        onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
                             : "No Stock Available"
                     }
                 </td>
@@ -332,7 +332,7 @@
                 setCusomizationData.forEach((item) => {
                     const row = $(`<tr data-product_id='${item.product_id}'>`);
                     row.html(`
-                    <td><button type="button" class="btn btn-sm btn-danger"><i class="fa fa-minus"></i></button></td>
+                    <td><button type="button" class="btn btn-sm btn-danger" onclick="removeToProductCustomization(${item.id})"><i class="fa fa-minus"></i></button></td>
                 <td>
                     <small class="text-xs font-semibold">${item.p_code || ""} -</small>
                     <small class="text-xs font-semibold">${item.p_name || ""}</small><br/>
@@ -352,7 +352,7 @@
                 });
             } else {
                 const notFoundRow = $("<tr>").html(`
-            <td colspan="4" class="text-center text-danger font-semibold">
+            <td colspan="6" class="text-center text-danger font-semibold">
                 Not Found
             </td>
         `);
@@ -408,7 +408,20 @@
             });
 
 
+
+
         };
+
+        const removeToProductCustomization = (targetId) => {
+            const indexToDelete = setCusomizationData.findIndex(item => item.id === targetId);
+
+            // If the item exists, remove it
+            if (indexToDelete !== -1) {
+                setCusomizationData.splice(indexToDelete, 1);
+            }
+            handleCusomizeData(setCusomizationData);
+        };
+
 
         const handleProductChange = () => {
 
