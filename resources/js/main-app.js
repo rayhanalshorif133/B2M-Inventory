@@ -92,11 +92,9 @@ app.component('purchase-due-collection-component', PurchaseDueCollectionComponen
 // Sales
 import SalesCreateComponent from './components/sales/CreateComponent.vue';
 import SalesListComponent from './components/sales/ListComponent.vue';
-import SalesEditComponent from './components/sales/EditComponent.vue';
 
 app.component('sales-create-component', SalesCreateComponent);
 app.component('sales-list-component', SalesListComponent);
-app.component('sales-edit-component', SalesEditComponent);
 
 
 // sales-payment-create-component

@@ -7,14 +7,18 @@
     $currentRouteName = Route::currentRouteName();
 @endphp
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="/home" class="brand-link underline-none">
-        <img src="{{ asset($user->company->logo) }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" />
-        @if(strlen($user->company->name) > 20)
-            <span class="brand-text font-weight-light" style="font-size: 14px">{{ $user->company->name}}</span>
-        @else
-        <span class="brand-text font-weight-light" style="font-size: 16px">{{ $user->company->name}}</span>
-        @endif
-    </a>
+    @if (strlen($user->company->name) > 20)
+        <a href="/home" class="brand-link underline-none d-flex flex-column justify-content-center" style="">
+            <img src="{{ asset($user->company->logo) }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" />
+            <span class="brand-text font-weight-light mx-auto text-center" style="font-size: 14px">{{ $user->company->name }}</span>
+        </a>
+    @else
+        <a href="/home" class="brand-link underline-none">
+            <img src="{{ asset($user->company->logo) }}" alt="AdminLTE Logo"
+                class="brand-image img-circle elevation-3" />
+            <span class="brand-text font-weight-light" style="font-size: 14px">{{ $user->company->name }}</span>
+        </a>
+    @endif
 
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
@@ -125,7 +129,8 @@
                     </ul>
                 </li>
 
-                <li class="nav-item
+                <li
+                    class="nav-item
                 @if (
                     $currentRouteName == 'purchase.index' ||
                         $currentRouteName == 'purchase.create' ||

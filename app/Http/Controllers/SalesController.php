@@ -53,7 +53,9 @@ class SalesController extends Controller
     public function create(Request $request)
     {
         if ($request->method() == 'GET') {
-            return view('sales.create');
+            $customers = Customer::select()->where('company_id', Auth::user()->company_id)->get();
+            $transactionTypes = TransactionType::select()->where('company_id', Auth::user()->company_id)->get();
+            return view('sales.create', compact('customers', 'transactionTypes'));
         }
 
 

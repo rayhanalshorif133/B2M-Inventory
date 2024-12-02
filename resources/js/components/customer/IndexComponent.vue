@@ -35,7 +35,7 @@
 <script setup>
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 
 DataTable.use(DataTablesCore);
@@ -47,15 +47,37 @@ axios.get("/customer/list?type=fetch").then(function (response) {
     GET_DATA.length > 0 &&
         GET_DATA.map(function (item, index) {
             const btns = `<div class="btn-group">
-                    <button type="button" class="btn btn-info btn-sm">
+                    <button type="button" class="btn btn-info btn-sm editBtn">
                      <i class="fa-regular fa-pen-to-square"></i> Edit
                     </button>
                     <button type="button" class="btn btn-danger btn-sm">
                     Delete <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>`;
-            var PUTDATA = [item.id, item.name, item.email,item.contact, item.address, btns];
+            var PUTDATA = [index + 1, item.name, item.email,item.contact, item.address, btns];
             data.value.push(PUTDATA);
         });
+});
+
+
+const handleEdit = () => {
+    // Event delegation to handle clicks on dynamically generated buttons
+    document.addEventListener("click", (event) => {
+        if (event.target.closest(".editBtn")) {
+            const id = event.target.closest(".btn").getAttribute("data-id");
+            fetchDetailsProductData(id);
+            const modalElement = document.getElementById("showProductDetails");
+            showModal.value = new bootstrap.Modal(modalElement);
+            showModal.value.show();
+        }
+        if (event.target.closest(".statusBtn")) {
+            const id = event.target.closest(".btn").getAttribute("data-id");
+            handleStatusBtn(id);
+        }
+    });
+};
+
+onMounted(() => {
+    handleEdit();
 });
 </script>

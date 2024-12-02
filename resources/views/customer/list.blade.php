@@ -7,6 +7,5 @@
         <breadcrumb-component :title="'Customer List'" :items="{{ json_encode(['home', 'Customer List']) }}">
         </breadcrumb-component>
         <customer-list-component></customer-list-component>
-
     </div>
 @endsection
