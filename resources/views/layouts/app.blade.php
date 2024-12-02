@@ -138,6 +138,16 @@
         });
 
 
+        const getId = () => {
+            const currentURL = window.location.pathname;
+            const id = parseInt(currentURL.match(/\d+/)[0]);
+            if (id === undefined) {
+                return 0;
+            }
+            return id;
+        }
+
+
 
         $(document).ready(function() {
             var successMessage = $('#flash-messages').data('success');

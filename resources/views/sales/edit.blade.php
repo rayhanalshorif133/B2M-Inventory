@@ -125,24 +125,24 @@
                                                     <tfoot>
                                                         <tr>
                                                             <td colspan="2" class="bg-success text-end">Total</td>
-                                                            <td class="bg-success text-center">0</td>
+                                                            <td class="bg-success text-center" id="salesTotalQty">0</td>
                                                             <td class="bg-success text-center"></td>
                                                             <td class="bg-success text-center"></td>
-                                                            <td class="bg-success text-center">0.00</td>
+                                                            <td class="bg-success text-center" id="salesTotalAmount">0.00
+                                                            </td>
                                                         </tr>
                                                     </tfoot>
                                                 </table>
                                                 <div class="product_customization_note_amount mt-1">
                                                     <div class="product_customization_note">
                                                         <label class="mt-2 mx-2 w-8rem">Note:</label>
-                                                        <textarea type="text" class="form-control" placeholder="Note"></textarea>
+                                                        <textarea type="text" class="form-control" id="note" placeholder="Note"></textarea>
                                                     </div>
                                                     <div class="flex-column product_customization_amount">
                                                         <div class="d-flex mt-1">
                                                             <div>
                                                                 <label class="w-8rem">Transaction Type</label>
-                                                                <select class="form-control w-fit" id="transaction_type"
-                                                                    name="transaction_type">
+                                                                <select class="form-control w-fit" id="transaction_type">
                                                                     @foreach ($transactionTypes as $trans)
                                                                         <option value="{{ $trans->id }}">
                                                                             {{ $trans->name }}</option>
@@ -152,15 +152,15 @@
                                                             <div class="mx-2">
                                                                 <label class="mx-2 w-8rem">Paid Amount</label>
                                                                 <input type="text" class="form-control"
-                                                                    placeholder="Paid amount" />
+                                                                    placeholder="Paid amount" id="paid_amount" />
                                                             </div>
                                                         </div>
                                                         <div class="d-flex mt-1 justify-content-end">
-                                                            <label>Due Amount: 0.00</label>
+                                                            <label>Due Amount: <span id="due_amount">00</span></label>
                                                         </div>
                                                         <div class="d-flex mt-1 justify-content-end">
                                                             <button class="btn btn-success btn-sm" type="button"
-                                                                disabled>Submit</button>
+                                                                onclick="handleSubmit()">Submit</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -190,7 +190,116 @@
             handleCreateNewCustomer();
             handleProductChange();
             getProductAttributesByBarcode();
+            handlePaidAmount();
         });
+
+
+        const handlePaidAmount = () => {
+            $("#paid_amount").keyup(function() {
+                const paidAmount = $(this).val();
+                const salesTotalAmount = parseFloat($("#salesTotalAmount").text());
+                var dueAmount = 0;
+                dueAmount = salesTotalAmount - parseFloat(paidAmount);
+                if (paidAmount > salesTotalAmount) {
+                    Toastr.fire({
+                        icon: "error",
+                        title: "Payment amount is Error",
+                    });
+                    return false;
+                }
+                setTimeout(()=>{
+                    $(this).val(salesTotalAmount);
+                    $("#due_amount").text(0);
+                },4000);
+                $("#due_amount").text(dueAmount);
+            });
+        };
+
+
+
+        const handleSubmit = () => {
+
+            const transaction_type = $("#transaction_type").val();
+            const selectedCustomer = $("#customer").val();
+            const paid_amount = $("#paid_amount").val();
+
+
+            if (!transaction_type) {
+                Toastr.fire({
+                    icon: "error",
+                    title: "Please Selected a transaction type",
+                });
+                return false;
+            }
+
+
+
+
+            if (!selectedCustomer) {
+                Toastr.fire({
+                    icon: "error",
+                    title: "Please Selected a Customer",
+                });
+                return false;
+            }
+
+            if (setCusomizationData.length == 0) {
+                Toastr.fire({
+                    icon: "error",
+                    title: "Please add product for customizations",
+                });
+                return false;
+            }
+
+
+            if (!paid_amount) {
+                Toastr.fire({
+                    icon: "error",
+                    title: "Please Enter a paid amount",
+                });
+                return false;
+            }
+
+
+            const data = {
+                sales_id: window.getId(),
+                customer_id: selectedCustomer,
+                invoice_date: $("#invoice_date").val(),
+                total_amount: parseFloat($("#salesTotalAmount").text()),
+                sub_amount: 0,
+                transaction_type_id: transaction_type,
+                paid_amount: $("#paid_amount").val(),
+                grand_total_amount: 0,
+                productCustomizations: setCusomizationData,
+                note: $("#note").val(),
+            };
+
+
+
+
+
+            axios
+                .put(`/sales/${data.sales_id}/edit/`, data)
+                .then((response) => {
+                    const data = response.data.data;
+                    const status = response.data.status;
+                    if (status == true) {
+                        Toastr.fire({
+                            icon: "success",
+                            title: "Successfully updated Sales",
+                        });
+
+                        setTimeout(() => {
+                            window.location.href = `/sales/invoice/${data.id}`;
+                        }, 1600);
+                    } else {
+                        Toastr.fire({
+                            icon: "error",
+                            title: "Something went wrong, Please try again.!",
+                        });
+                    }
+                });
+        };
 
 
 
@@ -235,7 +344,7 @@
                     ${
                         parseInt(item.current_stock) > 0
                             ? `<button type="button" class="btn btn-sm btn-success"
-                                        onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
+                                            onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
                             : "No Stock Available"
                     }
                 </td>
@@ -299,6 +408,7 @@
                 $("#invoice_date").val(data.sales.invoice_date);
                 if (data.salesDetails.length > 0) {
                     data.salesDetails.map((item) => {
+                        console.log(item);
                         const SET_VALUE = {
                             id: item.id,
                             p_code: item.product_attribute.code,
@@ -309,7 +419,7 @@
                             p_model: item.product_attribute.model,
                             p_size: item.product_attribute.size,
                             p_model: item.product_attribute.model,
-                            purchase_rate: item.purchase_rate,
+                            purchase_rate: item.product_attribute.last_purchase,
                             sales_rate: item.sales_rate,
                             qty: item.qty,
                             discount: item.discount,
@@ -327,9 +437,13 @@
 
         const handleCusomizeData = (setCusomizationData) => {
             const tbody = $("#productCustomization");
+            var salesTotalQty = 0;
+            var salesTotalAmount = 0;
             tbody.empty();
             if (setCusomizationData.length > 0) {
                 setCusomizationData.forEach((item) => {
+                    salesTotalQty += parseInt(item.qty);
+                    salesTotalAmount += parseInt(item.total);
                     const row = $(`<tr data-product_id='${item.product_id}'>`);
                     row.html(`
                     <td><button type="button" class="btn btn-sm btn-danger" onclick="removeToProductCustomization(${item.id})"><i class="fa fa-minus"></i></button></td>
@@ -358,6 +472,9 @@
         `);
                 tbody.append(notFoundRow);
             }
+
+            $("#salesTotalQty").text(salesTotalQty);
+            $("#salesTotalAmount").text(salesTotalAmount);
 
 
             $(".changeSalesQty").on('blur', function(e) {
@@ -467,7 +584,7 @@
             axios.get("/customer/fetch").then((response) => {
                 const data = response.data.data;
                 $("#customer").empty();
-                $("#customer").append('<option value="">Select a customer</option>');
+                $("#customer").append('<option value="" disabled>Select a customer</option>');
                 data.forEach((item) => {
                     const option = `<option value="${item.id}">${item.name}</option>`;
                     $("#customer").append(option);
