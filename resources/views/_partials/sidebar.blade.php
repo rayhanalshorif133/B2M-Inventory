@@ -9,7 +9,11 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="/home" class="brand-link underline-none">
         <img src="{{ asset($user->company->logo) }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" />
-        <span class="brand-text font-weight-light">{{ $user->company->name }}</span>
+        @if(strlen($user->company->name) > 20)
+            <span class="brand-text font-weight-light" style="font-size: 14px">{{ $user->company->name}}</span>
+        @else
+        <span class="brand-text font-weight-light" style="font-size: 16px">{{ $user->company->name}}</span>
+        @endif
     </a>
 
     <div class="sidebar">
