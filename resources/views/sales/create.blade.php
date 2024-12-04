@@ -55,7 +55,7 @@
                                             <div class="col-md-8 d-flex">
                                                 <label for="invoice_date" class="d-flex mx-1 w-8rem">Invoice Time:
                                                     <span class="text-danger mx-1">*</span></label>
-                                                <input type="date" id="invoice_date" class="form-control w-10rem" />
+                                                <input type="date" id="invoice_date" class="form-control w-10rem" value="{{  date("Y-m-d") }}"/>
                                             </div>
                                         </div>
                                         @include('sales._partials.addNewCustomerModal', [
@@ -161,7 +161,7 @@
                                                             <label>Due Amount: <span id="due_amount">00</span></label>
                                                         </div>
                                                         <div class="d-flex mt-1 justify-content-end">
-                                                            <button class="btn btn-success btn-sm" type="button"
+                                                            <button class="btn btn-success btn-sm submitbtn" type="button"
                                                                 onclick="handleSubmit()">Submit</button>
                                                         </div>
                                                     </div>
@@ -229,12 +229,18 @@
             const selectedCustomer = $("#customer").val();
             const paid_amount = $("#paid_amount").val();
 
+            $(".submitbtn").text('Processing ...');
+
+
+
 
             if (!transaction_type) {
                 Toastr.fire({
                     icon: "error",
                     title: "Please Selected a transaction type",
                 });
+
+                $(".submitbtn").text('Submit');
                 return false;
             }
 
@@ -246,6 +252,7 @@
                     icon: "error",
                     title: "Please Selected a Customer",
                 });
+                $(".submitbtn").text('Submit');
                 return false;
             }
 
@@ -254,6 +261,7 @@
                     icon: "error",
                     title: "Please add product for customizations",
                 });
+                $(".submitbtn").text('Submit');
                 return false;
             }
 
@@ -263,12 +271,12 @@
                     icon: "error",
                     title: "Please Enter a paid amount",
                 });
+                $(".submitbtn").text('Submit');
                 return false;
             }
 
 
             const data = {
-                sales_id: window.getId(),
                 customer_id: selectedCustomer,
                 invoice_date: $("#invoice_date").val(),
                 total_amount: parseFloat($("#salesTotalAmount").text()),
@@ -284,15 +292,18 @@
 
 
 
+
+
             axios
-                .put(`/sales/${data.sales_id}/edit/`, data)
+                .post(`/sales/create`, data)
                 .then((response) => {
                     const data = response.data.data;
                     const status = response.data.status;
                     if (status == true) {
+                        $(".submitbtn").text('Submit');
                         Toastr.fire({
                             icon: "success",
-                            title: "Successfully updated Sales",
+                            title: "Successfully created Sales",
                         });
 
                         setTimeout(() => {
@@ -303,6 +314,7 @@
                             icon: "error",
                             title: "Something went wrong, Please try again.!",
                         });
+                        $(".submitbtn").text('Submit');
                     }
                 });
         };
@@ -405,40 +417,7 @@
         // Populate the product details when the page loads
 
 
-        const fetchData = () => {
-            const id = window.getId();
-            axios.get(`/sales/fetch/${id}`).then((response) => {
-                const data = response.data.data;
-                SALESDATA.push(data);
 
-                $("#invoice_date").val(data.sales.invoice_date);
-                if (data.salesDetails.length > 0) {
-                    data.salesDetails.map((item) => {
-                        console.log(item);
-                        const SET_VALUE = {
-                            id: item.id,
-                            p_code: item.product_attribute.code,
-                            product_attribute_id: item.product_attribute.id,
-                            p_name: item.product.name,
-                            product_id: item.product.id,
-                            p_color: item.product_attribute.color,
-                            p_model: item.product_attribute.model,
-                            p_size: item.product_attribute.size,
-                            p_model: item.product_attribute.model,
-                            purchase_rate: item.product_attribute.last_purchase,
-                            sales_rate: item.sales_rate,
-                            qty: item.qty,
-                            discount: item.discount,
-                            total: item.total,
-                        };
-
-                        setCusomizationData.push(SET_VALUE);
-                        handleCusomizeData(setCusomizationData);
-                    });
-                }
-
-            });
-        };
 
 
         const handleCusomizeData = (setCusomizationData) => {

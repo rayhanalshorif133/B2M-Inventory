@@ -121,7 +121,7 @@ class SalesController extends Controller
                 $salesDetails->sales_id = $sales->id;
                 $salesDetails->qty = $item['qty'];
                 $salesDetails->product_id = $item['product_id'];
-                $salesDetails->sales_rate = $item['sales_price'];
+                $salesDetails->sales_rate = $item['sales_rate'];
                 $salesDetails->discount = $item['discount'];
                 $salesDetails->total = $item['total'];
                 $salesDetails->created_time = $sales->created_time;
@@ -131,7 +131,7 @@ class SalesController extends Controller
 
 
                 $productAttribute->current_stock = intval($productAttribute->current_stock) - intval($item['qty']);
-                $productAttribute->sales_rate = $item['sales_price'];
+                $productAttribute->sales_rate = $item['sales_rate'];
 
 
                 $productAttribute->save();
