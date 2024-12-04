@@ -27,6 +27,39 @@
                 </div>
             </div>
         </div>
+        <div
+            class="modal fade"
+            id="editCustomer"
+            tabindex="-1"
+            aria-labelledby="editCustomerLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-defult">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCustomerLabel">
+                            Customer Update
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            :onclick="hideModel"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-secondary text-white"
+                            :onclick="hideModel"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </template>
 <style>
@@ -37,8 +70,14 @@ import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
 import { ref, onMounted } from "vue";
 
-
 DataTable.use(DataTablesCore);
+
+var showModal = ref();
+
+
+const hideModel = () => {
+    showModal.value.hide();
+};
 
 var data = ref([]);
 
@@ -54,19 +93,24 @@ axios.get("/customer/list?type=fetch").then(function (response) {
                     Delete <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>`;
-            var PUTDATA = [index + 1, item.name, item.email,item.contact, item.address, btns];
+            var PUTDATA = [
+                index + 1,
+                item.name,
+                item.email,
+                item.contact,
+                item.address,
+                btns,
+            ];
             data.value.push(PUTDATA);
         });
 });
-
 
 const handleEdit = () => {
     // Event delegation to handle clicks on dynamically generated buttons
     document.addEventListener("click", (event) => {
         if (event.target.closest(".editBtn")) {
             const id = event.target.closest(".btn").getAttribute("data-id");
-            fetchDetailsProductData(id);
-            const modalElement = document.getElementById("showProductDetails");
+            const modalElement = document.getElementById("editCustomer");
             showModal.value = new bootstrap.Modal(modalElement);
             showModal.value.show();
         }

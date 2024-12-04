@@ -290,10 +290,6 @@
 
 
 
-
-
-
-
             axios
                 .post(`/sales/create`, data)
                 .then((response) => {
