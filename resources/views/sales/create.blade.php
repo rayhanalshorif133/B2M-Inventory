@@ -55,7 +55,8 @@
                                             <div class="col-md-8 d-flex">
                                                 <label for="invoice_date" class="d-flex mx-1 w-8rem">Invoice Time:
                                                     <span class="text-danger mx-1">*</span></label>
-                                                <input type="date" id="invoice_date" class="form-control w-10rem" value="{{  date("Y-m-d") }}"/>
+                                                <input type="date" id="invoice_date" class="form-control w-10rem"
+                                                    value="{{ date('Y-m-d') }}" />
                                             </div>
                                         </div>
                                         @include('sales._partials.addNewCustomerModal', [
@@ -161,8 +162,8 @@
                                                             <label>Due Amount: <span id="due_amount">00</span></label>
                                                         </div>
                                                         <div class="d-flex mt-1 justify-content-end">
-                                                            <button class="btn btn-success btn-sm submitbtn" type="button"
-                                                                onclick="handleSubmit()">Submit</button>
+                                                            <button class="btn btn-success btn-sm submitbtn"
+                                                                type="button" onclick="handleSubmit()">Submit</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -213,10 +214,10 @@
                     });
                     return false;
                 }
-                setTimeout(()=>{
+                setTimeout(() => {
                     $(this).val(salesTotalAmount);
                     $("#due_amount").text(0);
-                },4000);
+                }, 4000);
                 $("#due_amount").text(dueAmount);
             });
         };
@@ -230,6 +231,7 @@
             const paid_amount = $("#paid_amount").val();
 
             $(".submitbtn").text('Processing ...');
+            $(".submitbtn").attr('disabled', true);
 
 
 
@@ -241,6 +243,7 @@
                 });
 
                 $(".submitbtn").text('Submit');
+                $(".submitbtn").attr('disabled', false);
                 return false;
             }
 
@@ -253,6 +256,7 @@
                     title: "Please Selected a Customer",
                 });
                 $(".submitbtn").text('Submit');
+                $(".submitbtn").attr('disabled', false);
                 return false;
             }
 
@@ -262,6 +266,7 @@
                     title: "Please add product for customizations",
                 });
                 $(".submitbtn").text('Submit');
+                $(".submitbtn").attr('disabled', false);
                 return false;
             }
 
@@ -272,6 +277,7 @@
                     title: "Please Enter a paid amount",
                 });
                 $(".submitbtn").text('Submit');
+                $(".submitbtn").attr('disabled', false);
                 return false;
             }
 
@@ -311,6 +317,7 @@
                             title: "Something went wrong, Please try again.!",
                         });
                         $(".submitbtn").text('Submit');
+                        $(".submitbtn").attr('disabled', false);
                     }
                 });
         };
@@ -358,7 +365,7 @@
                     ${
                         parseInt(item.current_stock) > 0
                             ? `<button type="button" class="btn btn-sm btn-success"
-                                            onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
+                                                onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
                             : "No Stock Available"
                     }
                 </td>
@@ -380,7 +387,7 @@
         // Function to handle adding to product customization
         function addToProductCustomization(productAttrID) {
 
-            const hasCusomizationData = setCusomizationData.find(item => item.product_id === productAttrID);
+            const hasCusomizationData = setCusomizationData.find(item => item.id === productAttrID);
 
             if (hasCusomizationData) {
                 hasCusomizationData.qty += 1;
@@ -393,7 +400,7 @@
                     p_code: productAttr.code,
                     product_attribute_id: productAttr.id,
                     p_name: productAttr.product.name,
-                    product_id: productAttr.id,
+                    product_id: productAttr.product.id,
                     p_color: productAttr.color,
                     p_model: productAttr.model,
                     p_size: productAttr.size,
