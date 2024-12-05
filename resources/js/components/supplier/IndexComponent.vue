@@ -187,10 +187,11 @@ const fetchSupplier = () => {
     });
 };
 
+
 const statusDesign = (status) => {
-    if (status === 1) {
+    if (status == 1) {
         return '<span class="badge bg-success">Active</span>';
-    } else if (status === 0) {
+    } else if (status == 0) {
         return '<span class="badge bg-danger">Inactive</span>';
     } else {
         return '<span class="badge bg-secondary">Unknown</span>';
