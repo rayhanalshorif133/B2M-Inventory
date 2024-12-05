@@ -102,4 +102,22 @@ class CustomerController extends Controller
             return $this->respondWithError('error', 'Something went wrong.!');
         }
     }
+
+    public function delete($id)
+    {
+        try {
+            // Find the customer by ID
+            $customer = Customer::find($id);
+            if (!$customer) {
+                return $this->respondWithError('error', 'Customer not found.');
+            }
+
+            $customer->status = $customer->status == 0 ? 1 : 0; // Assuming 0 means deleted or inactive
+            $customer->save();
+
+            return $this->respondWithSuccess('success', 'Customer deleted successfully');
+        } catch (\Throwable $th) {
+            return $this->respondWithError('error', 'Something went wrong.!');
+        }
+    }
 }

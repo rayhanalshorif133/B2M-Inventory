@@ -115,6 +115,8 @@ Route::middleware('auth')
         Route::post('/create', 'create')->name('create');
         Route::get('/fetch', 'fetch')->name('fetch');
         Route::get('/list', 'list')->name('list');
+        Route::put('/update', 'update')->name('update');
+        Route::delete('/{id}/delete', 'delete')->name('delete');
     });
 
 Route::middleware('auth')
@@ -124,6 +126,7 @@ Route::middleware('auth')
         Route::post('/create', 'create')->name('create');
         Route::get('/fetch', 'fetch')->name('fetch');
         Route::put('/update', 'update')->name('update');
+        Route::delete('/{id}/delete', 'delete')->name('delete');
         Route::get('/list', 'list')->name('list');
     });
 

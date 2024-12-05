@@ -20,6 +20,7 @@
                                 <th>Email</th>
                                 <th>Contact</th>
                                 <th>Address</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -172,11 +173,11 @@ const fetchCustomer = () => {
         data.value = [];
         GET_DATA.length > 0 &&
             GET_DATA.map(function (item, index) {
-                const btns = `<div class="btn-group">
-                    <button type="button" class="btn btn-info btn-sm editBtn" data-id="${item.id}">
+                const btns = `<div class="btn-group" data-id="${item.id}">
+                    <button type="button" class="btn btn-info btn-sm editBtn" >
                      <i class="fa-regular fa-pen-to-square"></i> Edit
                     </button>
-                    <button type="button" class="btn btn-danger btn-sm">
+                    <button type="button" class="btn btn-danger btn-sm deleteBtn">
                     Delete <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>`;
@@ -186,6 +187,7 @@ const fetchCustomer = () => {
                     item.email,
                     item.contact,
                     item.address,
+                    statusDesign(item.status),
                     btns,
                 ];
                 data.value.push(PUTDATA);
@@ -193,11 +195,23 @@ const fetchCustomer = () => {
     });
 };
 
+const statusDesign = (status) => {
+    if (status === 1) {
+        return '<span class="badge bg-success">Active</span>';
+    } else if (status === 0) {
+        return '<span class="badge bg-danger">Inactive</span>';
+    } else {
+        return '<span class="badge bg-secondary">Unknown</span>';
+    }
+};
+
 const handleEdit = () => {
     // Event delegation to handle clicks on dynamically generated buttons
     document.addEventListener("click", (event) => {
         if (event.target.closest(".editBtn")) {
-            const id = event.target.closest(".btn").getAttribute("data-id");
+            const id = event.target
+                .closest(".btn-group")
+                .getAttribute("data-id");
             const modalElement = document.getElementById("editCustomer");
             showModal.value = new bootstrap.Modal(modalElement);
             axios.get(`/customer/fetch?customer_id=${id}`).then((res) => {
@@ -205,9 +219,33 @@ const handleEdit = () => {
                 showModal.value.show();
             });
         }
-        if (event.target.closest(".statusBtn")) {
-            const id = event.target.closest(".btn").getAttribute("data-id");
-            handleStatusBtn(id);
+        if (event.target.closest(".deleteBtn")) {
+            const id = event.target
+                .closest(".btn-group")
+                .getAttribute("data-id");
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/customer/${id}/delete`).then((res) => {
+                        const { data } = res.data;
+
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: data,
+                            icon: "success",
+                        });
+
+                        fetchCustomer();
+                    });
+                }
+            });
         }
     });
 };

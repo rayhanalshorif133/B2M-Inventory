@@ -37,6 +37,13 @@ class SupplierController extends Controller
                 ->get();
             return $this->respondWithSuccess('Successfully fetched purchases data', $purchases);
         }
+
+        if ($request->supplier_id) {
+            $supplier = Supplier::select()->where('id', $request->supplier_id)->first();
+            return $this->respondWithSuccess('Successfully fetched supplier data', $supplier);
+        }
+
+
         $suppliers = Supplier::select('id', 'name')->where('company_id', Auth::user()->company_id)->get();
         return $this->respondWithSuccess('Successfully fetched supplier data', $suppliers);
     }
@@ -62,6 +69,52 @@ class SupplierController extends Controller
             return $this->respondWithSuccess('success', 'Supplier created successfully');
         } catch (\Throwable $th) {
             return $this->respondWithError('error', 'Something wents wrong.!');
+        }
+    }
+
+
+    public function update(Request $request)
+    {
+        try {
+            // Find the supplier by ID
+            $supplier = Supplier::find($request->id);
+
+            // If the supplier doesn't exist, return an error
+            if (!$supplier) {
+                return $this->respondWithError('error', 'Supplier not found.');
+            }
+
+            // Update the supplier's details
+            $supplier->name = $request->name;
+            $supplier->contact = $request->contact;
+            $supplier->address = $request->address;
+            $supplier->email = $request->email;
+            $supplier->others_info = $request->others_info;
+            $supplier->company_id = Auth::user()->company_id;
+            $supplier->save();
+
+            return $this->respondWithSuccess('success', 'Supplier updated successfully');
+        } catch (\Throwable $th) {
+            return $this->respondWithError('error', $th->getMessage());
+        }
+    }
+
+
+    public function delete($id)
+    {
+        try {
+            // Find the supplier by ID
+            $supplier = Supplier::find($id);
+            if (!$supplier) {
+                return $this->respondWithError('error', 'Supplier not found.');
+            }
+
+            $supplier->status = $supplier->status == 0 ? 1 : 0; // Assuming 0 means deleted or inactive
+            $supplier->save();
+
+            return $this->respondWithSuccess('success', 'Supplier deleted successfully');
+        } catch (\Throwable $th) {
+            return $this->respondWithError('error', 'Something went wrong.');
         }
     }
 }
