@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('email')->nullable();
             $table->string('others_info')->nullable();
+            $table->unsignedBigInteger('status')->default(1)->nullable();
             $table->timestamps();
         });
 

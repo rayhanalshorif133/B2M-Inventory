@@ -123,6 +123,7 @@ Route::middleware('auth')
     ->controller(CustomerController::class)->group(function () {
         Route::post('/create', 'create')->name('create');
         Route::get('/fetch', 'fetch')->name('fetch');
+        Route::put('/update', 'update')->name('update');
         Route::get('/list', 'list')->name('list');
     });
 

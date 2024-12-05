@@ -39,6 +39,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @yield('head')
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
