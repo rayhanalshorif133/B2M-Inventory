@@ -1,9 +1,15 @@
 @php
-    $user = \App\Models\User::select()
+    if(Auth::check()){
+        $user = \App\Models\User::select()
         ->where('company_id', Auth::user()->company_id)
         ->where('id', Auth::user()->id)
         ->with('company', 'roles')
         ->first();
+    }else{
+        return redirect()->route('logout');
+    }
+
+
     $currentRouteName = Route::currentRouteName();
 @endphp
 <aside class="main-sidebar sidebar-dark-primary elevation-4">

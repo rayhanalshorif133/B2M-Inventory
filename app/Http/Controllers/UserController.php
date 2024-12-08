@@ -48,7 +48,8 @@ class UserController extends Controller
     public function create(Request $request)
     {
         if ($request->method() == 'GET') {
-            return view('user.create');
+            $roles = Role::select('id', 'name')->where('name', '!=', 'super-admin')->orderBy('id', 'asc')->get();
+            return view('user.create', compact('roles'));
         }
 
 
@@ -57,7 +58,8 @@ class UserController extends Controller
             $has_email = User::select('id')->where('email', $request['email'])->where('company_id', Auth::user()->company_id)->first();
 
             if ($has_email) {
-                return $this->respondWithError('error', 'Email already exists');
+                Session::flash('error', 'Email already exists');
+                return redirect()->back()->withInput();
             }
 
 
@@ -66,14 +68,29 @@ class UserController extends Controller
             $user->email = $request['email'];
             $user->company_id = Auth::user()->company_id;
             $user->password = Hash::make($request['password']);
-            $user->image = $this->storeImage($request['image']);
+
+
+            if ($request->hasFile('profile_image')) {
+                $file = $request->file('profile_image');
+                $destinationPath = public_path('images/user');
+                $fileExtension = $file->getClientOriginalExtension();
+                $fileName = uniqid() . '.' . $fileExtension;
+                $file->move($destinationPath, $fileName);
+                $logoPath = 'images/user/' . $fileName;
+                $user->image = $logoPath;
+            }
+
             $user->save();
+
+            // Assign the role to the user
             $user->assignRole($request['role']);
 
-
-            return $this->respondWithSuccess('success', 'Successfully created user');
+            Session::flash('success', 'Successfully created user');
+            return redirect()->route('user.list');
         } catch (\Throwable $th) {
-            return $this->respondWithError('error', 'Something went wrong');
+            Session::flash('error', $th->getMessage());
+            // Session::flash('error', 'Something went wrong');
+            return redirect()->back()->withInput();
         }
     }
 
@@ -149,7 +166,6 @@ class UserController extends Controller
             $company->save();
             Session::flash('success', 'User profile successfully updated!');
             return redirect()->back();
-
         } catch (\Throwable $th) {
             return $this->respondWithError('error', $th->getMessage());
         }

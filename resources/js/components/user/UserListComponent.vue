@@ -46,7 +46,7 @@ axios.get("/user/list").then(function (response) {
     GET_DATA.length > 0 &&
         GET_DATA.map(function (item, index) {
             console.log(item)
-            const image = `<img src="${item.image}" class="h-2 w-2"/>`;
+            const image = `<img src="/${item.image}" class="h-2 w-2"/>`;
             const btns = `<div class="btn-group">
                     <button type="button" class="btn btn-info btn-sm">
                      <i class="fa-regular fa-pen-to-square"></i> Edit
