@@ -114,7 +114,6 @@ const fetchDetailsPurchaseData = (id) => {
 };
 
 const exportToExcel = () => {
-    // Create a new workbook and add a worksheet with the data
     const worksheet = XLSX.utils.json_to_sheet(
         data.value.map((item) => ({
             "#": item[0],

@@ -31,7 +31,6 @@
 
     <title>Inovice</title>
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-    {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
 </head>
 
 <body>
@@ -40,7 +39,11 @@
             <div class="sm:px-3 md:px-4 xl:px-5">
                 <div class="flex justify-between w-full">
                     <div class="flex mt-2 space-x-3">
-                        <img src="{{ $sales->company->logo }}" alt="company logo" class="w-44 h-14 mt-2" />
+                        @php
+                            $imageUrl = $sales->company->logo;
+                            $imageUrl = str_replace('\/', '/', $imageUrl);
+                        @endphp
+                        <img src="{{ asset($imageUrl)}}" alt="company logo" class="w-auto h-14 mt-2" />
                         <div class="space-y-2">
                             <h1 class="text-xl font-bold">
                                 {{ $sales->company->name }}

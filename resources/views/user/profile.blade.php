@@ -234,6 +234,7 @@
             fetchAuthData();
 
             $(".editProfileBtn").click(() => {
+                console.log('hello');
                 $(".editProfileBtn").toggleClass('d-none');
                 $(".show_profile").toggleClass('d-none');
                 $(".updateProfileBtn").toggleClass('d-none');

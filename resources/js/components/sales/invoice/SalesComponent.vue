@@ -265,7 +265,6 @@ export default {
                 window.print();
             }, 300);
 
-
         };
 
         return {

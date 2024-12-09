@@ -26,7 +26,7 @@ class SalesController extends Controller
             $query = Sales::where('company_id', Auth::user()->company_id)
                 ->with('customer')->orderBy('created_at', 'desc')
                 ->get();
-            return DataTables::of($query)->toJson();
+            return DataTables::of($query)->addIndexColumn()->toJson();
         }
         return view('sales.index');
     }
