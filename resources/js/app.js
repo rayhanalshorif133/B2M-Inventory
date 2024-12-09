@@ -6,7 +6,6 @@
 
 import './bootstrap';
 
-import './auth';
 import './main-app';
 import './purchase-invoice-app.js';
 import './purchase-pay-slip.js';
