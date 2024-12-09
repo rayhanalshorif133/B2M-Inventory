@@ -24,7 +24,6 @@ app.use(vuetify);
 // Authenticated components
 import TipsSkipComponent from './components/partials/TipsSkipComponent.vue';
 import BreadcrumbComponent from './components/partials/BreadcrumbComponent.vue';
-import DashboardComponent from './components/DashboardComponent.vue';
 import FooterComponent from './components/partials/FooterComponent.vue';
 import TransactionTypeListComponent from './components/transaction-type/ListComponent.vue';
 
@@ -32,7 +31,6 @@ app.component('breadcrumb-component', BreadcrumbComponent);
 app.component('tips-skip-component', TipsSkipComponent);
 
 // single component
-app.component('dashboard-component', DashboardComponent);
 app.component('transaction-type-list-component', TransactionTypeListComponent);
 
 // user
@@ -180,7 +178,5 @@ app.component('supplier-list-component', SupplierListComponent);
 app.component('footer-component', FooterComponent);
 
 
-import TestComponent from './components/Test.vue';
-app.component('test-component', TestComponent);
 app.mount('#app');
 

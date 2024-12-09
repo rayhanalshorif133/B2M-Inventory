@@ -197,7 +197,7 @@
             handleCreateNewCustomer();
             handleProductChange();
             // getProductAttributesByBarcode();
-            // handlePaidAmount();
+            handlePaidAmount();
         });
 
 
@@ -214,11 +214,6 @@
                     });
                     return false;
                 }
-                setTimeout(() => {
-                    $(this).val(salesTotalAmount);
-                    $("#due_amount").text(0);
-                }, 4000);
-                $("#due_amount").text(dueAmount);
             });
         };
 
@@ -407,9 +402,9 @@
                     p_model: productAttr.model,
                     purchase_rate: productAttr.purchase_rate,
                     sales_rate: productAttr.sales_rate,
-                    qty: 0,
+                    qty: 1,
                     discount: 0,
-                    total: 0,
+                    total: productAttr.sales_rate,
                 };
                 setCusomizationData.push(SET_VALUE);
             }
