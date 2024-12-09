@@ -258,7 +258,14 @@ class SalesController extends Controller
             $data = ['salesDetails' => $salesDetails, 'sales' => $sales, 'salesPayment' => $salesPayment];
             return $this->respondWithSuccess('Successfully fetch sales', $data);
         } else {
-            return view('sales.invoice');
+            $salesDetails = SalesDetails::select()->where('sales_id', $id)
+                ->with('product', 'productAttribute')
+                ->get();
+
+            $sales = Sales::select()->where('id', $id)->with('company', 'customer', 'createdBy')->first();
+            $salesPayment = SalesPayment::select()->where('sales_id', $sales->id)->with('transactionType')->first();
+            $print_date = date('Y-m-d');
+            return view('sales.invoice', compact('print_date','sales','salesDetails','salesPayment'));
         }
     }
 
