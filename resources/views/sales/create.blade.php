@@ -203,10 +203,11 @@
 
         const handlePaidAmount = () => {
             $("#paid_amount").keyup(function() {
-                const paidAmount = $(this).val();
+                const paidAmount = $(this).val() ? $(this).val() : 0;
                 const salesTotalAmount = parseFloat($("#salesTotalAmount").text());
                 var dueAmount = 0;
                 dueAmount = salesTotalAmount - parseFloat(paidAmount);
+                console.log(paidAmount);
                 if (paidAmount > salesTotalAmount) {
                     Toastr.fire({
                         icon: "error",
@@ -214,6 +215,7 @@
                     });
                     return false;
                 }
+                $("#due_amount").text(dueAmount);
             });
         };
 
