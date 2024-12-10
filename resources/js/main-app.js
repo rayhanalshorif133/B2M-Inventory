@@ -8,13 +8,13 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 
 const vuetify = createVuetify({
     icons: {
-      defaultSet: 'mdi',
-      aliases,
-      sets: {
-        mdi,
-      },
+        defaultSet: 'mdi',
+        aliases,
+        sets: {
+            mdi,
+        },
     },
-  });
+});
 
 const app = createApp({});
 
@@ -87,12 +87,7 @@ app.component('purchase-due-collection-component', PurchaseDueCollectionComponen
 
 
 
-// Sales
-import SalesCreateComponent from './components/sales/CreateComponent.vue';
-import SalesListComponent from './components/sales/ListComponent.vue';
 
-app.component('sales-create-component', SalesCreateComponent);
-app.component('sales-list-component', SalesListComponent);
 
 
 // sales-payment-create-component

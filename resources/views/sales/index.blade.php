@@ -74,7 +74,7 @@
                                 Edit
                             </a>
                         </h5>
-                        <button type="button" class="btn-close text-white" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close text-white" onclick="hideShowSalesDetailsModal()"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -109,7 +109,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary text-white" onclick="hideShowSalesDetailsModal()">Close</button>
                     </div>
                 </div>
             </div>
@@ -121,7 +121,114 @@
 
 @push('scripts')
     <script>
+        var showSalesDetails = false;
         $(() => {
+
+            handleDataTable();
+
+            $("#exportToExcel").click(() => $(".exportToExcel").click());
+
+
+
+
+
+
+
+            $(document).on("click", ".showBtn", function() {
+                const id = $(this).data("id");
+
+                showSalesDetails = new bootstrap.Modal(document.getElementById(
+                'showSalesDetails')); // Create the modal instance
+                showSalesDetails.show();
+
+
+                axios.get(`/sales/fetch/${id}`).then((response) => {
+                    $(".salesEditLink").attr("href", `/sales/${id}/edit`);
+                    const {
+                        sales,
+                        salesDetails
+                    } = response.data.data;
+
+                    $("#salesCode").text(sales.code);
+                    $("#invoiceDate").text(sales.invoice_date);
+                    $("#totalAmount").text("৳ " + sales.total_amount);
+                    $("#paidAmount").text("৳ " + sales.paid_amount);
+                    $("#dueAmount").text("৳ " + sales.due_amount);
+                    $("#salesNote").text(sales.note);
+
+                    // salesDetailsBody
+                    $('#salesDetailsBody').empty();
+                    var finalTotal = 0;
+
+                    // Insert rows into the table body
+                    $.each(salesDetails, function(index, item) {
+                        console.log(item)
+                        const row = `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>
+                                    ${item.product_attribute.code}<br>
+                                    ${item.product.name}
+                                    ${item.product_attribute.model != null ? '|' + item.product_attribute.model : ''}
+                                    ${item.product_attribute.color != null ? '|' + item.product_attribute.color : ''}<br>
+                                </td>
+                                <td>${item.qty}</td>
+                                <td>${item.sales_rate} tk</td>
+                                <td>${item.discount} tk</td>
+                                <td>${item.total} tk</td>
+                            </tr>
+                        `;
+                        $('#salesDetailsBody').append(row);
+                        finalTotal += item.total;
+                    });
+                    $("#finalTotal").text(finalTotal);
+                });
+            });
+
+            $(document).on("click", ".deleteBtn", function() {
+                const id = $(this).data("id");
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.delete(`/sales/${id}/delete`).then((result) => {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success",
+                            });
+                            handleDataTable();
+                        });
+
+                    } else {
+                        Swal.fire({
+                            title: "Cancelled",
+                            text: "Your imaginary file is safe :)",
+                            icon: "error",
+                        });
+                    }
+                });
+
+            });
+
+        });
+
+
+        const hideShowSalesDetailsModal = () => {
+            showSalesDetails.hide()
+        };
+
+
+
+
+        const handleDataTable = () => {
+            $('#salesList').DataTable().clear().destroy();
             url = '/sales/list?type=fetch';
             table = $('#salesList').DataTable({
                 processing: true,
@@ -179,7 +286,7 @@
                         render: function(data, type, row) {
                             const btns = `
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-success btn-sm showBtn btn-fit" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showSalesDetails">
+                                    <button type="button" class="btn btn-success btn-sm showBtn btn-fit" data-id="${row.id}" >
                                      <i class="fa-regular fa-eye"></i> View
                                     </button>
                                     <a href="/sales/invoice/${row.id}" type="button" class="btn btn-primary btn-sm print btn-fit">
@@ -195,54 +302,7 @@
                     },
                 ]
             });
-            $("#exportToExcel").click(() => $(".exportToExcel").click());
 
-            $(document).on("click", ".showBtn", function() {
-                const id = $(this).data("id");
-
-                axios.get(`/sales/fetch/${id}`).then((response) => {
-                    $(".salesEditLink").attr("href", `/sales/${id}/edit`);
-                    const {
-                        sales,
-                        salesDetails
-                    } = response.data.data;
-
-                    $("#salesCode").text(sales.code);
-                    $("#invoiceDate").text(sales.invoice_date);
-                    $("#totalAmount").text("৳ " + sales.total_amount);
-                    $("#paidAmount").text("৳ " + sales.paid_amount);
-                    $("#dueAmount").text("৳ " + sales.due_amount);
-                    $("#salesNote").text(sales.note);
-
-                    // salesDetailsBody
-                    $('#salesDetailsBody').empty();
-                    var finalTotal = 0;
-
-                    // Insert rows into the table body
-                    $.each(salesDetails, function(index, item) {
-                        console.log(item)
-                        const row = `
-                            <tr>
-                                <td>${index + 1}</td>
-                                <td>
-                                    ${item.product_attribute.code}<br>
-                                    ${item.product.name}
-                                    ${item.product_attribute.model != null ? '|' + item.product_attribute.model : ''}
-                                    ${item.product_attribute.color != null ? '|' + item.product_attribute.color : ''}<br>
-                                </td>
-                                <td>${item.qty}</td>
-                                <td>${item.sales_rate} tk</td>
-                                <td>${item.discount} tk</td>
-                                <td>${item.total} tk</td>
-                            </tr>
-                        `;
-                        $('#salesDetailsBody').append(row);
-                        finalTotal += item.total;
-                    });
-                    $("#finalTotal").text(finalTotal);
-                });
-            });
-
-        });
+        };
     </script>
 @endpush
