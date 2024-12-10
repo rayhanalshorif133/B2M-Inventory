@@ -287,7 +287,7 @@ class PurchaseController extends Controller
         if ($request->fetch == "1") {
             $query = PurchasePayment::where('company_id', Auth::user()->company_id)
                 ->with('supplier')->orderBy('created_at', 'desc')->get();
-            return DataTables::of($query)->toJson();
+            return DataTables::of($query)->addIndexColumn()->toJson();
         }
         return view('purchase.payment-list');
     }
