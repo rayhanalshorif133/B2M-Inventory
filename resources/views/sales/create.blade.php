@@ -371,7 +371,7 @@
                     ${
                         parseInt(item.current_stock) > 0
                             ? `<button type="button" class="btn btn-sm btn-success"
-                                                            onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
+                                                                onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
                             : "No Stock Available"
                     }
                 </td>
