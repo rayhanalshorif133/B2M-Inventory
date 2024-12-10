@@ -30,7 +30,6 @@
                     <div class="card-header justify-content-between d-flex">
                         <h3 class="card-title">Purchase Payment List</h3>
                         <div class="ml-auto">
-                            {{-- click --}}
                             <button class="btn btn-sm btn-success mx-2" id="exportToExcel">
                                 Export to Excel
                             </button>

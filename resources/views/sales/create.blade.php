@@ -64,7 +64,7 @@
                                         ])
                                     </div>
                                     <div class="col-12 col-md-7 col-lg-7">
-                                        <div class="form-group d-flex">
+                                        <div class="form-group d-flex my-2">
                                             <label for="Product" class="d-flex mx-1">Product
                                                 <span class="text-danger mx-1">*</span></label>
                                             <select class="form-control" id="product" name="product">
@@ -75,7 +75,14 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-5 col-lg-5 row">
-                                        <input type="text" id="barcode" class="form-control" placeholder="Barcode" />
+                                        <div class="d-flex my-2">
+                                            <input type="text" id="barcode" class="form-control mr-3"
+                                                placeholder="Barcode" />
+                                            <a href="{{ route('product.create') }}"
+                                                class="btn btn-success mx-1 mt-1 h-fit btn-sm"
+                                                style="width: 8rem!important; font-size:12px">New Product <i
+                                                    class="fa-solid fa-arrow-right"></i></a>
+                                        </div>
                                     </div>
                                     <div class="col-md-12 col-lg-4">
                                         <div class="card card-navy">
@@ -196,7 +203,7 @@
             // fetchData();
             handleCreateNewCustomer();
             handleProductChange();
-            // getProductAttributesByBarcode();
+            getProductAttributesByBarcode();
             handlePaidAmount();
         });
 
@@ -332,6 +339,8 @@
                         )
                         .then((response) => {
                             const data = response.data.data;
+                            setProductAttributeData = [];
+                            setProductAttributeData = data;
                             setProductDetails(data);
                         });
                 }
@@ -362,7 +371,7 @@
                     ${
                         parseInt(item.current_stock) > 0
                             ? `<button type="button" class="btn btn-sm btn-success"
-                                                onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
+                                                            onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
                             : "No Stock Available"
                     }
                 </td>
