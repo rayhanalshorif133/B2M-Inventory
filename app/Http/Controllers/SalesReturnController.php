@@ -59,7 +59,8 @@ class SalesReturnController extends Controller
     public function create(Request $request)
     {
         if ($request->method() == 'GET') {
-            return view('sales.return.create');
+            $date = date('Y-m-d');
+            return view('sales.return.create',compact('date'));
         }
 
 
