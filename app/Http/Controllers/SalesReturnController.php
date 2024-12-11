@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ProductAttribute;
 use App\Models\Sales;
+use App\Models\TransactionType;
 use App\Models\SalesReturn;
 use App\Models\SalesReturnDetails;
 use App\Models\SalesReturnPayment;
@@ -60,12 +61,14 @@ class SalesReturnController extends Controller
     {
         if ($request->method() == 'GET') {
             $date = date('Y-m-d');
-            return view('sales.return.create',compact('date'));
+            $transactionTypes = TransactionType::select()->where('company_id', Auth::user()->company_id)->get();
+            return view('sales.return.create',compact('date','transactionTypes'));
         }
 
 
         DB::beginTransaction();
         try {
+
 
 
             $sales = Sales::find($request->sales_id);
@@ -83,6 +86,7 @@ class SalesReturnController extends Controller
             $salesReturn->created_time = date('H:i:s');
             $salesReturn->created_date = date('Y-m-d');
             $salesReturn->save();
+
 
 
             foreach ($request->product_details as $item) {
@@ -108,6 +112,8 @@ class SalesReturnController extends Controller
                 $find_product_attribute->current_stock =  $current_stock;
                 $find_product_attribute->save();
             }
+
+
 
             // Sales return payments
             $salesReturnPayment = new SalesReturnPayment();

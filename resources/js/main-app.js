@@ -107,10 +107,8 @@ app.component('payment-edit-component', PaymentEditComponent);
 
 // sales return
 import SalesReturnListComponent from './components/sales/return/ListComponent.vue';
-import SalesReturnCreateComponent from './components/sales/return/CreateComponent.vue';
 import SalesReturnEditComponent from './components/sales/return/EditComponent.vue';
 app.component('sales-return-list-component', SalesReturnListComponent);
-app.component('sales-return-create-component', SalesReturnCreateComponent);
 app.component('sales-return-edit-component', SalesReturnEditComponent);
 
 

@@ -60,7 +60,7 @@ class Controller extends BaseController
     {
 
         $GET_IMAGE = explode(";base64,", $image);
-        if($GET_IMAGE){
+        if ($GET_IMAGE) {
             $img = $GET_IMAGE[1];
         }
         $data = base64_decode($img);
@@ -69,41 +69,41 @@ class Controller extends BaseController
         $name = '/storage/' . $file_name;
         return $name;
     }
-    
-    
-    protected function newStoreImage($image){
-        
+
+
+    protected function newStoreImage($image)
+    {
+
         // Split the base64 image string
-$GET_IMAGE = explode(";base64,", $image);
-if (count($GET_IMAGE) < 2) {
-    return 'Invalid image format';
-}
+        $GET_IMAGE = explode(";base64,", $image);
+        if (count($GET_IMAGE) < 2) {
+            return 'Invalid image format';
+        }
 
-$img = $GET_IMAGE[1];
-$data = base64_decode($img);
+        $img = $GET_IMAGE[1];
+        $data = base64_decode($img);
 
-if (!$data) {
-    return 'Base64 decode failed';
-}
+        if (!$data) {
+            return 'Base64 decode failed';
+        }
 
-// Create a unique temporary file name
-$tempFilePath = sys_get_temp_dir() . '/' . uniqid() . '.png';
+        // Create a unique temporary file name
+        $tempFilePath = sys_get_temp_dir() . '/' . uniqid() . '.png';
 
-// Save the decoded image data to the temporary file
-file_put_contents($tempFilePath, $data);
+        // Save the decoded image data to the temporary file
+        file_put_contents($tempFilePath, $data);
 
-// Define the final file path in the public storage
-$file_name = 'images/' . uniqid() . '.png';
-$destinationPath = storage_path('app/public/' . $file_name);
+        // Define the final file path in the public storage
+        $file_name = 'images/' . uniqid() . '.png';
+        $destinationPath = storage_path('app/public/' . $file_name);
 
-// Move the temporary file to the public storage path
-if (rename($tempFilePath, $destinationPath)) {
-    // Ensure the file is publicly accessible
-    return asset('storage/' . $file_name);
-} else {
-    return 'Failed to move image to public storage';
-}
-
-        
+        // Move the temporary file to the public storage path
+        if (rename($tempFilePath, $destinationPath)) {
+            // Ensure the file is publicly accessible
+            return asset('storage/' . $file_name);
+        } else {
+            return 'Failed to move image to public storage';
+        }
     }
+
 }

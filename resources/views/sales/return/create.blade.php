@@ -4,10 +4,26 @@
     <div class="content-wrapper">
 
 
-        <breadcrumb-component :title="'Sales Return'" :items="{{ json_encode(['home', 'Sales Return']) }}">
-        </breadcrumb-component>
 
-        <sales-return-create-component></sales-return-create-component>
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Sales Return</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('home') }}" class="text-capitalize">home</a>
+                                <span class="text-gray"> / </span>
+                                <span class="text-gray">Sales Return</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div>
             <section class="content">
@@ -42,25 +58,24 @@
                                                     <option disabled selected value="0">Select an Invoice</option>
                                                 </select>
                                             </div>
-                                            {{-- @if ($getSales)
-                                            <div class="mt-3 border p-2">
+
+                                            <div class="mt-3 border p-2 sales_info d-none">
                                                 <div>
                                                     <h5><b>Sales Info:</b></h5>
                                                     <p>
                                                         <b>Total Amount:</b>
-                                                        {{ $getTotalAmount }} tk
+                                                        <span class="sales_total_amount mx-1"></span> tk
                                                     </p>
                                                     <p>
                                                         <b>Paid Amount:</b>
-                                                        {{ $getSales->paid_amount }} tk
+                                                        <span class="sales_paid_amount mx-1"></span> tk
                                                     </p>
                                                     <p>
                                                         <b>Due Amount:</b>
-                                                        {{ $getSales->due_amount }} tk
+                                                        <span class="sales_due_amount mx-1"></span> tk
                                                     </p>
                                                 </div>
                                             </div>
-                                        @endif --}}
 
                                         </div>
                                     </div>
@@ -71,90 +86,63 @@
                                             <h3 class="card-title">Product Informations</h3>
                                         </div>
                                         <div class="card-body">
-                                            {{-- <table class="table table-striped table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col" class="bg-success">#</th>
-                                                    <th scope="col" class="bg-success">Particulars</th>
-                                                    <th scope="col" class="bg-success">Qty</th>
-                                                    <th scope="col" class="bg-success">Sales Rate</th>
-                                                    <th scope="col" class="bg-success">Discount</th>
-                                                    <th scope="col" class="w-25 bg-success">Return Qty</th>
-                                                    <th scope="col" class="text-end bg-success">Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($salesDetailsList as $item)
+                                            <table class="table table-striped table-bordered">
+                                                <thead>
                                                     <tr>
-                                                        <td class="d-flex-item-center">
-                                                            <button type="button" class="btn btn-sm btn-danger mt-2"
-                                                                onclick="removeItem({{ $item->id }})">
-                                                                <i class="fa-solid fa-xmark"></i>
-                                                            </button>
-                                                        </td>
-                                                        <td>
-                                                            {{ $item->product_attribute->code }}<br />
-                                                            {{ $item->product_attribute->color }}<br />
-                                                            {{ $item->product_attribute->model }}
-                                                        </td>
-                                                        <td>{{ $item->qty }}</td>
-                                                        <td>{{ $item->sales_rate }}</td>
-                                                        <td>{{ $item->discount }}</td>
-                                                        <td>
-                                                            <input type="number" class="form-control"
-                                                                value="{{ $item->return_qty }}"
-                                                                onchange="handleReturnQty(this, {{ $item->id }})" />
-                                                        </td>
-                                                        <td class="text-end">{{ $item->total }}</td>
+                                                        <th scope="col" class="bg-success">#</th>
+                                                        <th scope="col" class="bg-success">Particulars</th>
+                                                        <th scope="col" class="bg-success">Qty</th>
+                                                        <th scope="col" class="bg-success">Sales Rate</th>
+                                                        <th scope="col" class="bg-success">Discount</th>
+                                                        <th scope="col" class="w-25 bg-success">Return Qty</th>
+                                                        <th scope="col" class="text-end bg-success">Total</th>
                                                     </tr>
-                                                @endforeach
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td class="text-end bg-success" colspan="6">Total Amount:</td>
-                                                    <td class="text-end bg-success">{{ $getSales->total_amount }}</td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
+                                                </thead>
+                                                <tbody id="salesDetailsBody"></tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td class="text-end bg-success" colspan="6">Total Amount:</td>
+                                                        <td class="text-end bg-success total_amount"></td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
 
-                                        <div class="product_customization_note_amount mt-1">
-                                            <div class="product_customization_note">
-                                                <label class="mt-2 mx-2 w-8rem">Note:</label>
-                                                <textarea class="form-control" placeholder="Note">{{ $note }}</textarea>
-                                            </div>
-                                            <div class="flex-column product_customization_amount">
-                                                <div class="d-flex mt-1">
-                                                    <div>
-                                                        <label class="w-8rem">Transaction Type</label>
-                                                        <select class="form-control w-fit" id="transaction_type"
-                                                            name="transaction_type">
-                                                            <option selected disabled value="">Transaction Type
-                                                            </option>
-                                                            @foreach ($transactionTypes as $item)
-                                                                <option value="{{ $item->id }}">{{ $item->name }}
+                                            <div class="product_customization_note_amount mt-1">
+                                                <div class="product_customization_note">
+                                                    <label class="mt-2 mx-2 w-8rem">Note:</label>
+                                                    <textarea class="form-control" id="note" placeholder="Note"></textarea>
+                                                </div>
+                                                <div class="flex-column product_customization_amount">
+                                                    <div class="d-flex mt-1">
+                                                        <div>
+                                                            <label class="w-8rem">Transaction Type</label>
+                                                            <select class="form-control w-fit" id="transactionType">
+                                                                <option selected disabled value="">Transaction Type
                                                                 </option>
-                                                            @endforeach
-                                                        </select>
+                                                                @foreach ($transactionTypes as $item)
+                                                                    <option value="{{ $item->id }}">
+                                                                        {{ $item->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="mx-2">
+                                                            <label class="mx-2 w-8rem">Return Amount</label>
+                                                            <input type="number" class="form-control return_amount"
+                                                                placeholder="Return amount" value="0" />
+                                                        </div>
                                                     </div>
-                                                    <div class="mx-2">
-                                                        <label class="mx-2 w-8rem">Return Amount</label>
-                                                        <input type="number" class="form-control"
-                                                            placeholder="Return amount" name="return_amount"
-                                                            value="{{ $return_amount }}"
-                                                            onchange="handleReturnAmount(this)" />
+                                                    <div class="d-flex mt-1 justify-content-end">
+                                                        <label>Due Amount: <span id="due_amount">0</span></label>
                                                     </div>
-                                                </div>
-                                                <div class="d-flex mt-1 justify-content-end">
-                                                    <label>Due Amount: {{ $due_amount }}</label>
-                                                </div>
-                                                <div class="d-flex mt-1 justify-content-end">
-                                                    <button type="button" class="btn btn-success btn-sm"
-                                                        onclick="submitBtn()" @disabled($submitBtnStatus)>
-                                                        {{ $submitBtnText }}
-                                                    </button>
+                                                    <div class="d-flex mt-1 justify-content-end">
+                                                        <button type="button" class="btn btn-success btn-sm submitBtn"
+                                                            onclick="submitBtn()">
+                                                            Submit
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -171,12 +159,17 @@
 @push('scripts')
     <script>
         var salesList = [];
+        var salesDetailsData = [];
+        var returnAmount = 0;
         $(() => {
             const today = new Date();
             const formattedDate = today.toISOString().split('T')[0]; // Extracts the date in YYYY-MM-DD format
             $("#selectedDate").val(formattedDate);
+            // $("#selectedDate").val(formattedDate);
             fetchSipplier(formattedDate);
             handleChange();
+            $('.submitBtn').prop('disabled', true);
+
         });
 
         const fetchSipplier = (date) => {
@@ -228,6 +221,153 @@
                     $("#selectedInvoice").append(new Option(item.code, item.id));
                 });
             });
+
+            $("#selectedInvoice").on('change', function() {
+                const selectedInvoice = $(this).val();
+                axios
+                    .get(
+                        `/sales/fetch-invoice?type=sales-return&sales_id=${selectedInvoice}`
+                    )
+                    .then((response) => {
+                        const {
+                            sales,
+                            salesDetails
+                        } = response.data.data;
+                        if (sales) {
+                            $(".sales_info").removeClass('d-none');
+                            $(".sales_total_amount").text(sales.total_amount);
+                            $(".sales_paid_amount").text(sales.paid_amount);
+                            $(".sales_due_amount").text(sales.due_amount);
+                        }
+                        console.log(salesDetails);
+                        salesDetailsInsert(salesDetails);
+                        $('.submitBtn').prop('disabled', false);
+                    });
+            });
+
+
+            $(".return_amount").on("keyup", function() {
+                returnAmount = parseFloat($(this).val());
+                const total_amount = parseFloat($('.total_amount').text());
+                const dueAmount = total_amount - returnAmount;
+                $('#due_amount').text(dueAmount);;
+
+            });
+
+
+
+        };
+
+
+
+
+
+
+
+
+
+        function salesDetailsInsert(data, hasSame = true) {
+            salesDetailsData = data;
+            const tbody = $('#salesDetailsBody');
+            tbody.empty();
+
+            var total_amount = 0;
+            data.forEach((item) => {
+                if (hasSame == true) {
+                    item.return_qty = item.qty;
+                }
+                total_amount += parseFloat(item.total);
+                const row = `
+            <tr>
+                <td class="d-flex-item-center">
+                    <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeItem(${item.id})">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </td>
+                <td>
+                    ${item.product_attribute.code}<br />
+                    ${item.product_attribute.color ? `<span>${item.product_attribute.color}</span><br />` : ''}
+                    ${item.product_attribute.model ? `<span>${item.product_attribute.model}</span>` : ''}
+                </td>
+                <td>${item.qty}</td>
+                <td>${item.sales_rate}</td>
+                <td>${item.discount}</td>
+                <td>
+                    <input type="number" class="form-control handleReturnQty" data-item_id="${item.id}" value="${item.return_qty}"/>
+                </td>
+                <td class="text-end">${item.total}</td>
+            </tr>
+        `;
+                tbody.append(row);
+            });
+
+            $(".total_amount").text(total_amount);
+
+            $(".handleReturnQty").on('blur', function(e) {
+                $(this).removeClass("form-control-red");
+                $('.submitBtn').prop('disabled', false);
+
+                const returnQty = parseInt($(this).val());
+                const itemId = $(this).data('item_id');
+                const item = data.find(d => d.id === itemId);
+                item.total = parseInt($(this).val()) * item.sales_rate;
+                item.return_qty = parseInt($(this).val());
+
+                if (returnQty > item.qty) {
+                    Toastr.fire({
+                        icon: "error",
+                        title: "Quantity is out of range",
+                    });
+                    $(this).addClass("form-control-red");
+                    $('.submitBtn').prop('disabled', true);
+                    return false;
+                }
+
+                salesDetailsInsert(data, false);
+            });
+        }
+
+
+
+        const submitBtn = () => {
+
+            const data = {
+                sales_id: $("#selectedInvoice").val(),
+                note: $("#note").val(),
+                transaction_type_id: $("#transactionType").val(),
+                total_amount: parseFloat($('.total_amount').text()),
+                due_amount: parseFloat($('#due_amount').text()),
+                return_amount: returnAmount,
+                product_details: salesDetailsData,
+            };
+
+
+
+            $('.submitBtn').text('Processing');
+            $('.submitBtn').prop('disabled', true);
+
+
+            axios.post("/sales/return/create", data).then((response) => {
+                const {
+                    data,
+                    status
+                } = response.data;
+
+                if (status == true) {
+                    Toastr.fire({
+                        icon: "success",
+                        title: "Sales Return successful",
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = `/sales/return/invoice/${data.id}`;
+                    }, 1600);
+                }else{
+                    $('.submitBtn').text('Submit');
+                    $('.submitBtn').prop('disabled', false);
+                }
+            });
+
         };
     </script>
 @endpush
