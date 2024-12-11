@@ -321,9 +321,10 @@ class SalesController extends Controller
                     $customer = $customer->due_amount > 0;
                     return $customer;
                 });
-            return DataTables::of($query)->toJson();
+            return DataTables::of($query)->addIndexColumn()->toJson();
         }
-        return view('sales.due-collection');
+        $transactionTypes = TransactionType::select()->where('company_id', Auth::user()->company_id)->get();
+        return view('sales.due-collection', compact('transactionTypes'));
     }
 
     // Fetches the
