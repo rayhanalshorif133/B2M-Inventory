@@ -30,7 +30,7 @@ class SalesReturnController extends Controller
                 ->with('customer')
                 ->orderBy('created_at', 'desc')
                 ->get();
-            return DataTables::of($query)->toJson();
+            return DataTables::of($query)->addIndexColumn()->toJson();
         }
 
         return view('sales.return.list');
@@ -62,7 +62,7 @@ class SalesReturnController extends Controller
         if ($request->method() == 'GET') {
             $date = date('Y-m-d');
             $transactionTypes = TransactionType::select()->where('company_id', Auth::user()->company_id)->get();
-            return view('sales.return.create',compact('date','transactionTypes'));
+            return view('sales.return.create', compact('date', 'transactionTypes'));
         }
 
 

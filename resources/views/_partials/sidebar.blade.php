@@ -65,6 +65,7 @@
                         $currentRouteName == 'sales.return.create' ||
                         $currentRouteName == 'payment.sales.pay' ||
                         $currentRouteName == 'sales.payment-list' ||
+                        $currentRouteName == 'sales.return.edit' ||
                         $currentRouteName == 'sales.return.index' ||
                         $currentRouteName == 'sales.due-collection') menu-is-opening menu-open @endif">
                     <a href="#" class="nav-link @if (
@@ -74,6 +75,7 @@
                             $currentRouteName == 'sales.return.create' ||
                             $currentRouteName == 'sales.payment-list' ||
                             $currentRouteName == 'sales.return.index' ||
+                            $currentRouteName == 'sales.return.edit' ||
                             $currentRouteName == 'sales.due-collection' ||
                             $currentRouteName == 'payment.sales.pay') active menu-open @endif">
                         <i class="text-cyan nav-icon fa-solid fa-hand-holding-dollar"></i>
@@ -106,7 +108,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('sales.return.index') }}"
-                                class="nav-link @if ($currentRouteName == 'sales.return.index') active @endif">
+                                class="nav-link @if ($currentRouteName == 'sales.return.index' || $currentRouteName == 'sales.return.edit') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Sales Return List</p>
                             </a>
