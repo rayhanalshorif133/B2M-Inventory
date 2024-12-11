@@ -2,9 +2,6 @@
 
 @section('content')
     <div class="content-wrapper">
-
-
-
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
@@ -362,7 +359,7 @@
                     setTimeout(() => {
                         window.location.href = `/sales/return/invoice/${data.id}`;
                     }, 1600);
-                }else{
+                } else {
                     $('.submitBtn').text('Submit');
                     $('.submitBtn').prop('disabled', false);
                 }
