@@ -55,7 +55,6 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-
                                 <tbody></tbody>
                             </table>
                         </div>

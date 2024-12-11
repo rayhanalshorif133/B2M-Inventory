@@ -26,11 +26,11 @@
             <section class="content">
                 <div class="container-fluid">
                     <div class="row mx-2">
-                        <div class="card card-navy p-0">
+                        <div class="card card-navy p-0" style="width: 100%">
                             <div class="card-header w-100 bg-navy">
                                 <h3 class="card-title">Sales Return</h3>
                             </div>
-                            <div class="card-body row">
+                            <div class="card-body row" style="width: 100%">
                                 <div class="col-md-4 col-12">
                                     <div class="card card-outline card-info">
                                         <div class="card-header">
@@ -40,17 +40,17 @@
                                         </div>
                                         <div class="card-body">
                                             <div>
-                                                <label class="required">Select a Date:</label>
+                                                <label class="required form-label">Select a Date:</label>
                                                 <input type="date" id="selectedDate" class="form-control" />
                                             </div>
                                             <div>
-                                                <label class="required">Select a Customer:</label>
+                                                <label class="required form-label">Select a Customer:</label>
                                                 <select class="form-select" name="selectedCustomer" id="selectedCustomer">
                                                     <option disabled selected value="0">Select a Customer</option>
                                                 </select>
                                             </div>
                                             <div class="mt-2">
-                                                <label class="required">Select an Invoice:</label>
+                                                <label class="required form-label">Select an Invoice:</label>
                                                 <select class="form-select" name="selectedInvoice" id="selectedInvoice">
                                                     <option disabled selected value="0">Select an Invoice</option>
                                                 </select>
@@ -143,7 +143,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>

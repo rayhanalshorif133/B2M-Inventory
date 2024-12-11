@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div class="table-responsive" style="width: 100%">
                             <table class="table table-bordered display table-hover nowrap" id="salesList"
                                 style="width: 100%">
                                 <thead>
