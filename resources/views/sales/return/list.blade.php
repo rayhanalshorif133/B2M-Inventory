@@ -24,7 +24,6 @@
                 </div>
             </div>
         </div>
-        {{-- <sales-return-list-component></sales-return-list-component> --}}
 
         <section class="content">
             <div class="container-fluid">
