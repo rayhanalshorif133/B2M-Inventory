@@ -100,9 +100,7 @@
                                         <th scope="col">Total</th>
                                     </tr>
                                 </thead>
-                                <tbody id="purchaseDetailsBody">
-                                    <!-- Dynamically populated rows will go here -->
-                                </tbody>
+                                <tbody id="purchaseDetailsBody"></tbody>
                                 <tfoot>
                                     <tr>
                                         <td colspan="5" class="text-end"><b>Total :</b></td>
