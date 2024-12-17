@@ -122,18 +122,11 @@
                                             Name</label><br>
                                         <div class="col-sm-3 col-md-2 mb-3">
                                             <div class="form-group">
-
-                                                <select class="form-control select2" style="width: 100%;">
-                                                    <option value="">Select Customer</option>
-                                                    <option value="1">Tushar</option>
-                                                    <option value="2">Rashed</option>
-                                                    <option value="3">Rayhan</option>
-                                                </select>
+                                                <select class="form-control select2" id="customer" style="width: 100%;"></select>
                                             </div>
                                         </div>
                                         <div class="col-sm-2 col-md-2 mb-2">
-                                            <a class="btn btn-outline-success btn-sm ms-2" data-bs-toggle="offcanvas"
-                                                data-bs-target="#new-customer-form" id="customer-form">
+                                            <a class="btn btn-outline-success btn-sm ms-2" data-toggle="modal" data-target="#addNewCustomerModal">
                                                 <svg class="svg-inline--fa fa-user-plus" aria-hidden="true"
                                                     focusable="false" data-prefix="fas" data-icon="user-plus" role="img"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
@@ -150,7 +143,7 @@
                                             Issue : </label>
                                         <div class="col-sm-3 col-md-3 position-relative">
                                             <div class="input-group has-validation">
-                                                <input type="date" name="record_date" id="record_date" value=""
+                                                <input type="date" name="invoice_date" id="invoice_date" value="{{ date('Y-m-d') }}"
                                                     class="form-control" required="required">
                                             </div>
                                         </div>
@@ -178,18 +171,6 @@
                                             <div class="form-group">
                                                 <select class="form-control select2" style="width: 100%;">
                                                     <option value="">Select Product</option>
-                                                    <option value="watch1">
-                                                        Watch / Apple / Red / P_20292
-                                                    </option>
-                                                    <option value="watch2">
-                                                        Watch / Apple / Black / P_20301
-                                                    </option>
-                                                    <option value="watch3">
-                                                        Watch / Apple / Blue / P_20302
-                                                    </option>
-                                                    <option value="watch4">
-                                                        Watch / Apple / White / P_20303
-                                                    </option>
                                                 </select>
                                             </div>
                                         </div>
@@ -366,7 +347,7 @@
                                         <div class="form-group d-flex">
                                             <label for="customer" class="d-flex mx-1">Customer
                                                 <span class="text-danger mx-1">*</span></label>
-                                            <select class="form-control" id="customer">
+                                            <select class="form-control">
                                                 <option value="">Select a customer</option>
                                             </select>
                                         </div>
