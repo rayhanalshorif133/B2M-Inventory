@@ -122,11 +122,13 @@
                                             Name</label><br>
                                         <div class="col-sm-3 col-md-2 mb-3">
                                             <div class="form-group">
-                                                <select class="form-control select2" id="customer" style="width: 100%;"></select>
+                                                <select class="form-control select2" id="customer"
+                                                    style="width: 100%;"></select>
                                             </div>
                                         </div>
                                         <div class="col-sm-2 col-md-2 mb-2">
-                                            <a class="btn btn-outline-success btn-sm ms-2" data-toggle="modal" data-target="#addNewCustomerModal">
+                                            <a class="btn btn-outline-success btn-sm ms-2" data-toggle="modal"
+                                                data-target="#addNewCustomerModal">
                                                 <svg class="svg-inline--fa fa-user-plus" aria-hidden="true"
                                                     focusable="false" data-prefix="fas" data-icon="user-plus" role="img"
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
@@ -143,11 +145,15 @@
                                             Issue : </label>
                                         <div class="col-sm-3 col-md-3 position-relative">
                                             <div class="input-group has-validation">
-                                                <input type="date" name="invoice_date" id="invoice_date" value="{{ date('Y-m-d') }}"
-                                                    class="form-control" required="required">
+                                                <input type="date" name="invoice_date" id="invoice_date"
+                                                    value="{{ date('Y-m-d') }}" class="form-control" required="required">
                                             </div>
                                         </div>
                                     </div>
+
+                                    @include('sales._partials.addNewCustomerModal', [
+                                        'customers' => $customers,
+                                    ])
 
                                     <!-- Voucher Number-->
                                     <div class="row mb-3">
@@ -169,7 +175,7 @@
                                             Name</label>
                                         <div class="col-sm-10 mb-3">
                                             <div class="form-group">
-                                                <select class="form-control select2" style="width: 100%;">
+                                                <select class="form-control select2" id="product" style="width: 100%;">
                                                     <option value="">Select Product</option>
                                                 </select>
                                             </div>
@@ -190,67 +196,10 @@
                                                 </tr>
                                             </thead>
 
-                                            <tbody>
-                                                <tr id="row-0" class="slsord_line">
-
-                                                    <td>
-                                                        <input type="text" name="product_name" class="form-control"
-                                                            readonly>
-
-                                                    </td>
-                                                    <td>
-                                                        <input type="number" name="qty"
-                                                            class="bg-focus form-control text-right" required="required">
-                                                    </td>
-
-                                                    <td>
-                                                        <input type="number" name="unit"
-                                                            class="bg-focus form-control text-right" required="required">
-                                                    </td>
-
-                                                    <td>
-                                                        <input type="number" name="discount"
-                                                            class="bg-focus form-control text-right">
-                                                    </td>
-
-                                                    <td class="col">
-                                                        <div class="row">
-                                                            <div class="col-sm-12">
-                                                                <select name="tax"
-                                                                    class="form-select bg-focus form-control"
-                                                                    required="required">
-                                                                    <option value="0" selected="selected">No tax
-                                                                    </option>
-                                                                    <option value="0"> 0%</option>
-                                                                    <option value="5"> 5%</option>
-                                                                    <option value="10"> 10%</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-
-                                                    <td class="col text-end total">
-                                                        <span id="amount">0.00</span>
-                                                        <input type="hidden" name="amout">
-                                                    </td>
-
-                                                    <td class="col" data-controller="remove-sales-order">
-                                                        <a id="cancel" class="text-danger" href="">
-                                                            <svg class="svg-inline--fa fa-trash-can fs-1 mt-2"
-                                                                aria-hidden="true" focusable="false" data-prefix="far"
-                                                                data-icon="trash-can" role="img"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-                                                                data-fa-i2svg="">
-                                                                <path fill="currentColor"
-                                                                    d="M170.5 51.6L151.5 80h145l-19-28.4c-1.5-2.2-4-3.6-6.7-3.6H177.1c-2.7 0-5.2 1.3-6.7 3.6zm147-26.6L354.2 80H368h48 8c13.3 0 24 10.7 24 24s-10.7 24-24 24h-8V432c0 44.2-35.8 80-80 80H112c-44.2 0-80-35.8-80-80V128H24c-13.3 0-24-10.7-24-24S10.7 80 24 80h8H80 93.8l36.7-55.1C140.9 9.4 158.4 0 177.1 0h93.7c18.7 0 36.2 9.4 46.6 24.9zM80 128V432c0 17.7 14.3 32 32 32H336c17.7 0 32-14.3 32-32V128H80zm80 64V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16z">
-                                                                </path>
-                                                            </svg>
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                            <tbody id="insertProductItemForSales">
 
 
-
+                                                {{--
                                                 <tr id="subtotal-tr">
                                                     <td class="border-0" colspan="5"></td>
                                                     <td>Subtotal</td>
@@ -283,7 +232,7 @@
                                                     <td class="fw-bold">Total</td>
                                                     <td class="fw-bold" id="est-grand-total">0.00</td>
                                                     <td></td>
-                                                </tr>
+                                                </tr> --}}
                                             </tbody>
                                         </table>
                                     </div>
@@ -334,7 +283,7 @@
                 </div>
                 <!-- /.card -->
             </div>
-            <div class="row">
+            <div class="row d-none">
                 <div class="col-md-12">
                     <div class="card card-info">
                         <div class="card-header">
@@ -343,50 +292,7 @@
                         <div class="card-body">
                             <form>
                                 <div class="row">
-                                    <div class="col-12 col-md-7 col-lg-7">
-                                        <div class="form-group d-flex">
-                                            <label for="customer" class="d-flex mx-1">Customer
-                                                <span class="text-danger mx-1">*</span></label>
-                                            <select class="form-control">
-                                                <option value="">Select a customer</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-5 col-lg-5">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <button data-toggle="modal" data-target="#addNewCustomerModal"
-                                                    class="btn btn-navy btn-sm h-2" type="button">
-                                                    <i class="fa fa-plus"></i> Add
-                                                    New
-                                                </button>
-                                            </div>
-                                            <div class="col-md-8 d-flex">
-                                                <label for="invoice_date" class="d-flex mx-1 w-8rem">Invoice Time:
-                                                    <span class="text-danger mx-1">*</span></label>
-                                                <input type="date" id="invoice_date" class="form-control w-10rem"
-                                                    value="{{ date('Y-m-d') }}" />
-                                            </div>
-                                        </div>
-                                        @include('sales._partials.addNewCustomerModal', [
-                                            'customers' => $customers,
-                                        ])
-                                    </div>
-                                    <div class="col-12 col-md-7 col-lg-7">
-                                        <div class="form-group d-flex">
-                                            <label for="Product" class="d-flex mx-1">Product
-                                                <span class="text-danger mx-1">*</span></label>
-                                            <select class="form-control" id="product" name="product">
-                                                <option value="" selected disabled>
-                                                    Select a product
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-5 col-lg-5 row">
-                                        <input type="text" id="barcode" class="form-control"
-                                            placeholder="Barcode" />
-                                    </div>
+
                                     <div class="col-md-12 col-lg-4">
                                         <div class="card card-navy">
                                             <div class="card-header">
@@ -653,43 +559,66 @@
         };
 
         // Function to populate product details
-        const setProductDetails = (productAttributes) => {
-            if (productAttributes.length > 0) {
-                $("#product_name").text(productAttributes[0].product.name);
-            }
-            const tbody = $("#productAttributes");
-            tbody.empty();
-            if (productAttributes.length > 0) {
-                productAttributes.forEach((item) => {
-                    const row = $("<tr>");
-                    row.html(`
-                <td>
-                    <small class="text-xs font-semibold">${item.code || ""}</small><br/>
-                    <small class="text-xs font-semibold">${item.color || ""}</small><br/>
-                    <small class="text-xs font-semibold">${item.model || ""}</small><br/>
-                    <small class="text-xs font-semibold">${item.size || ""}</small>
-                </td>
-                <td>${item.sales_rate}</td>
-                <td>${item.current_stock}</td>
-                <td>
-                    ${
-                        parseInt(item.current_stock) > 0
-                            ? `<button type="button" class="btn btn-sm btn-success"
-                                                            onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
-                            : "No Stock Available"
-                    }
-                </td>
-            `);
+        const setProductDetails = (item) => {
 
-                    tbody.append(row);
-                });
+            const tbody = $("#insertProductItemForSales");
+            const id = `row-${item.id}`;
+            console.clear();
+            const rowWithId = tbody.find('#' + id) ? tbody.find('#' + id) :
+                false; // Finds the <tr> with the specific id
+
+
+
+            if (rowWithId.length == 0) {
+
+
+                var rowHTML = `
+            <tr id="${id}" class="slsord_line">
+                <td>
+                    <small class="text-xs font-semibold">${item.code ? item.code : ''}</small><br/>
+                    <small class="text-xs font-semibold">${item.product?.name ? item.product.name : ''} ${item.model ? ' / ' + item.model : ''} ${item.size ? ' / ' + item.size : ''} ${item.color ? ' / ' + item.color : ''}</small><br/>
+                </td>
+                <td>
+                    <input type="number" name="qty" value="1" class="bg-focus form-control text-right" required="required">
+                </td>
+                <td>
+                    <input type="number" name="unit" value="${item.sales_rate}" class="bg-focus form-control text-right" required="required">
+                </td>
+                <td>
+                    <input type="number" name="discount" value="0" class="bg-focus form-control text-right">
+                </td>
+                <td class="col">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <select name="tax" class="form-select bg-focus form-control" required="required">
+                                <option value="0" selected="selected">No tax</option>
+                                <option value="0"> 0%</option>
+                                <option value="5"> 5%</option>
+                                <option value="10"> 10%</option>
+                            </select>
+                        </div>
+                    </div>
+                </td>
+                <td class="col text-end total">
+                    <span id="amount">0.00</span>
+                    <input type="hidden" name="amout">
+                </td>
+                <td class="col" data-controller="remove-sales-order">
+                    <a id="cancel" class="text-danger" href="">
+                        <i class="fa fa-trash fs-5" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>`;
+
+
+                tbody.append(rowHTML);
             } else {
-                const notFoundRow = $("<tr>").html(`
-            <td colspan="4" class="text-center text-danger font-semibold">
-                Not Found
-            </td>
-        `);
-                tbody.append(notFoundRow);
+
+                const secondTd = rowWithId.find('td').eq(1); // Get the second <td> (index 1)
+                const qtyInput = secondTd.find('input[name="qty"]');
+                const currentQty = parseInt(qtyInput.val(), 10) ||
+                0; // Get current qty (default to 0 if not a valid number)
+                qtyInput.val(currentQty + 1);
             }
         };
 
@@ -844,12 +773,11 @@
                 const p_id = $(this).val();
                 axios
                     .get(
-                        `/product/fetch-attribute?product_id=${p_id}`
+                        `/product/fetch-attribute?product_attribute_id=${p_id}`
                     )
                     .then((response) => {
                         const data = response.data.data;
-                        setProductAttributeData = [];
-                        setProductAttributeData = data;
+                        console.log(data);
                         setProductDetails(data);
                     });
             });
@@ -893,13 +821,19 @@
         };
 
         const fetchProducts = () => {
-            axios.get("/product/fetch").then((response) => {
+            axios.get("/product/fetch?type=new-sales").then((response) => {
                 const data = response.data.data;
                 $("#product").empty();
                 $("#product").append('<option value="">Select a product</option>');
                 data.forEach((item) => {
                     const option =
-                        `<option value="${item.id}">${item.name}</option>`;
+                        `<option value="${item.id || ''}">
+                            ${item.product?.name ? item.product.name : ''}
+                            ${item.code ? ' / ' + item.code : ''}
+                            ${item.model ? ' / ' + item.model : ''}
+                            ${item.size ? ' / ' + item.size : ''}
+                            ${item.color ? ' / ' + item.color : ''}
+                            </option>`;
                     $("#product").append(option);
                 });
             });

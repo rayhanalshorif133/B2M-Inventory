@@ -18,19 +18,29 @@ class Product extends Model
         'created_by',
     ];
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function subCategory(){
+    public function subCategory()
+    {
         return $this->belongsTo(Category::class, 'sub_category_id', 'id');
     }
 
-    public function company(){
+    public function company()
+    {
         return $this->belongsTo(Company::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+
+    public function productAttributes()
+    {
+        return $this->hasMany(ProductAttribute::class, 'product_id');
     }
 }

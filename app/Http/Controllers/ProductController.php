@@ -26,10 +26,22 @@ class ProductController extends Controller
 
 
 
-    public function fetch($id = null)
+    public function fetch(Request $request, $id = null)
     {
+
+        if ($request->type == 'new-sales') {
+            $products = ProductAttribute::select()
+                ->where('company_id', Auth::user()->company_id)
+                ->where('current_stock', '>', 0)
+                ->with('product')
+                ->get();
+            return $this->respondWithSuccess('Successfully fetched product data', $products);
+        }
+
         if ($id == null) {
-            $products = Product::select('id', 'name')->where('company_id', Auth::user()->company_id)->where('status', 1)->get();
+            $products = Product::select('id', 'name')
+                ->where('company_id', Auth::user()->company_id)->where('status', 1)
+                ->get();
         } else {
             $products = Product::select()
                 ->where('company_id', Auth::user()->company_id)
