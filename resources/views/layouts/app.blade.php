@@ -141,6 +141,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 
 
     <script>

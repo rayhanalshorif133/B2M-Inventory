@@ -1,5 +1,77 @@
 @extends('layouts.app', ['title' => 'Add New Sales'])
 
+
+
+
+
+
+@section('head')
+    <style type="text/css">
+        :host,
+        :root {
+            --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Solid";
+            --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Regular";
+            --fa-font-light: normal 300 1em/1 "Font Awesome 6 Light";
+            --fa-font-thin: normal 100 1em/1 "Font Awesome 6 Thin";
+            --fa-font-duotone: normal 900 1em/1 "Font Awesome 6 Duotone";
+            --fa-font-sharp-solid: normal 900 1em/1 "Font Awesome 6 Sharp";
+            --fa-font-sharp-regular: normal 400 1em/1 "Font Awesome 6 Sharp";
+            --fa-font-sharp-light: normal 300 1em/1 "Font Awesome 6 Sharp";
+            --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands"
+        }
+
+        svg:not(:host).svg-inline--fa,
+        svg:not(:root).svg-inline--fa {
+            overflow: visible;
+            box-sizing: content-box
+        }
+
+        .svg-inline--fa {
+            display: var(--fa-display, inline-block);
+            height: 1em;
+            overflow: visible;
+            vertical-align: -.125em
+        }
+
+        .svg-inline--fa.fa-2xs {
+            vertical-align: .1em
+        }
+
+        .svg-inline--fa.fa-xs {
+            vertical-align: 0
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            z-index: 9999;
+            left: -100%;
+            transform: translate(22%, 0px);
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown.action-btn {
+            position: relative;
+        }
+
+        .card {
+            box-shadow: none;
+        }
+    </style>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endsection
+
+
+
+
+
 @section('content')
     <div class="content-wrapper">
 
@@ -25,6 +97,262 @@
 
 
         <section class="content overflow-x-hidden">
+            <div class="col-12">
+                <!-- Default box -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Seles Order</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card mb-3 mt-2" data-controller="calculate-sales-order">
+                            <div class="card-body bg-white">
+                                <form class="form-horizontal" action="" method="">
+
+                                    <!-- Customer Name-->
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-md-2 text-capitalize" for="q_billing_status">Customer
+                                            Name</label><br>
+                                        <div class="col-sm-3 col-md-2 mb-3">
+                                            <div class="form-group">
+
+                                                <select class="form-control select2" style="width: 100%;">
+                                                    <option value="">Select Customer</option>
+                                                    <option value="1">Tushar</option>
+                                                    <option value="2">Rashed</option>
+                                                    <option value="3">Rayhan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2 col-md-2 mb-2">
+                                            <a class="btn btn-outline-success btn-sm ms-2" data-bs-toggle="offcanvas"
+                                                data-bs-target="#new-customer-form" id="customer-form">
+                                                <svg class="svg-inline--fa fa-user-plus" aria-hidden="true"
+                                                    focusable="false" data-prefix="fas" data-icon="user-plus" role="img"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
+                                                    data-fa-i2svg="">
+                                                    <path fill="currentColor"
+                                                        d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z">
+                                                    </path>
+                                                </svg>
+                                                New Customer
+                                            </a>
+                                        </div>
+                                        <label class="col-sm-2 col-md-2 control-label-required text-end"
+                                            for="datepickerVal">Date Of
+                                            Issue : </label>
+                                        <div class="col-sm-3 col-md-3 position-relative">
+                                            <div class="input-group has-validation">
+                                                <input type="date" name="record_date" id="record_date" value=""
+                                                    class="form-control" required="required">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Voucher Number-->
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 control-label-required text-end">Sales Order #</label>
+                                        <div class="col-sm-3">
+                                            <label class="control-label align-middle">
+                                                SLSODR/001
+                                                <input autocomplete="off" type="hidden" value="SLSODR/005"
+                                                    name="sales_order[voucher_number]" id="sales_order_voucher_number">
+                                            </label>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="row mt-3">
+                                        <label class="col-sm-2 control-label-required text-end text-capitalize"
+                                            for="customer-name">Product
+                                            Name</label>
+                                        <div class="col-sm-10 mb-3">
+                                            <div class="form-group">
+                                                <select class="form-control select2" style="width: 100%;">
+                                                    <option value="">Select Product</option>
+                                                    <option value="watch1">
+                                                        Watch / Apple / Red / P_20292
+                                                    </option>
+                                                    <option value="watch2">
+                                                        Watch / Apple / Black / P_20301
+                                                    </option>
+                                                    <option value="watch3">
+                                                        Watch / Apple / Blue / P_20302
+                                                    </option>
+                                                    <option value="watch4">
+                                                        Watch / Apple / White / P_20303
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <table class="table border border-top table-responsive">
+                                            <thead class="light">
+                                                <tr class="bg-light dark__bg-1000">
+                                                    <th scope="col" class="col-2 control-label-required">Item Name</th>
+                                                    <th scope="col" class="col-1 control-label-required">Qty</th>
+                                                    <th scope="col" class="col-2 control-label-required">Unit Cost</th>
+                                                    <th scope="col" class="col-2">Discount %</th>
+                                                    <th scope="col" class="col-1">Tax</th>
+                                                    <th scope="col" class="col-2 text-end">Amount</th>
+                                                    <th scope="col" class="col-0"></th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr id="row-0" class="slsord_line">
+
+                                                    <td>
+                                                        <input type="text" name="product_name" class="form-control"
+                                                            readonly>
+
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" name="qty"
+                                                            class="bg-focus form-control text-right" required="required">
+                                                    </td>
+
+                                                    <td>
+                                                        <input type="number" name="unit"
+                                                            class="bg-focus form-control text-right" required="required">
+                                                    </td>
+
+                                                    <td>
+                                                        <input type="number" name="discount"
+                                                            class="bg-focus form-control text-right">
+                                                    </td>
+
+                                                    <td class="col">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <select name="tax"
+                                                                    class="form-select bg-focus form-control"
+                                                                    required="required">
+                                                                    <option value="0" selected="selected">No tax
+                                                                    </option>
+                                                                    <option value="0"> 0%</option>
+                                                                    <option value="5"> 5%</option>
+                                                                    <option value="10"> 10%</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
+                                                    <td class="col text-end total">
+                                                        <span id="amount">0.00</span>
+                                                        <input type="hidden" name="amout">
+                                                    </td>
+
+                                                    <td class="col" data-controller="remove-sales-order">
+                                                        <a id="cancel" class="text-danger" href="">
+                                                            <svg class="svg-inline--fa fa-trash-can fs-1 mt-2"
+                                                                aria-hidden="true" focusable="false" data-prefix="far"
+                                                                data-icon="trash-can" role="img"
+                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                                                                data-fa-i2svg="">
+                                                                <path fill="currentColor"
+                                                                    d="M170.5 51.6L151.5 80h145l-19-28.4c-1.5-2.2-4-3.6-6.7-3.6H177.1c-2.7 0-5.2 1.3-6.7 3.6zm147-26.6L354.2 80H368h48 8c13.3 0 24 10.7 24 24s-10.7 24-24 24h-8V432c0 44.2-35.8 80-80 80H112c-44.2 0-80-35.8-80-80V128H24c-13.3 0-24-10.7-24-24S10.7 80 24 80h8H80 93.8l36.7-55.1C140.9 9.4 158.4 0 177.1 0h93.7c18.7 0 36.2 9.4 46.6 24.9zM80 128V432c0 17.7 14.3 32 32 32H336c17.7 0 32-14.3 32-32V128H80zm80 64V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16z">
+                                                                </path>
+                                                            </svg>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+
+
+
+                                                <tr id="subtotal-tr">
+                                                    <td class="border-0" colspan="5"></td>
+                                                    <td>Subtotal</td>
+                                                    <td> <span id="inv-total">0.00</span></td>
+                                                    <td colspan="1"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="border-0" colspan="5"></td>
+                                                    <td>Discount</td>
+                                                    <td><span id="est-discount">0.00</span></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-0" colspan="5"></td>
+                                                    <td>Tax</td>
+                                                    <td><span id="tax-amount">0.00</span></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-0" colspan="5"></td>
+                                                    <td>Due</td>
+                                                    <td><span id="est-discount">0.00</span></td>
+                                                    <td></td>
+                                                </tr>
+
+
+                                                <tr class="bg-light border-top">
+                                                    <td colspan="5"></td>
+                                                    <td class="fw-bold">Total</td>
+                                                    <td class="fw-bold" id="est-grand-total">0.00</td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                    <div class="row mb-2">
+                                        <div class="col-md-7">
+                                            <div class="mb-3">
+                                                <label class="form-label">Customer Notes</label>
+                                                <textarea rows="4" class="bg-focus form-control" name="sales_order[customer_notes]"
+                                                    id="sales_order_customer_notes"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Transaction Type</label>
+                                            <select class="form-select bg-focus form-control"
+                                                name="sales_order[transaction_type]" id="sales_order_transaction_type">
+                                                <option value="cash">Cash</option>
+                                                <option value="bkash">Bkash</option>
+
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3"><label class="form-label">Paid Amount</label>
+                                            <input type="text" class="bg-focus form-control" name="paid_amount">
+                                        </div>
+                                    </div>
+
+                                    <!-- Form Buttons-->
+                                    <div class="row mt-4 justify-content-end">
+                                        <div class="d-flex justify-content-end">
+                                            <a class="btn btn-outline-danger" style="margin-right: 10px;"
+                                                href="">Cancel</a>
+                                            <button name="button" type="submit" class="btn btn-success me-2"
+                                                style="width: 20vw;">
+                                                Save
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+
+                    </div>
+                    <!-- /.card-footer-->
+                </div>
+                <!-- /.card -->
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-info">
@@ -64,7 +392,7 @@
                                         ])
                                     </div>
                                     <div class="col-12 col-md-7 col-lg-7">
-                                        <div class="form-group d-flex my-2">
+                                        <div class="form-group d-flex">
                                             <label for="Product" class="d-flex mx-1">Product
                                                 <span class="text-danger mx-1">*</span></label>
                                             <select class="form-control" id="product" name="product">
@@ -75,14 +403,8 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-5 col-lg-5 row">
-                                        <div class="d-flex my-2">
-                                            <input type="text" id="barcode" class="form-control mr-3"
-                                                placeholder="Barcode" />
-                                            <a href="{{ route('product.create') }}"
-                                                class="btn btn-success mx-1 mt-1 h-fit btn-sm"
-                                                style="width: 8rem!important; font-size:12px">New Product <i
-                                                    class="fa-solid fa-arrow-right"></i></a>
-                                        </div>
+                                        <input type="text" id="barcode" class="form-control"
+                                            placeholder="Barcode" />
                                     </div>
                                     <div class="col-md-12 col-lg-4">
                                         <div class="card card-navy">
@@ -185,8 +507,8 @@
                     </div>
                 </div>
             </div>
-        </section>
 
+        </section>
 
     </div>
 @endsection
@@ -203,18 +525,17 @@
             // fetchData();
             handleCreateNewCustomer();
             handleProductChange();
-            getProductAttributesByBarcode();
-            handlePaidAmount();
+            // getProductAttributesByBarcode();
+            // handlePaidAmount();
         });
 
 
         const handlePaidAmount = () => {
             $("#paid_amount").keyup(function() {
-                const paidAmount = $(this).val() ? $(this).val() : 0;
+                const paidAmount = $(this).val();
                 const salesTotalAmount = parseFloat($("#salesTotalAmount").text());
                 var dueAmount = 0;
                 dueAmount = salesTotalAmount - parseFloat(paidAmount);
-                console.log(paidAmount);
                 if (paidAmount > salesTotalAmount) {
                     Toastr.fire({
                         icon: "error",
@@ -222,6 +543,10 @@
                     });
                     return false;
                 }
+                setTimeout(() => {
+                    $(this).val(salesTotalAmount);
+                    $("#due_amount").text(0);
+                }, 4000);
                 $("#due_amount").text(dueAmount);
             });
         };
@@ -339,8 +664,6 @@
                         )
                         .then((response) => {
                             const data = response.data.data;
-                            setProductAttributeData = [];
-                            setProductAttributeData = data;
                             setProductDetails(data);
                         });
                 }
@@ -371,7 +694,7 @@
                     ${
                         parseInt(item.current_stock) > 0
                             ? `<button type="button" class="btn btn-sm btn-success"
-                                                                onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
+                                                            onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
                             : "No Stock Available"
                     }
                 </td>
@@ -413,9 +736,9 @@
                     p_model: productAttr.model,
                     purchase_rate: productAttr.purchase_rate,
                     sales_rate: productAttr.sales_rate,
-                    qty: 1,
+                    qty: 0,
                     discount: 0,
-                    total: productAttr.sales_rate,
+                    total: 0,
                 };
                 setCusomizationData.push(SET_VALUE);
             }
@@ -600,5 +923,14 @@
                 });
             });
         };
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            //Initialize Select2 Elements
+            $('.select2').select2()
+        })
     </script>
 @endpush
