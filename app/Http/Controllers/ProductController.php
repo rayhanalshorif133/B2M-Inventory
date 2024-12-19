@@ -185,10 +185,10 @@ class ProductController extends Controller
     public function showProductDetails($id)
     {
         $product = Product::select()->where('id', $id)->with('category', 'subCategory', 'company')->first();
-        $ProductAttributes = ProductAttribute::where('product_id', $id)->get();
+        $productAttributes = ProductAttribute::where('product_id', $id)->get();
         $data = [
             'product' => $product,
-            'ProductAttributes' => $ProductAttributes
+            'productAttributes' => $productAttributes
         ];
         return $this->respondWithSuccess('successfully fetched product details', $data);
     }
