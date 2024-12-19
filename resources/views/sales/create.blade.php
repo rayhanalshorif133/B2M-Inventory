@@ -63,6 +63,21 @@
         .card {
             box-shadow: none;
         }
+
+        .table {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        thead th,
+        tbody td {
+            white-space: nowrap;
+        }
     </style>
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -182,59 +197,55 @@
                                         </div>
                                     </div>
 
-                                    <div class="mt-4">
-                                        <table class="table border border-top table-responsive">
+                                    <div class="mt-4" style="width: 100%;">
+                                        <table class="table table-bordered">
                                             <thead class="light">
                                                 <tr class="bg-light dark__bg-1000">
-                                                    <th scope="col" class="col-2 control-label-required">Item Name</th>
+                                                    <th scope="col" class="col-3 control-label-required">Item Name</th>
                                                     <th scope="col" class="col-1 control-label-required">Qty</th>
-                                                    <th scope="col" class="col-2 control-label-required">Unit Cost</th>
-                                                    <th scope="col" class="col-2">Discount %</th>
-                                                    <th scope="col" class="col-1">Tax</th>
-                                                    <th scope="col" class="col-2 text-end">Amount</th>
-                                                    <th scope="col" class="col-0"></th>
+                                                    <th scope="col" class="col-2 control-label-required">Sales Rate</th>
+                                                    <th scope="col" class="col-2">Discount
+                                                    </th>
+                                                    <th scope="col" class="col-1 text-end">Amount
+                                                    </th>
+                                                    <th scope="col" class="col-1 text-end">Action
+                                                    </th>
                                                 </tr>
                                             </thead>
-
                                             <tbody id="insertProductItemForSales">
-
-
-                                                {{--
-                                                <tr id="subtotal-tr">
-                                                    <td class="border-0" colspan="5"></td>
-                                                    <td>Subtotal</td>
-                                                    <td> <span id="inv-total">0.00</span></td>
-                                                    <td colspan="1"></td>
+                                                <tr class="slsord_line" id="no_record">
+                                                    <td class="border-0 text-center" colspan="6">No Record</td>
                                                 </tr>
-
-                                                <tr>
-                                                    <td class="border-0" colspan="5"></td>
-                                                    <td>Discount</td>
-                                                    <td><span id="est-discount">0.00</span></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="border-0" colspan="5"></td>
-                                                    <td>Tax</td>
-                                                    <td><span id="tax-amount">0.00</span></td>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="border-0" colspan="5"></td>
-                                                    <td>Due</td>
-                                                    <td><span id="est-discount">0.00</span></td>
-                                                    <td></td>
-                                                </tr>
-
-
-                                                <tr class="bg-light border-top">
-                                                    <td colspan="5"></td>
-                                                    <td class="fw-bold">Total</td>
-                                                    <td class="fw-bold" id="est-grand-total">0.00</td>
-                                                    <td></td>
-                                                </tr> --}}
+                                                <!-- Uncomment for future rows
+                                                                              <tr id="subtotal-tr">
+                                                                                <td class="border-0" colspan="4"></td>
+                                                                                <td>Subtotal</td>
+                                                                                <td class="text-end"> <span id="inv-total">0.00</span></td>
+                                                                              </tr>
+                                                                              <tr>
+                                                                                <td class="border-0" colspan="4"></td>
+                                                                                <td>Discount</td>
+                                                                                <td class="text-end"><span id="est-discount">0.00</span></td>
+                                                                              </tr>
+                                                                              <tr>
+                                                                                <td class="border-0" colspan="4"></td>
+                                                                                <td>Tax</td>
+                                                                                <td class="text-end"><span id="tax-amount">0.00</span></td>
+                                                                              </tr>
+                                                                              <tr>
+                                                                                <td class="border-0" colspan="4"></td>
+                                                                                <td>Due</td>
+                                                                                <td class="text-end"><span id="due-amount">0.00</span></td>
+                                                                              </tr>
+                                                                              <tr class="bg-light border-top">
+                                                                                <td colspan="4"></td>
+                                                                                <td class="fw-bold">Total</td>
+                                                                                <td class="fw-bold text-end" id="est-grand-total">0.00</td>
+                                                                              </tr>
+                                                                              -->
                                             </tbody>
                                         </table>
+
                                     </div>
 
 
@@ -562,10 +573,14 @@
         const setProductDetails = (item) => {
 
             const tbody = $("#insertProductItemForSales");
+            const hasNoRecord = tbody.find("tr#no_record");
             const id = `row-${item.id}`;
+            if (hasNoRecord) {
+                hasNoRecord.addClass('hidden');
+            }
             console.clear();
             const rowWithId = tbody.find('#' + id) ? tbody.find('#' + id) :
-                false; // Finds the <tr> with the specific id
+                false;
 
 
 
@@ -574,53 +589,57 @@
 
                 var rowHTML = `
             <tr id="${id}" class="slsord_line">
-                <td>
-                    <small class="text-xs font-semibold">${item.code ? item.code : ''}</small><br/>
-                    <small class="text-xs font-semibold">${item.product?.name ? item.product.name : ''} ${item.model ? ' / ' + item.model : ''} ${item.size ? ' / ' + item.size : ''} ${item.color ? ' / ' + item.color : ''}</small><br/>
+                <td class="col-3">
+                    <small class="text-xs font-semibold">${item.product?.name ? item.product.name : ''}</small><br/>
+                    <small class="text-xs font-semibold">${item.code ? item.code : ''} ${item.model ? ' / ' + item.model : ''} ${item.size ? ' / ' + item.size : ''} ${item.color ? ' / ' + item.color : ''}</small><br/>
                 </td>
                 <td>
                     <input type="number" name="qty" value="1" class="bg-focus form-control text-right" required="required">
                 </td>
                 <td>
-                    <input type="number" name="unit" value="${item.sales_rate}" class="bg-focus form-control text-right" required="required">
+                    <input type="number" name="sales_rate" value="${item.sales_rate? item.sales_rate : 0}" class="bg-focus form-control text-right" required="required">
                 </td>
                 <td>
                     <input type="number" name="discount" value="0" class="bg-focus form-control text-right">
                 </td>
-                <td class="col">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <select name="tax" class="form-select bg-focus form-control" required="required">
-                                <option value="0" selected="selected">No tax</option>
-                                <option value="0"> 0%</option>
-                                <option value="5"> 5%</option>
-                                <option value="10"> 10%</option>
-                            </select>
-                        </div>
-                    </div>
-                </td>
-                <td class="col text-end total">
-                    <span id="amount">0.00</span>
-                    <input type="hidden" name="amout">
-                </td>
-                <td class="col" data-controller="remove-sales-order">
-                    <a id="cancel" class="text-danger" href="">
-                        <i class="fa fa-trash fs-5" aria-hidden="true"></i>
-                    </a>
+                <td class="col-1 text-end total">${item.sales_rate? item.sales_rate : 0}</td>
+                <td class="remove-sales-order col-1">
+                    <span id="cancel" class="text-danger cursor-pointer d-block text-right" href="">
+                        <i class="fa fa-trash fs-5 " aria-hidden="true"></i>
+                    </span>
                 </td>
             </tr>`;
-
-
                 tbody.append(rowHTML);
             } else {
-
-                const secondTd = rowWithId.find('td').eq(1); // Get the second <td> (index 1)
-                const qtyInput = secondTd.find('input[name="qty"]');
-                const currentQty = parseInt(qtyInput.val(), 10) ||
-                0; // Get current qty (default to 0 if not a valid number)
-                qtyInput.val(currentQty + 1);
+                const qtyInput = rowWithId.find('td').eq(1).find('input[name="qty"]');
+                let salesRate = parseFloat(rowWithId.find('input[name="sales_rate"]').val());
+                let currentQty = parseInt(qtyInput.val()) + 1;
+                qtyInput.val(currentQty);
+                rowWithId.find('td').eq(4).html(currentQty * salesRate);
             }
+
+
+            $(".remove-sales-order").click(function() {
+                $(this).closest('tr').remove();
+                if ($("#insertProductItemForSales").find('tr').length == 1) {
+                    $("#insertProductItemForSales").find("tr#no_record").removeClass('hidden');
+                }
+            });
+
+            $('input[name="sales_rate"], input[name="qty"], input[name="discount"]').on('blur', updateTotalAmount);
+
+
+
         };
+
+        function updateTotalAmount() {
+            const rowWithId = $(this).closest('tr');
+            const salesRate = parseFloat(rowWithId.find('input[name="sales_rate"]').val());
+            const currentQty = parseInt(rowWithId.find('input[name="qty"]').val());
+            const discount = parseFloat(rowWithId.find('input[name="discount"]').val()) || 0; // Default to 0 if no discount
+            const totalAmount = currentQty * (salesRate - discount); // Apply discount if any
+            rowWithId.find('td').eq(4).html(totalAmount.toFixed(2));
+        }
 
 
         // Function to handle adding to product customization
@@ -777,7 +796,6 @@
                     )
                     .then((response) => {
                         const data = response.data.data;
-                        console.log(data);
                         setProductDetails(data);
                     });
             });
