@@ -144,8 +144,8 @@
 
 
             $(document).on("click", ".showBtn", function() {
-                const id = $(this).data("id");
 
+                const id = $(this).data("id");
 
                 showProductDetails = new bootstrap.Modal(document.getElementById(
                     'showProductDetails')); // Create the modal instance
@@ -192,7 +192,7 @@
                                         <hr>
                                     </div>
                             `;
-                    }).join(''); // Join the array of HTML strings into a single string
+                    }).join('');
 
                     $('#setProductAttrDetails').html(productDetailsHTML);
                 });
