@@ -23,6 +23,7 @@ class CategoryController extends Controller
         if ($request->type == 'product-create') {
             $categories = Category::select('id', 'name', 'status')
                 ->where('created_by', Auth::user()->id)
+                ->where('company_id', Auth::user()->company_id)
                 ->where('parent_category_id', null)
                 ->where('status', 1)
                 ->get()
@@ -34,6 +35,7 @@ class CategoryController extends Controller
         } else {
             $categories = Category::select('id', 'name', 'status')
                 ->where('created_by', Auth::user()->id)
+                ->where('company_id', Auth::user()->company_id)
                 ->where('parent_category_id', null)
                 ->get()
                 ->each(function ($item) {

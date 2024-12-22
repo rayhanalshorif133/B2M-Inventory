@@ -71,23 +71,52 @@
                         <h5 class="modal-title" id="showProductDetailsLabel">
                             Product Details
                         </h5>
-                        <button type="button" class="btn-close"></button>
+                        <button type="button" class="btn-close" onclick="hideshowProductDetailsModal()"></button>
                     </div>
                     <div class="modal-body">
                         <div class="card card-info">
                             <h5 class="card-header">Basic Information</h5>
                             <div class="card-body">
-                                <div class="row">
+                                <div class="row showProductBasicInfo">
+                                    <input type="hidden" class="form-control" id="show_product_id" />
                                     <div class="card-text col-12 col-md-4"><b>Product Name:</b> <br> <span
-                                            id="details_product_name"></span></div>
+                                            id="details_product_name"></span>
+                                    </div>
                                     <div class="card-text col-12 col-md-4"><b>Product Category:</b> <br> <span
                                             id="details_product_category"></span></div>
                                     <div class="card-text col-12 col-md-4"><b>Product Sub Category:</b> <br> <span
                                             id="details_product_subcategory"></span></div>
 
                                 </div>
-                                <button class="btn btn-primary btn-sm mt-2">
+                                <div class="row editProductBasicInfo hidden">
+                                    <div class="col-12 col-md-4">
+                                        <div class="form-group">
+                                            <label for="productName" class="required">Product Name</label>
+                                            <input type="text" class="form-control" id="productName" name="productName"
+                                                placeholder="Enter Product Name" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        <div class="form-group">
+                                            <label for="productCategory" class="required">Product Category</label>
+                                            <select class="custom-select" id="productCategory" name="productCategory">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        <div class="form-group">
+                                            <label for="productSubCategory" class="required">Product Sub Category</label>
+                                            <select class="custom-select" id="productSubCategory" name="productSubCategory">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary btn-sm mt-2 editProductBasicInfoBtn">
                                     <span><i class="fa-solid fa-pen-to-square"></i> Edit</span>
+                                </button>
+                                <button class="btn btn-success btn-sm mt-2 checkProductBasicInfoBtn hidden">
+                                    <span><i class="fa-solid fa-check"></i> Update</span>
                                 </button>
                             </div>
                         </div>
@@ -106,7 +135,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary text-white">
+                        <button type="button" class="btn btn-secondary text-white" onclick="hideshowProductDetailsModal()">
                             Close
                         </button>
                     </div>
@@ -137,18 +166,15 @@
 
             // $("#exportToExcel").click(() => $(".exportToExcel").click());
 
-
-
-
-
-
+            handleProductDetailsEdit();
 
             $(document).on("click", ".showBtn", function() {
 
                 const id = $(this).data("id");
+                $("#show_product_id").val(id);
 
                 showProductDetails = new bootstrap.Modal(document.getElementById(
-                    'showProductDetails')); // Create the modal instance
+                    'showProductDetails'));
                 showProductDetails.show();
 
 
@@ -169,7 +195,6 @@
 
                     // set Product's Attributes
                     var productDetailsHTML = productAttributes.map(function(product) {
-                        console.log(product);
                         return `
                                    <div class="mt-2">
                                 <div>
@@ -235,9 +260,82 @@
         });
 
 
+        const handleProductDetailsEdit = () => {
+            $(document).on('click', '.editProductBasicInfoBtn', function() {
+                var cateogryData = [];
+                const product_id = $("#show_product_id").val();
+                $(".showProductBasicInfo").toggleClass('hidden');
+                $(".editProductBasicInfo").toggleClass('hidden');
+                $(".checkProductBasicInfoBtn").toggleClass('hidden');
+                $(this).toggleClass('hidden');
+                axios.get(`/category/fetch`).then((response) => {
+                    const data = response.data.data;
+
+                    var html = '';
+                    data.map((item) => {
+                        html += `<option value="${item.id}">${item.name}</option>`;
+                    });
+                    $("#productCategory").html(html);
+                    cateogryData = data;
+                });
+
+                axios.get(`/product/show-product-details/${product_id}`).then((response) => {
+                    const {
+                        product
+                    } = response.data.data;
+                    $("#productName").val(product.name);
+                    $("#productCategory").val(product.company_id);
+                    const {
+                        subCategories
+                    } = cateogryData.find((item) => item.id == product.company_id);
+                    html = '';
+                    subCategories.map((item) => {
+                        html += `<option value="${item.id}">${item.name}</option>`;
+                    });
+                    $("#productSubCategory").html(html);
+                });
+
+                $("#productCategory").on('change', function() {
+                    const {
+                        subCategories
+                    } = cateogryData.find((item) => item.id == $(this).val());
+                    html = '';
+                    subCategories.map((item) => {
+                        html += `<option value="${item.id}">${item.name}</option>`;
+                    });
+                    $("#productSubCategory").html(html);
+                });
+            });
+            $(document).on('click', '.checkProductBasicInfoBtn', function() {
+                const product_id = $("#show_product_id").val();
+                $(".showProductBasicInfo").toggleClass('hidden');
+                $(".editProductBasicInfo").toggleClass('hidden');
+                $(".editProductBasicInfoBtn").toggleClass('hidden');
+                $(this).toggleClass('hidden');
+                const data = {
+                    'category_id': $("#productCategory").val(),
+                    'sub_category_id': $("#productSubCategory").val(),
+                    'name': $("#productName").val(),
+                };
+
+
+
+                axios.put(`/product/update/${product_id}?type=basic-info`, data)
+                    .then(function(res) {
+                        const data = res.data.data;
+                        $('#details_product_name').text(data.name);
+                        $('#details_product_category').text(data.category.name);
+                        $('#details_product_subcategory').text(data.sub_category.name);
+                    });
+            });
+        }
+
+
         const hideshowProductDetailsModal = () => {
             showProductDetails.hide()
         };
+
+
 
 
 

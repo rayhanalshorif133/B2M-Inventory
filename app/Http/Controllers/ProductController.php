@@ -21,6 +21,7 @@ class ProductController extends Controller
                 ->with('category', 'subCategory')->get();
             return DataTables::of($query)->toJson();
         }
+
         return view('product.list');
     }
 
