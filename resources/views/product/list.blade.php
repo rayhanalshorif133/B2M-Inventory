@@ -4,7 +4,6 @@
     <div class="content-wrapper">
 
 
-        {{-- <product-list-component></product-list-component> --}}
 
 
         <div class="content-header">
@@ -125,17 +124,59 @@
                             <h5 class="card-header">Product Details</h5>
                             <div class="mx-4">
                                 <span id="setProductAttrDetails"></span>
+                                <div class="row addNewProductAttr hidden">
+                                    <div class="col-md-3 col-12 col-sm-2 mb-3">
+                                        <label for="productCode" class="form-label">Code</label>
+                                        <input type="text" class="form-control" id="productCode" value="#P_404191">
+                                    </div>
+                                    <div class="col-md-3 col-12 col-sm-2 mb-3">
+                                        <label for="size" class="form-label">Size</label>
+                                        <input type="number" class="form-control" id="size" value="3">
+                                    </div>
+                                    <div class="col-md-3 col-12 col-sm-2 mb-3">
+                                        <label for="model" class="form-label">Model</label>
+                                        <input type="text" class="form-control" id="model" value="lg">
+                                    </div>
+                                    <div class="col-md-3 col-12 col-sm-2 mb-3">
+                                        <label for="color" class="form-label">Color</label>
+                                        <input type="text" class="form-control" id="color" value="red3">
+                                    </div>
+                                    <div class="col-md-3 col-12 col-sm-2 mb-3">
+                                        <label for="currentStock" class="form-label">Current Stock</label>
+                                        <input type="number" class="form-control" id="currentStock" value="52">
+                                    </div>
+                                    <div class="col-md-3 col-12 col-sm-2 mb-3">
+                                        <label for="unitCost" class="form-label">Unit Cost</label>
+                                        <input type="number" class="form-control" id="unitCost" value="20">
+                                    </div>
+                                    <div class="col-md-3 col-12 col-sm-2 mb-3">
+                                        <label for="salesRate" class="form-label">Sales Rate</label>
+                                        <input type="number" class="form-control" id="salesRate" value="8980">
+                                    </div>
+                                    <div class="col-md-3 col-12 col-sm-2 mb-3">
+                                        <label for="lastPurchase" class="form-label">Last Purchase</label>
+                                        <input type="number" class="form-control" id="lastPurchase" value="20">
+                                    </div>
+                                </div>
                                 <div class="my-2">
-                                    <button class="btn btn-sm btn-navy">
+                                    <button class="btn btn-sm btn-navy addNewProductAttrBtn">
                                         <i class="fa fa-plus"></i> Added New
                                     </button>
+                                    <button class="btn btn-sm btn-danger addNewProductAttrBtnCancel hidden">
+                                        <i class="fa fa-times"></i> Cancel
+                                    </button>
+                                    <button class="btn btn-sm btn-success addNewProductAttrBtnSubmit hidden">
+                                        <i class="fa fa-check"></i> Submit
+                                    </button>
+
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary text-white" onclick="hideshowProductDetailsModal()">
+                        <button type="button" class="btn btn-secondary text-white"
+                            onclick="hideshowProductDetailsModal()">
                             Close
                         </button>
                     </div>
@@ -155,18 +196,14 @@
         var table = "";
 
 
-
-
         $(() => {
 
             handleDataTable();
 
-
-
-
             // $("#exportToExcel").click(() => $(".exportToExcel").click());
 
             handleProductDetailsEdit();
+            addNewAddNewProductAttrBtn();
 
             $(document).on("click", ".showBtn", function() {
 
@@ -188,34 +225,63 @@
                     // set Product Details
                     $('#details_product_name').text(product.name);
                     $('#details_product_category').text(product.category.name);
-                    $('#details_product_subcategory').text(product.sub_category
-                        .name);
+                    $('#details_product_subcategory').text(product.sub_category.name);
 
 
 
                     // set Product's Attributes
                     var productDetailsHTML = productAttributes.map(function(product) {
-                        return `
-                                   <div class="mt-2">
-                                <div>
-                                    <div class="d-flex justify-content-between px-2">
-                                        <p><b>Code:</b> ${product.code ? product.code : 'Not Set'}</p>
-                                        <p><b>Size:</b> ${product.size ? product.size : 'Not Set'}</p>
-                                        <p><b>Model:</b> ${product.model ? product.model : 'Not Set'}</p>
-                                        <p><b>Color:</b> ${product.color ? product.color : 'Not Set'}</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between px-2">
-                                        <p><b>Current Stock:</b> ${product.current_stock ? product.current_stock : 'Not Set'}</p>
-                                        <p><b>Unit Cost:</b> ${product.unit_cost ? product.unit_cost : 'Not Set'}</p>
-                                        <p><b>Sales Rate:</b> ${product.sales_rate ? product.sales_rate : 'Not Set'}</p>
-                                        <p><b>Last Purchase:</b> ${product.last_purchase ? product.last_purchase : 'Not Set'}</p>
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary btn-sm mt-2">
-                                    <span><i class="fa-solid fa-pen-to-square"></i> Edit</span>
-                                </button>
+                        return `<div class="mt-2">
+                                        <div class="productAttrContainer">
+                                            <div class="d-flex justify-content-between px-2 showProductAttrDetails">
+                                                <p><b>Code:</b> <span id="showProductAttrCode-${product.id}">${product.code ? product.code : 'Not Set'}</span></p>
+                                                <p><b>Size:</b> <span id="showProductAttrSize-${product.id}">${product.size ? product.size : 'Not Set'}</span></p>
+                                                <p><b>Model:</b> <span id="showProductAttrModel-${product.id}">${product.model ? product.model : 'Not Set'}</span></p>
+                                                <p><b>Color:</b> <span id="showProductAttrColor-${product.id}">${product.color ? product.color : 'Not Set'}</span></p>
+                                            </div>
+
+
+                                            <div class="d-flex justify-content-between px-2 showProductAttrDetails">
+                                                <p><b>Current Stock:</b> ${product.current_stock ? product.current_stock : 'Not Set'}</p>
+                                                <p><b>Unit Cost:</b> ${product.unit_cost ? product.unit_cost : 'Not Set'}</p>
+                                                <p><b>Sales Rate:</b>
+                                                <span id="showProductAttrSalesRate-${product.id}">${product.sales_rate ? product.sales_rate : 'Not Set'}</span>
+                                                    </p>
+
+                                                <p><b>Last Purchase:</b> ${product.last_purchase ? product.last_purchase : 'Not Set'}</p>
+                                            </div>
+                                            <div class="row px-2 hidden">
+                                                <input type="hidden" id="productAttrId" value="${product.id}">
+                                                <div class="mb-3 col-4">
+                                                    <label for="productCode" class="form-label"><b>Code:</b></label>
+                                                    <input type="text" id="productCode_${product.id}" name="productCode" class="form-control" value="${product.code ? product.code : ''}" placeholder="Not Set">
+                                                </div>
+                                                <div class="mb-3 col-4">
+                                                    <label for="productSize" class="form-label"><b>Size:</b></label> <br/>
+                                                    <input type="text" id="productSize_${product.id}" class="form-control" value="${product.size ? product.size : ''}" placeholder="Not Set">
+                                                </div>
+                                                <div class="mb-3 col-4">
+                                                    <label for="productModel" class="form-label"><b>Model:</b></label> <br/>
+                                                    <input type="text" id="productModel_${product.id}" class="form-control" value="${product.model ? product.model : ''}" placeholder="Not Set">
+                                                </div>
+                                                <div class="mb-3 col-4">
+                                                    <label for="productColor" class="form-label"><b>Color:</b></label> <br/>
+                                                    <input type="text" id="productColor_${product.id}" class="form-control" value="${product.color ? product.color : ''}" placeholder="Not Set">
+                                                </div>
+                                                <div class="mb-3 col-4">
+                                                    <label for="productSalesRate" class="form-label"><b>Sales Rate:</b></label> <br/>
+                                                    <input type="text" id="productSalesRate_${product.id}" class="form-control" value="${product.sales_rate ? product.sales_rate : ''}" placeholder="Not Set">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-primary btn-sm mt-2 editProductAttribute">
+                                            <span><i class="fa-solid fa-pen-to-square"></i> Edit</span>
+                                        </button>
+                                        <button class="btn btn-success btn-sm mt-2 checkProductAttribute hidden">
+                                            <span><i class="fa-solid fa-check"></i> Done</span>
+                                        </button>
                                         <hr>
-                                    </div>
+                             </div>
                             `;
                     }).join('');
 
@@ -223,6 +289,45 @@
                 });
 
 
+            });
+
+
+            $(document).on('click', '.editProductAttribute', function() {
+                $(this).parent().find('.productAttrContainer').find('.hidden').toggleClass('hidden')
+                    .toggleClass('d-flex')
+                $(this).parent().find('.showProductAttrDetails').toggleClass('hidden').toggleClass(
+                    'd-flex');
+                $(this).addClass('hidden');
+                $(this).parent().find('.checkProductAttribute').removeClass('hidden');
+            });
+
+            $(document).on('click', '.checkProductAttribute', function() {
+                $(this).parent().find('.productAttrContainer').find('.d-flex').toggleClass('hidden')
+                    .toggleClass('d-flex')
+                $(this).parent().find('.showProductAttrDetails').toggleClass('hidden').toggleClass(
+                    'd-flex');
+                $(this).addClass('hidden');
+                $(this).parent().find('.editProductAttribute').removeClass('hidden');
+
+                const productAttrId = $("#productAttrId").val();
+                const productAttrData = {
+                    code: $(`#productCode_${productAttrId}`).val(),
+                    size: $(`#productSize_${productAttrId}`).val(),
+                    model: $(`#productModel_${productAttrId}`).val(),
+                    color: $(`#productColor_${productAttrId}`).val(),
+                    sales_rate: $(`#productSalesRate_${productAttrId}`).val(),
+                };
+                axios.put(`/product/update/${productAttrId}?type=attr-info`, productAttrData)
+                    .then(function(res) {
+                        const data = res.data.data;
+                        $(`#showProductAttrCode-${data.id}`).text(data.code ? data.code : 'Not Set');
+                        $(`#showProductAttrSize-${data.id}`).text(data.size ? data.size : 'Not Set');
+                        $(`#showProductAttrModel-${data.id}`).text(data.model ? data.model : 'Not Set');
+                        $(`#showProductAttrColor-${data.id}`).text(data.color ? data.color : 'Not Set');
+                        $(`#showProductAttrSalesRate-${data.id}`).text(data.sales_rate ? data
+                            .sales_rate : 'Not Set');
+
+                    });
             });
 
             $(document).on("click", ".deleteBtn", function() {
@@ -258,6 +363,45 @@
             });
 
         });
+
+        const addNewAddNewProductAttrBtn = () => {
+            $(document).on('click', '.addNewProductAttrBtn', function() {
+                $(".addNewProductAttr").toggleClass('hidden');
+                $(".addNewProductAttrBtnCancel").toggleClass('hidden');
+                $(".addNewProductAttrBtnSubmit").toggleClass('hidden');
+                $(this).toggleClass('hidden');
+            });
+
+            $(document).on('click', '.addNewProductAttrBtnCancel', function() {
+                $(".addNewProductAttr").toggleClass('hidden');
+                $(".addNewProductAttrBtnCancel").toggleClass('hidden');
+                $(".addNewProductAttrBtnSubmit").toggleClass('hidden');
+                $(".addNewProductAttrBtn").toggleClass('hidden');
+            });
+
+
+            // add new product attribute
+            $(document).on('click', '.addNewProductAttrBtnSubmit', function() {
+                const product_id = $("#show_product_id").val();
+
+                console.log(product_id);
+                return false;
+                const productAttrData = {
+                    code: $("#productCode").val(),
+                    size: $("#size").val(),
+                    model: $("#model").val(),
+                    color: $("#color").val(),
+                    current_stock: $("#currentStock").val(),
+                    unit_cost: $("#unitCost").val(),
+                    sales_rate: $("#salesRate").val(),
+                    last_purchase: $("#lastPurchase").val(),
+                };
+                axios.post(`/product/${product_id}/add-new-attr`, productAttrData)
+                    .then(function(res) {
+                        const data = res.data.data;
+                    });
+            });
+        }
 
 
         const handleProductDetailsEdit = () => {
@@ -418,3 +562,4 @@
         };
     </script>
 @endpush
+

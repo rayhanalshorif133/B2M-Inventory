@@ -19,13 +19,6 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <!-- {{ productData }} -->
-                    <div class="card card-info" v-if="productData">
-                        <h5 class="card-header">Basic Information</h5>
-                        <show-basic-info
-                            :product="productData.product"
-                        ></show-basic-info>
-                    </div>
                     <div class="card card-navy" v-if="productData">
                         <h5 class="card-header">Product Details</h5>
                         <show-attributes-info
