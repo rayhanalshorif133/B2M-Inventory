@@ -126,36 +126,41 @@
                                 <span id="setProductAttrDetails"></span>
                                 <div class="row addNewProductAttr hidden">
                                     <div class="col-md-3 col-12 col-sm-2 mb-3">
-                                        <label for="productCode" class="form-label">Code</label>
-                                        <input type="text" class="form-control" id="productCode" value="#P_404191">
+                                        <label for="productCode" class="form-label optional">Code</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="productCode" value="">
+                                            <span class="btn btn-primary btn-sm" type="button" id="generateCodeButton">
+                                                <i class="fa-solid fa-rotate-right text-white"></i>
+                                            </span>
+                                        </div>
                                     </div>
                                     <div class="col-md-3 col-12 col-sm-2 mb-3">
-                                        <label for="size" class="form-label">Size</label>
-                                        <input type="number" class="form-control" id="size" value="3">
+                                        <label for="size" class="form-label optional">Size</label>
+                                        <input type="number" class="form-control" id="size" value="">
                                     </div>
                                     <div class="col-md-3 col-12 col-sm-2 mb-3">
-                                        <label for="model" class="form-label">Model</label>
-                                        <input type="text" class="form-control" id="model" value="lg">
+                                        <label for="model" class="form-label optional">Model</label>
+                                        <input type="text" class="form-control" id="model" value="">
                                     </div>
                                     <div class="col-md-3 col-12 col-sm-2 mb-3">
-                                        <label for="color" class="form-label">Color</label>
-                                        <input type="text" class="form-control" id="color" value="red3">
+                                        <label for="color" class="form-label optional">Color</label>
+                                        <input type="text" class="form-control" id="color" value="">
                                     </div>
                                     <div class="col-md-3 col-12 col-sm-2 mb-3">
-                                        <label for="currentStock" class="form-label">Current Stock</label>
-                                        <input type="number" class="form-control" id="currentStock" value="52">
+                                        <label for="currentStock" class="form-label optional">Current Stock</label>
+                                        <input type="number" class="form-control" id="currentStock" value="">
                                     </div>
                                     <div class="col-md-3 col-12 col-sm-2 mb-3">
-                                        <label for="unitCost" class="form-label">Unit Cost</label>
-                                        <input type="number" class="form-control" id="unitCost" value="20">
+                                        <label for="unitCost" class="form-label optional">Unit Cost</label>
+                                        <input type="number" class="form-control" id="unitCost" value="">
                                     </div>
                                     <div class="col-md-3 col-12 col-sm-2 mb-3">
-                                        <label for="salesRate" class="form-label">Sales Rate</label>
-                                        <input type="number" class="form-control" id="salesRate" value="8980">
+                                        <label for="salesRate" class="form-label optional">Sales Rate</label>
+                                        <input type="number" class="form-control" id="salesRate" value="">
                                     </div>
                                     <div class="col-md-3 col-12 col-sm-2 mb-3">
-                                        <label for="lastPurchase" class="form-label">Last Purchase</label>
-                                        <input type="number" class="form-control" id="lastPurchase" value="20">
+                                        <label for="lastPurchase" class="form-label optional">Last Purchase</label>
+                                        <input type="number" class="form-control" id="lastPurchase" value="">
                                     </div>
                                 </div>
                                 <div class="my-2">

@@ -43,7 +43,6 @@
 
 <script>
 import { ref, toRefs, onMounted } from "vue";
-import ShowBasicInfo from "./_partials/ShowBasicInfo.vue";
 import ShowAttributesInfo from "./_partials/ShowAttributesInfo.vue";
 export default {
     components: {
