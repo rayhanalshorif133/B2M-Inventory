@@ -92,6 +92,7 @@ Route::middleware('auth')->controller(ProductController::class)
         Route::get('/check-duplicate-code/{code}', 'checkDuplicateCode')->name('check-duplicate-code');
         // update
         Route::put('/update/{id}', 'update')->name('update');
+        Route::get('/getProductCode', 'getProductCode')->name('getProductCode');
     });
 
 

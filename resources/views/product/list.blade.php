@@ -129,9 +129,11 @@
                                         <label for="productCode" class="form-label optional">Code</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="productCode" value="">
-                                            <span class="btn btn-primary btn-sm" type="button" id="generateCodeButton">
+                                            <button
+                                                class="btn btn-primary btn-sm d-flex justify-content-center align-items-center generateCodeButton"
+                                                type="button">
                                                 <i class="fa-solid fa-rotate-right text-white"></i>
-                                            </span>
+                                            </button>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12 col-sm-2 mb-3">
@@ -297,6 +299,9 @@
             });
 
 
+
+
+
             $(document).on('click', '.editProductAttribute', function() {
                 $(this).parent().find('.productAttrContainer').find('.hidden').toggleClass('hidden')
                     .toggleClass('d-flex')
@@ -375,6 +380,14 @@
                 $(".addNewProductAttrBtnCancel").toggleClass('hidden');
                 $(".addNewProductAttrBtnSubmit").toggleClass('hidden');
                 $(this).toggleClass('hidden');
+                console.log('Add new product');
+
+                $(document).on('click', '.generateCodeButton', function() {
+                    axios.get('/product/getProductCode')
+                        .then(function(response) {
+                            $("#productCode").val(response.data);
+                        });
+                });
             });
 
             $(document).on('click', '.addNewProductAttrBtnCancel', function() {
@@ -383,6 +396,8 @@
                 $(".addNewProductAttrBtnSubmit").toggleClass('hidden');
                 $(".addNewProductAttrBtn").toggleClass('hidden');
             });
+
+
 
 
             // add new product attribute
@@ -406,6 +421,9 @@
                         const data = res.data.data;
                     });
             });
+
+
+
         }
 
 
@@ -567,4 +585,3 @@
         };
     </script>
 @endpush
-
