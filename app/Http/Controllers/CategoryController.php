@@ -13,7 +13,15 @@ class CategoryController extends Controller
     public function list()
     {
 
-        return view('category.list');
+        $categories = Category::select('id', 'name', 'status')
+        ->where('created_by', Auth::user()->id)
+        ->where('company_id', Auth::user()->company_id)
+        ->where('parent_category_id', null)
+        ->get()
+        ->each(function ($item) {
+            $item->subCategories = Category::select('id', 'name', 'status')->where('parent_category_id', $item->id)->get();
+        });
+        return view('category.list', compact('categories'));
     }
 
     public function fetch(Request $request)
@@ -85,6 +93,15 @@ class CategoryController extends Controller
     public function addNewSubCategory($category_id, Request $request)
     {
         try {
+
+            // find the category
+            $hasAlreadyCategory = Category::select()->where('parent_category_id', $category_id)
+                ->where('name', $request->name)
+                ->first();
+            if($hasAlreadyCategory){
+                return $this->respondWithError('Sub category already exists');
+            }
+
             $subCategory = new Category();
             $subCategory->company_id = Auth::user()->company_id;
             $subCategory->name = $request->name;
@@ -92,7 +109,7 @@ class CategoryController extends Controller
             $subCategory->parent_category_id = $category_id;
             $subCategory->created_by = Auth::user()->id;
             $subCategory->save();
-            return $this->respondWithSuccess('Fetched categories successfully', $subCategory);
+            return $this->respondWithSuccess('Successfully added new sub category ', $subCategory);
         } catch (\Throwable $th) {
             return $this->respondWithError('error', 'Something went wrong');
         }
@@ -102,14 +119,8 @@ class CategoryController extends Controller
     {
         try {
             $category = Category::select()->where('id', $category_id)->first();
-            if ($request->action == 'status') {
-                $category->status = $category->status == "1" ? "0" : "1";
-            }
-
-            if ($request->name) {
-                $category->name = $request->name;
-            }
-
+            $category->status = $request->status;
+            $category->name = $request->name;
             $category->save();
             return $this->respondWithSuccess('Updated category successfully', $category);
         } catch (\Throwable $th) {
