@@ -14,14 +14,14 @@ class CategoryController extends Controller
     {
 
         $categories = Category::select('id', 'name', 'status')
-        ->where('created_by', Auth::user()->id)
-        ->where('company_id', Auth::user()->company_id)
-        ->where('parent_category_id', null)
-        ->orderBy('id', 'desc')
-        ->get()
-        ->each(function ($item) {
-            $item->subCategories = Category::select('id', 'name', 'status')->where('parent_category_id', $item->id)->get();
-        });
+            ->where('created_by', Auth::user()->id)
+            ->where('company_id', Auth::user()->company_id)
+            ->where('parent_category_id', null)
+            ->orderBy('id', 'desc')
+            ->get()
+            ->each(function ($item) {
+                $item->subCategories = Category::select('id', 'name', 'status')->where('parent_category_id', $item->id)->get();
+            });
         return view('category.list', compact('categories'));
     }
 
@@ -31,16 +31,8 @@ class CategoryController extends Controller
 
         if ($request->type == 'product-create') {
             $categories = Category::select('id', 'name', 'status')
-                ->where('created_by', Auth::user()->id)
-                ->where('company_id', Auth::user()->company_id)
-                ->where('parent_category_id', null)
                 ->where('status', 1)
-                ->get()
-                ->each(function ($item) {
-                    $item->subCategories = Category::select('id', 'name', 'status')
-                        ->where('status', 1)
-                        ->where('parent_category_id', $item->id)->get();
-                });
+                ->where('parent_category_id', $request->category_id)->get();
         } else {
             $categories = Category::select('id', 'name', 'status')
                 ->where('created_by', Auth::user()->id)
@@ -87,7 +79,6 @@ class CategoryController extends Controller
             }
 
             return redirect()->route('category.list')->with('success', 'Category created successfully');
-
         } catch (\Throwable $th) {
             return $this->respondWithError('error', $th->getMessage());
         }
@@ -101,7 +92,7 @@ class CategoryController extends Controller
             $hasAlreadyCategory = Category::select()->where('parent_category_id', $category_id)
                 ->where('name', $request->name)
                 ->first();
-            if($hasAlreadyCategory){
+            if ($hasAlreadyCategory) {
                 return $this->respondWithError('Sub category already exists');
             }
 

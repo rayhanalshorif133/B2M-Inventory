@@ -421,7 +421,6 @@ export default {
             console.clear();
             const data = [];
             var listItem = 1;
-            console.log(categories.value);
             categories.value.forEach((category) => {
                 category.subCategories.map((item, index) => {
                     data.push({

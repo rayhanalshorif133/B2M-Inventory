@@ -153,25 +153,16 @@
             // Dynamically populate subcategories based on selected category
             $('#selectCategory').on('change', function() {
                 var categoryId = $(this).val();
-                // Example AJAX request to fetch subcategories
-                $.ajax({
-                    url: '/get-subcategories/' + categoryId,
-                    method: 'GET',
-                    success: function(data) {
-                        var subCategorySelect = $('#selectSubCategory');
-                        subCategorySelect.empty();
-                        subCategorySelect.append(
-                            '<option value="" selected disabled>Choose a Subcategory</option>'
-                            );
-                        $.each(data, function(index, subCategory) {
-                            subCategorySelect.append('<option value="' + subCategory
-                                .id + '">' + subCategory.name + '</option>');
-                        });
-                    },
-                    error: function() {
-                        alert('Failed to fetch subcategories');
-                    }
+
+                axios.get(`/category/fetch?type=product-create&category_id=${categoryId}`).then((res) => {
+                   var subCategorySelect = $('#selectSubCategory');
+                    subCategorySelect.empty();
+                    subCategorySelect.append('<option value="" selected disabled>Choose a Subcategory</option>');
+                    res.data.data.forEach((subCategory) => {
+                        subCategorySelect.append(`<option value="${subCategory.id}">${subCategory.name}</option>`);
+                    });
                 });
+
             });
 
             // Add new product detail row
