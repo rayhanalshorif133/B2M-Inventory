@@ -17,6 +17,7 @@ class CategoryController extends Controller
         ->where('created_by', Auth::user()->id)
         ->where('company_id', Auth::user()->company_id)
         ->where('parent_category_id', null)
+        ->orderBy('id', 'desc')
         ->get()
         ->each(function ($item) {
             $item->subCategories = Category::select('id', 'name', 'status')->where('parent_category_id', $item->id)->get();
@@ -64,9 +65,10 @@ class CategoryController extends Controller
 
 
 
+
             $category = new Category();
             $category->company_id = Auth::user()->company_id;
-            $category->name = $request['category_name'];
+            $category->name = $request->category_name;
             $category->status = 1;
             $category->parent_category_id = null;
             $category->created_by = Auth::user()->id;
@@ -74,17 +76,18 @@ class CategoryController extends Controller
 
 
 
-            $subCategories = $request['sub_categories'];
-            foreach ($subCategories as $item) {
+            foreach ($request->subCategories as $item) {
                 $subCategory = new Category();
                 $subCategory->company_id = $category->company_id;
-                $subCategory->name = $item['name'];
+                $subCategory->name = $item;
                 $subCategory->status = 1;
                 $subCategory->parent_category_id = $category->id;
                 $subCategory->created_by = Auth::user()->id;
                 $subCategory->save();
             }
-            return $this->respondWithSuccess('success', 'Category  created Successfully');
+
+            return redirect()->route('category.list')->with('success', 'Category created successfully');
+
         } catch (\Throwable $th) {
             return $this->respondWithError('error', $th->getMessage());
         }
