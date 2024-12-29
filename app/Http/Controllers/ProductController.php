@@ -89,7 +89,12 @@ class ProductController extends Controller
     public function create(Request $request)
     {
         if ($request->method() == 'GET') {
-            return view('product.create');
+
+            $categories = Category::where('company_id', Auth::user()->company_id)
+                ->where('status', 1)
+                ->where('parent_category_id', null)
+            ->get();
+            return view('product.create', compact('categories'));
         }
 
         try {

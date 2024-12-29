@@ -41,12 +41,7 @@ app.component('user-list-component', UserListComponent);
 app.component('user-create-component', UserCreateComponent);
 app.component('user-profile-component', UserProfileComponent);
 
-// category
-import CategoryCreateComponent from './components/category/CreateComponent.vue';
-import CategoryListComponent from './components/category/ListComponent.vue';
 
-app.component('category-create-component', CategoryCreateComponent);
-app.component('category-list-component', CategoryListComponent);
 
 
 // Product
