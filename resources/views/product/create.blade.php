@@ -43,8 +43,8 @@
                                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
                                     aria-labelledby="nav-home-tab">
                                     <form class="mt-3">
+                                        <h3 class="text-lg font-medium">Product's Basic Information</h3>
                                         <div class="row">
-                                            <h3 class="text-lg font-medium">Product's Basic Information</h3>
                                             <div class="col-12 col-md-4">
                                                 <div class="form-group">
                                                     <label for="selectCategory" class="required">Select a Category</label>
@@ -64,7 +64,6 @@
                                                     <select class="custom-select" id="selectSubCategory">
                                                         <option value="" selected disabled>Choose a Subcategory
                                                         </option>
-                                                        <!-- Options will be dynamically populated -->
                                                     </select>
                                                 </div>
                                             </div>
@@ -76,6 +75,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="card card-navy">
                                             <div class="card-header">
                                                 Product Details
@@ -100,7 +100,7 @@
                                             </div>
                                         </div>
 
-                                        <button type="button" class="btn btn-success btn-sm mt-3" id="submit-btn">
+                                        <button type="submit" class="btn btn-success btn-sm mt-3">
                                             Submit
                                         </button>
                                     </form>
@@ -155,11 +155,14 @@
                 var categoryId = $(this).val();
 
                 axios.get(`/category/fetch?type=product-create&category_id=${categoryId}`).then((res) => {
-                   var subCategorySelect = $('#selectSubCategory');
+                    var subCategorySelect = $('#selectSubCategory');
                     subCategorySelect.empty();
-                    subCategorySelect.append('<option value="" selected disabled>Choose a Subcategory</option>');
+                    subCategorySelect.append(
+                        '<option value="" selected disabled>Choose a Subcategory</option>');
                     res.data.data.forEach((subCategory) => {
-                        subCategorySelect.append(`<option value="${subCategory.id}">${subCategory.name}</option>`);
+                        subCategorySelect.append(
+                            `<option value="${subCategory.id}">${subCategory.name}</option>`
+                            );
                     });
                 });
 

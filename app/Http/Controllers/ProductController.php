@@ -100,6 +100,7 @@ class ProductController extends Controller
         try {
 
 
+            dd($request->all());
 
 
             if ($request->type == 'xlsx') {
