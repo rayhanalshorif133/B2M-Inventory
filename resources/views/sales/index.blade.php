@@ -162,7 +162,6 @@
 
                     // Insert rows into the table body
                     $.each(salesDetails, function(index, item) {
-                        console.log(item)
                         const row = `
                             <tr>
                                 <td>${index + 1}</td>
@@ -271,7 +270,7 @@
                     },
                     {
                         render: function(data, type, row) {
-                            return row.total_amount;
+                            return row.grand_total;
                         },
                         targets: 0,
                     }, {

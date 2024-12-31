@@ -494,7 +494,8 @@
                 var rowHTML = `
             <tr id="${id}" class="slsord_line">
                 <td class="col-3">
-                    <input type="hidden" name="product_details[${item.id}][product_id]" value="${item.product_id}">
+                    <input type="hidden" name="product_details[${item.id}][product_id]" value="${item.product.id}">
+                    <input type="hidden" name="product_details[${item.id}][product_attribute_id]" value="${item.id}">
                     <small class="text-xs font-semibold">${item.product?.name ? item.product.name : ''}</small><br/>
                     <small class="text-xs font-semibold">${item.code ? item.code : ''} ${item.model ? ' / ' + item.model : ''} ${item.size ? ' / ' + item.size : ''} ${item.color ? ' / ' + item.color : ''}</small><br/>
                 </td>
@@ -511,7 +512,7 @@
                         ${item.sales_rate? item.sales_rate : 0}
                     </td>
                     <td class="remove-sales-order col-1">
-                        <input type="number" name="product_details[${item.id}][total]" value="${item.sales_rate? item.sales_rate : 0}" class="bg-focus form-control text-right input_total">
+                        <input type="hidden" name="product_details[${item.id}][total]" value="${item.sales_rate? item.sales_rate : 0}" class="bg-focus form-control text-right input_total">
                     <span id="cancel" class="text-danger cursor-pointer d-block text-right" href="">
                         <i class="fa fa-trash fs-5 " aria-hidden="true"></i>
                     </span>
@@ -550,10 +551,14 @@
             } else {
 
                 const qtyInput = rowWithId.find('td').eq(1).find('.input_qty');
+                // input_total
+                const input_total = rowWithId.find('.input_total');
                 let salesRate = parseFloat(rowWithId.find('.input_sales_rate').val());
                 let currentQty = parseInt(qtyInput.val()) + 1;
                 qtyInput.val(currentQty);
                 rowWithId.find('td').eq(4).html(currentQty * salesRate);
+                input_total.val(currentQty * salesRate);
+
             }
 
 
@@ -578,7 +583,6 @@
 
         function updateTotalAmount() {
             const rowWithId = $(this).closest('tr');
-
             const salesRate = parseFloat(rowWithId.find('.input_sales_rate').val());
             const currentQty = parseInt(rowWithId.find('.input_qty').val());
             const discount = parseFloat(rowWithId.find('.input_discount').val()) ||
@@ -597,6 +601,9 @@
             });
             tbody.find('tr.footer').find('td').eq(1).text(total_amount.toFixed(2));
             $("#set_total_amount").val(total_amount.toFixed(2));
+
+            const input_total = rowWithId.find('.input_total');
+            input_total.val(totalAmount);
 
             handleTotalGrandAmount();
         }

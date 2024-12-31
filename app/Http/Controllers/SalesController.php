@@ -68,10 +68,14 @@ class SalesController extends Controller
         DB::beginTransaction();
         try {
 
-            dd($request->all());
+
+            $product_details = $request->product_details;
+
+
 
             $company_id = $request->session()->get('company_id');
             $sales_order = $request->sales_order;
+
             $sales = new Sales();
             $sales->company_id = $company_id;
             $sales->customer_id = $sales_order['customer_id'];
@@ -81,10 +85,10 @@ class SalesController extends Controller
             $sales->total_amount = $sales_order['total_amount'];
             $sales->sub_amount = 0;
             $sales->paid_amount = $sales_order['paid_amount'];
-            $sales->grand_total = 0;
-            $sales->due_amount = 0;
+            $sales->grand_total = $sales_order['grand_total_amount'];
+            $sales->due_amount = $sales_order['due_amount'];
             $sales->note = $sales_order['customer_note'];
-            $sales->discount = 0;
+            $sales->discount = $sales_order['total_discount'];
             $sales->created_by = Auth::user()->id;
             $sales->created_time = date('H:i:s');
             $sales->created_date = date('Y-m-d');
@@ -94,7 +98,7 @@ class SalesController extends Controller
             /* <- Sales Payment ->*/
             $salesPayment = new SalesPayment();
             $salesPayment->sales_id = $sales->id;
-            $salesPayment->transaction_type_id = $request['transaction_type_id'];
+            $salesPayment->transaction_type_id = $sales_order['transaction_type'];
             $salesPayment->amount = $sales->paid_amount;
             $salesPayment->receipt_no = salesPaymentReceiptNo();
             $salesPayment->customer_id = $sales->customer_id;
@@ -118,14 +122,16 @@ class SalesController extends Controller
 
 
 
-            $productCustomizations =  $request['productCustomizations'];
 
-            foreach ($productCustomizations as $item) {
-                $productAttribute  = ProductAttribute::select()->where('id', $item['id'])->first();
+
+            foreach ($product_details as $item) {
+                $productAttribute  = ProductAttribute::select()->where('id', $item['product_attribute_id'])->first();
 
                 $salesDetails = new SalesDetails();
-                $salesDetails->product_attribute_id = $item['id'];
+                $salesDetails->product_attribute_id = $item['product_attribute_id'];
                 $salesDetails->sales_id = $sales->id;
+
+
                 $salesDetails->qty = $item['qty'];
                 $salesDetails->product_id = $item['product_id'];
                 $salesDetails->sales_rate = $item['sales_rate'];
@@ -158,10 +164,10 @@ class SalesController extends Controller
             }
 
             DB::commit();
-            return $this->respondWithSuccess('Successfully created Sales', $sales);
+            return redirect()->route('sales.index')->with('success', 'Successfully created Sales');
         } catch (\Throwable $th) {
             DB::rollBack();
-            return $this->respondWithError('error', $th->getMessage());
+            return redirect()->route('sales.index')->with('error', $th->getMessage());
         }
     }
 
