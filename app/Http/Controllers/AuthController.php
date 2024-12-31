@@ -55,6 +55,7 @@ class AuthController extends Controller
 
             Auth::login($user);
             $request->session()->put('loginId', $user->id);
+            $request->session()->put('company_id', $user->company_id);
             return $this->respondWithSuccess("success", 'Successfully logged in');
         } else {
             return $this->respondWithSuccess("error", 'Credentials is invalid or not found');

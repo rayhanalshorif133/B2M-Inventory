@@ -45,13 +45,13 @@
                                             </div>
                                             <div>
                                                 <label class="required form-label">Select a Customer:</label>
-                                                <select class="form-select" name="selectedCustomer" id="selectedCustomer">
+                                                <select class="custom-select" name="selectedCustomer" id="selectedCustomer">
                                                     <option disabled selected value="0">Select a Customer</option>
                                                 </select>
                                             </div>
                                             <div class="mt-2">
                                                 <label class="required form-label">Select an Invoice:</label>
-                                                <select class="form-select" name="selectedInvoice" id="selectedInvoice">
+                                                <select class="custom-select" name="selectedInvoice" id="selectedInvoice">
                                                     <option disabled selected value="0">Select an Invoice</option>
                                                 </select>
                                             </div>
@@ -173,6 +173,7 @@
             axios.get(`/customer/fetch?type=sales-return&date=${date}`)
                 .then((response) => {
                     const data = response.data.data;
+                    console.log(data);
                     var customerList = [];
                     salesList = data;
 

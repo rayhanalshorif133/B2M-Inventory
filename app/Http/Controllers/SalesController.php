@@ -53,9 +53,12 @@ class SalesController extends Controller
     public function create(Request $request)
     {
         if ($request->method() == 'GET') {
-            $customers = Customer::select()->where('company_id', Auth::user()->company_id)->get();
-            $transactionTypes = TransactionType::select()->where('company_id', Auth::user()->company_id)->get();
-            return view('sales.create', compact('customers', 'transactionTypes'));
+
+            $company_id = $request->session()->get('company_id');
+            $customers = Customer::select()->where('company_id', $company_id)->get();
+            $transactionTypes = TransactionType::select()->where('company_id', $company_id)->get();
+            $sales_code = $this->getSalesCode($company_id);
+            return view('sales.create', compact('customers', 'transactionTypes', 'sales_code'));
         }
 
 
@@ -65,18 +68,22 @@ class SalesController extends Controller
         DB::beginTransaction();
         try {
 
+            dd($request->all());
+
+            $company_id = $request->session()->get('company_id');
+            $sales_order = $request->sales_order;
             $sales = new Sales();
-            $sales->company_id = Auth::user()->company_id;
-            $sales->customer_id = $request['customer_id'];
-            $sales->code = $this->getSalesCode(Auth::user()->company_id);
+            $sales->company_id = $company_id;
+            $sales->customer_id = $sales_order['customer_id'];
+            $sales->code = $sales_order['voucher_number'];
             $sales->status = 1;
-            $sales->invoice_date = $request['invoice_date'];
-            $sales->total_amount = $request['total_amount'];
+            $sales->invoice_date = $sales_order['invoice_date'];
+            $sales->total_amount = $sales_order['total_amount'];
             $sales->sub_amount = 0;
-            $sales->paid_amount = $request['paid_amount'];
+            $sales->paid_amount = $sales_order['paid_amount'];
             $sales->grand_total = 0;
-            $sales->due_amount = floatval($request['total_amount']) - floatval($request['paid_amount']);
-            $sales->note = $request['note'];
+            $sales->due_amount = 0;
+            $sales->note = $sales_order['customer_note'];
             $sales->discount = 0;
             $sales->created_by = Auth::user()->id;
             $sales->created_time = date('H:i:s');

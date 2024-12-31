@@ -128,9 +128,13 @@
                     </div>
                     <div class="card-body">
                         <div class="card mb-3 mt-2" data-controller="calculate-sales-order">
+                            @include('sales._partials.addNewCustomerModal', [
+                                'customers' => $customers,
+                            ])
                             <div class="card-body bg-white">
-                                <form class="form-horizontal" action="" method="">
-
+                                <form class="form-horizontal" action="{{ route('sales.create') }}" method="POST">
+                                    @csrf
+                                    @method('POST')
                                     <!-- Customer Name-->
                                     <div class="row mb-3">
                                         <label class="col-sm-2 col-md-2 text-capitalize" for="q_billing_status">Customer
@@ -138,20 +142,13 @@
                                         <div class="col-sm-3 col-md-2 mb-3">
                                             <div class="form-group">
                                                 <select class="form-control select2" id="customer"
-                                                    style="width: 100%;"></select>
+                                                    name="sales_order[customer_id]" style="width: 100%;"></select>
                                             </div>
                                         </div>
                                         <div class="col-sm-2 col-md-2 mb-2">
                                             <a class="btn btn-outline-success btn-sm ms-2" data-toggle="modal"
                                                 data-target="#addNewCustomerModal">
-                                                <svg class="svg-inline--fa fa-user-plus" aria-hidden="true"
-                                                    focusable="false" data-prefix="fas" data-icon="user-plus" role="img"
-                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
-                                                    data-fa-i2svg="">
-                                                    <path fill="currentColor"
-                                                        d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z">
-                                                    </path>
-                                                </svg>
+                                                <i class="fa fa-plus" style="color: #0a7822"></i>
                                                 New Customer
                                             </a>
                                         </div>
@@ -160,24 +157,22 @@
                                             Issue : </label>
                                         <div class="col-sm-3 col-md-3 position-relative">
                                             <div class="input-group has-validation">
-                                                <input type="date" name="invoice_date" id="invoice_date"
+                                                <input type="date" name="sales_order[invoice_date]" id="invoice_date"
                                                     value="{{ date('Y-m-d') }}" class="form-control" required="required">
                                             </div>
                                         </div>
                                     </div>
 
-                                    @include('sales._partials.addNewCustomerModal', [
-                                        'customers' => $customers,
-                                    ])
+
 
                                     <!-- Voucher Number-->
                                     <div class="row mb-3">
                                         <label class="col-sm-2 control-label-required text-end">Sales Order #</label>
                                         <div class="col-sm-3">
                                             <label class="control-label align-middle">
-                                                SLSODR/001
-                                                <input autocomplete="off" type="hidden" value="SLSODR/005"
-                                                    name="sales_order[voucher_number]" id="sales_order_voucher_number">
+                                                {{ $sales_code }}
+                                                <input autocomplete="off" type="hidden" value="{{ $sales_code }}"
+                                                    name="sales_order[voucher_number]">
                                             </label>
                                         </div>
                                     </div>
@@ -216,59 +211,73 @@
                                                 <tr class="slsord_line" id="no_record">
                                                     <td class="border-0 text-center" colspan="6">No Record</td>
                                                 </tr>
-                                                <!-- Uncomment for future rows
-                                                                              <tr id="subtotal-tr">
-                                                                                <td class="border-0" colspan="4"></td>
-                                                                                <td>Subtotal</td>
-                                                                                <td class="text-end"> <span id="inv-total">0.00</span></td>
-                                                                              </tr>
-                                                                              <tr>
-                                                                                <td class="border-0" colspan="4"></td>
-                                                                                <td>Discount</td>
-                                                                                <td class="text-end"><span id="est-discount">0.00</span></td>
-                                                                              </tr>
-                                                                              <tr>
-                                                                                <td class="border-0" colspan="4"></td>
-                                                                                <td>Tax</td>
-                                                                                <td class="text-end"><span id="tax-amount">0.00</span></td>
-                                                                              </tr>
-                                                                              <tr>
-                                                                                <td class="border-0" colspan="4"></td>
-                                                                                <td>Due</td>
-                                                                                <td class="text-end"><span id="due-amount">0.00</span></td>
-                                                                              </tr>
-                                                                              <tr class="bg-light border-top">
-                                                                                <td colspan="4"></td>
-                                                                                <td class="fw-bold">Total</td>
-                                                                                <td class="fw-bold text-end" id="est-grand-total">0.00</td>
-                                                                              </tr>
-                                                                              -->
                                             </tbody>
+
                                         </table>
+
 
                                     </div>
 
 
-                                    <div class="row mb-2">
+                                    <div class="row m-2">
                                         <div class="col-md-7">
                                             <div class="mb-3">
                                                 <label class="form-label">Customer Notes</label>
-                                                <textarea rows="4" class="bg-focus form-control" name="sales_order[customer_notes]"
+                                                <textarea rows="4" class="bg-focus form-control" name="sales_order[customer_note]"
                                                     id="sales_order_customer_notes"></textarea>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
-                                            <label class="form-label">Transaction Type</label>
-                                            <select class="form-select bg-focus form-control"
-                                                name="sales_order[transaction_type]" id="sales_order_transaction_type">
-                                                <option value="cash">Cash</option>
-                                                <option value="bkash">Bkash</option>
 
-                                            </select>
+                                        <div class="col-md-5">
+                                            <div class="row">
+                                                <div class="col-12 col-md-6 mt-1">
+                                                    <label class="form-label" style="float: right">Total Discount</label>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <input type="number" class="bg-focus form-control"
+                                                        name="sales_order[total_discount]" id="total_discount"
+                                                        value="0" />
+                                                    <p class="d-flex mt-2 ">
+                                                        <label class="form-label mx-2">Grand Total Amount:</label>
+                                                        <label class="form-label text-success"
+                                                            id="grand_total_amount">00</label>
+                                                        <input type="hidden" class="bg-focus form-control"
+                                                            name="sales_order[grand_total_amount]"
+                                                            id="set_grand_total_amount" />
+                                                    </p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-12 col-md-6">
+                                                    <label class="form-label">Transaction Type</label>
+                                                    <select class="form-select bg-focus form-control"
+                                                        name="sales_order[transaction_type]"
+                                                        id="sales_order_transaction_type">
+                                                        <option value="" selected>Select Transaction Type</option>
+                                                        @foreach ($transactionTypes as $type)
+                                                            <option value="{{ $type->id }}">{{ $type->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="form-label">Paid Amount</label>
+                                                    <input type="hidden" class="bg-focus form-control"
+                                                        id="set_total_amount" name="sales_order[total_amount]">
+                                                    <input type="text" class="bg-focus form-control"
+                                                        name="sales_order[paid_amount]" id="paid_amount" />
+                                                    <p class="d-flex mt-2 ">
+                                                        <label class="form-label mx-2">Due Amount:</label>
+                                                        <label class="form-label text-danger" id="due_amount">00</label>
+                                                        <input type="hidden" class="bg-focus form-control"
+                                                            name="sales_order[due_amount]" id="set_due_amount" />
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-md-3"><label class="form-label">Paid Amount</label>
-                                            <input type="text" class="bg-focus form-control" name="paid_amount">
-                                        </div>
+
+
                                     </div>
 
                                     <!-- Form Buttons-->
@@ -276,9 +285,8 @@
                                         <div class="d-flex justify-content-end">
                                             <a class="btn btn-outline-danger" style="margin-right: 10px;"
                                                 href="">Cancel</a>
-                                            <button name="button" type="submit" class="btn btn-success me-2"
-                                                style="width: 20vw;">
-                                                Save
+                                            <button type="submit" class="btn btn-success me-2" style="width: 20vw;">
+                                                Submit
                                             </button>
                                         </div>
                                     </div>
@@ -286,124 +294,8 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-
-                    </div>
-                    <!-- /.card-footer-->
                 </div>
                 <!-- /.card -->
-            </div>
-            <div class="row d-none">
-                <div class="col-md-12">
-                    <div class="card card-info">
-                        <div class="card-header">
-                            <h3 class="card-title">Update Sales</h3>
-                        </div>
-                        <div class="card-body">
-                            <form>
-                                <div class="row">
-
-                                    <div class="col-md-12 col-lg-4">
-                                        <div class="card card-navy">
-                                            <div class="card-header">
-                                                Product Details
-                                            </div>
-                                            <div class="card-body">
-                                                <table class="table table-striped table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="4" class="text-center text-capitalize"
-                                                                id="product_name">
-                                                            </th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Attribute</th>
-                                                            <th>Sales Rate</th>
-                                                            <th>Stock</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="productAttributes">
-                                                        <td colspan="4" class="text-center text-danger font-semibold">
-                                                            Not Found
-                                                        </td>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-lg-8 col-md-12">
-                                        <div class="card card-success">
-                                            <div class="card-header">Product Customization</div>
-                                            <div class="card-body">
-                                                <table class="table table-striped table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Particulars</th>
-                                                            <th>Qty</th>
-                                                            <th class="text-center">
-                                                                Rate <br />
-                                                                <small>Sales</small>
-                                                            </th>
-                                                            <th>Discount</th>
-                                                            <th>Total</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="productCustomization"></tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <td colspan="2" class="bg-success text-end">Total</td>
-                                                            <td class="bg-success text-center" id="salesTotalQty">0</td>
-                                                            <td class="bg-success text-center"></td>
-                                                            <td class="bg-success text-center"></td>
-                                                            <td class="bg-success text-center" id="salesTotalAmount">0.00
-                                                            </td>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                                <div class="product_customization_note_amount mt-1">
-                                                    <div class="product_customization_note">
-                                                        <label class="mt-2 mx-2 w-8rem">Note:</label>
-                                                        <textarea type="text" class="form-control" id="note" placeholder="Note"></textarea>
-                                                    </div>
-                                                    <div class="flex-column product_customization_amount">
-                                                        <div class="d-flex mt-1">
-                                                            <div>
-                                                                <label class="w-8rem">Transaction Type</label>
-                                                                <select class="form-control w-fit" id="transaction_type">
-                                                                    @foreach ($transactionTypes as $trans)
-                                                                        <option value="{{ $trans->id }}">
-                                                                            {{ $trans->name }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div class="mx-2">
-                                                                <label class="mx-2 w-8rem">Paid Amount</label>
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Paid amount" id="paid_amount" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="d-flex mt-1 justify-content-end">
-                                                            <label>Due Amount: <span id="due_amount">00</span></label>
-                                                        </div>
-                                                        <div class="d-flex mt-1 justify-content-end">
-                                                            <button class="btn btn-success btn-sm submitbtn"
-                                                                type="button" onclick="handleSubmit()">Submit</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
             </div>
 
         </section>
@@ -424,28 +316,40 @@
             handleCreateNewCustomer();
             handleProductChange();
             // getProductAttributesByBarcode();
-            // handlePaidAmount();
+            handlePaidAmount();
         });
 
 
+        const handleTotalGrandAmount = () => {
+            const total_discount = parseFloat($("#total_discount").val());
+            const total_amount = parseFloat($("#set_total_amount").val());
+            const grand_total_amount = total_amount - total_discount;
+            $("#grand_total_amount").text(grand_total_amount);
+            $("#set_grand_total_amount").val(grand_total_amount);
+        };
+
+
         const handlePaidAmount = () => {
+            $("#total_discount").keyup(function() {
+                handleTotalGrandAmount();
+            });
+
+
             $("#paid_amount").keyup(function() {
-                const paidAmount = $(this).val();
-                const salesTotalAmount = parseFloat($("#salesTotalAmount").text());
+                const paidAmount = parseFloat($(this).val());
+                const total_amount = $("#set_grand_total_amount").val();
                 var dueAmount = 0;
-                dueAmount = salesTotalAmount - parseFloat(paidAmount);
-                if (paidAmount > salesTotalAmount) {
+                if (paidAmount > total_amount) {
                     Toastr.fire({
                         icon: "error",
                         title: "Payment amount is Error",
                     });
                     return false;
                 }
-                setTimeout(() => {
-                    $(this).val(salesTotalAmount);
-                    $("#due_amount").text(0);
-                }, 4000);
+                dueAmount = total_amount - parseFloat(paidAmount);
+
                 $("#due_amount").text(dueAmount);
+                $("#set_due_amount").val(dueAmount);
             });
         };
 
@@ -573,12 +477,12 @@
         const setProductDetails = (item) => {
 
             const tbody = $("#insertProductItemForSales");
+            const tfoot = $("#insertProductItemForSales").next();
             const hasNoRecord = tbody.find("tr#no_record");
             const id = `row-${item.id}`;
             if (hasNoRecord) {
                 hasNoRecord.addClass('hidden');
             }
-            console.clear();
             const rowWithId = tbody.find('#' + id) ? tbody.find('#' + id) :
                 false;
 
@@ -590,33 +494,72 @@
                 var rowHTML = `
             <tr id="${id}" class="slsord_line">
                 <td class="col-3">
+                    <input type="hidden" name="product_details[${item.id}][product_id]" value="${item.product_id}">
                     <small class="text-xs font-semibold">${item.product?.name ? item.product.name : ''}</small><br/>
                     <small class="text-xs font-semibold">${item.code ? item.code : ''} ${item.model ? ' / ' + item.model : ''} ${item.size ? ' / ' + item.size : ''} ${item.color ? ' / ' + item.color : ''}</small><br/>
                 </td>
                 <td>
-                    <input type="number" name="qty" value="1" class="bg-focus form-control text-right" required="required">
+                    <input type="number" name="product_details[${item.id}][qty]" value="1" class="input_qty bg-focus form-control text-right" required="required">
                 </td>
                 <td>
-                    <input type="number" name="sales_rate" value="${item.sales_rate? item.sales_rate : 0}" class="bg-focus form-control text-right" required="required">
+                    <input type="number" name="product_details[${item.id}][sales_rate]" value="${item.sales_rate? item.sales_rate : 0}" class="bg-focus form-control text-right input_sales_rate" required="required">
                 </td>
                 <td>
-                    <input type="number" name="discount" value="0" class="bg-focus form-control text-right">
-                </td>
-                <td class="col-1 text-end total">${item.sales_rate? item.sales_rate : 0}</td>
-                <td class="remove-sales-order col-1">
+                    <input type="number" name="product_details[${item.id}][discount]" value="0" class="input_discount bg-focus form-control text-right">
+                    </td>
+                    <td class="col-1 text-end total">
+                        ${item.sales_rate? item.sales_rate : 0}
+                    </td>
+                    <td class="remove-sales-order col-1">
+                        <input type="number" name="product_details[${item.id}][total]" value="${item.sales_rate? item.sales_rate : 0}" class="bg-focus form-control text-right input_total">
                     <span id="cancel" class="text-danger cursor-pointer d-block text-right" href="">
                         <i class="fa fa-trash fs-5 " aria-hidden="true"></i>
                     </span>
                 </td>
             </tr>`;
                 tbody.append(rowHTML);
+
+                // Calculate total amount
+                console.clear();
+                var total_amount = 0
+                tbody.find('tr').each(function() {
+                    // find td has total class
+                    const total = parseFloat($(this).find('td.total').text().trim());
+                    if (!isNaN(total)) {
+                        total_amount += total;
+                    }
+                });
+
+
+
+                const table_Foot = `
+                <tr class="footer">
+                        <td colspan="4" class="bg-success text-end">Total</td>
+                        <td class="bg-success text-center" id="salesTotalAmount">${total_amount}</td>
+                        <td class="bg-success text-center" id="salesTotalQty"></td>
+                    </tr>
+                `;
+
+                $("#set_total_amount").val(total_amount);
+
+                // if has already then delete
+                tbody.find('tr.footer').remove();
+                tbody.find('tr').last().after(table_Foot);
+
+
             } else {
-                const qtyInput = rowWithId.find('td').eq(1).find('input[name="qty"]');
-                let salesRate = parseFloat(rowWithId.find('input[name="sales_rate"]').val());
+
+                const qtyInput = rowWithId.find('td').eq(1).find('.input_qty');
+                let salesRate = parseFloat(rowWithId.find('.input_sales_rate').val());
                 let currentQty = parseInt(qtyInput.val()) + 1;
                 qtyInput.val(currentQty);
                 rowWithId.find('td').eq(4).html(currentQty * salesRate);
             }
+
+
+
+
+
 
 
             $(".remove-sales-order").click(function() {
@@ -626,19 +569,36 @@
                 }
             });
 
-            $('input[name="sales_rate"], input[name="qty"], input[name="discount"]').on('blur', updateTotalAmount);
+            $('.input_sales_rate, .input_qty, .input_discount').on('blur', updateTotalAmount);
 
+            handleTotalGrandAmount();
 
 
         };
 
         function updateTotalAmount() {
             const rowWithId = $(this).closest('tr');
-            const salesRate = parseFloat(rowWithId.find('input[name="sales_rate"]').val());
-            const currentQty = parseInt(rowWithId.find('input[name="qty"]').val());
-            const discount = parseFloat(rowWithId.find('input[name="discount"]').val()) || 0; // Default to 0 if no discount
+
+            const salesRate = parseFloat(rowWithId.find('.input_sales_rate').val());
+            const currentQty = parseInt(rowWithId.find('.input_qty').val());
+            const discount = parseFloat(rowWithId.find('.input_discount').val()) ||
+                0; // Default to 0 if no discount
             const totalAmount = currentQty * (salesRate - discount); // Apply discount if any
             rowWithId.find('td').eq(4).html(totalAmount.toFixed(2));
+            //  total amount calculation
+            const tbody = $("#insertProductItemForSales");
+            var total_amount = 0
+            tbody.find('tr').each(function() {
+                // find td has total class
+                const total = parseFloat($(this).find('td.total').text().trim());
+                if (!isNaN(total)) {
+                    total_amount += total;
+                }
+            });
+            tbody.find('tr.footer').find('td').eq(1).text(total_amount.toFixed(2));
+            $("#set_total_amount").val(total_amount.toFixed(2));
+
+            handleTotalGrandAmount();
         }
 
 
@@ -675,105 +635,11 @@
             handleCusomizeData(setCusomizationData);
         }
 
-        // Populate the product details when the page loads
 
 
 
 
 
-        const handleCusomizeData = (setCusomizationData) => {
-            const tbody = $("#productCustomization");
-            var salesTotalQty = 0;
-            var salesTotalAmount = 0;
-            tbody.empty();
-            if (setCusomizationData.length > 0) {
-                setCusomizationData.forEach((item) => {
-                    salesTotalQty += parseInt(item.qty);
-                    salesTotalAmount += parseInt(item.total);
-                    const row = $(`<tr data-product_id='${item.product_id}'>`);
-                    row.html(`
-                    <td><button type="button" class="btn btn-sm btn-danger" onclick="removeToProductCustomization(${item.id})"><i class="fa fa-minus"></i></button></td>
-                <td>
-                    <small class="text-xs font-semibold">${item.p_code || ""} -</small>
-                    <small class="text-xs font-semibold">${item.p_name || ""}</small><br/>
-                    <small class="text-xs font-semibold">${item.p_color || ""} -</small>
-                    <small class="text-xs font-semibold">${item.p_model || ""} -</small>
-                    <small class="text-xs font-semibold">${item.p_size || ""}</small>
-                </td>
-                <td><input type="number" value="${item.qty}" class="form-control changeSalesQty" /></td>
-                <td><input type="number" value="${item.sales_rate}" class="form-control changeSalesRate" /></td>
-                <td><input type="number" value="${item.discount}" class="form-control changeSalesDiscount" /></td>
-                <td>
-                    ${item.total}
-                </td>
-            `);
-
-                    tbody.append(row);
-                });
-            } else {
-                const notFoundRow = $("<tr>").html(`
-            <td colspan="6" class="text-center text-danger font-semibold">
-                Not Found
-            </td>
-        `);
-                tbody.append(notFoundRow);
-            }
-
-            $("#salesTotalQty").text(salesTotalQty);
-            $("#salesTotalAmount").text(salesTotalAmount);
-
-
-            $(".changeSalesQty").on('blur', function(e) {
-                const product_id = parseInt($(this).closest('tr').attr('data-product_id'));
-                const qty = $(this).val();
-
-                if (qty == '') {
-                    return false;
-                }
-                setCusomizationData.forEach(item => {
-                    if (item.product_id === product_id) {
-                        item.qty = qty;
-                        item.total = item.qty * (item.sales_rate - item.discount);
-                    }
-                });
-                handleCusomizeData(setCusomizationData);
-            });
-            $(".changeSalesRate").on('blur', function(e) {
-                const product_id = parseInt($(this).closest('tr').attr('data-product_id'));
-                const sales_rate = $(this).val();
-
-                if (sales_rate == '') {
-                    return false;
-                }
-                setCusomizationData.forEach(item => {
-                    if (item.product_id === product_id) {
-                        item.sales_rate = sales_rate;
-                        item.total = item.qty * (item.sales_rate - item.discount);
-                    }
-                });
-                handleCusomizeData(setCusomizationData);
-            });
-
-            $(".changeSalesDiscount").on('blur', function(e) {
-                const product_id = parseInt($(this).closest('tr').attr('data-product_id'));
-                const discount = $(this).val();
-
-                if (discount == '') {
-                    return false;
-                }
-                setCusomizationData.forEach(item => {
-                    if (item.product_id === product_id) {
-                        item.discount = discount;
-                        item.total = item.qty * (item.sales_rate - item.discount);
-                    }
-                });
-                handleCusomizeData(setCusomizationData);
-            });
-
-
-
-
-        };
 
         const removeToProductCustomization = (targetId) => {
             const indexToDelete = setCusomizationData.findIndex(item => item.id === targetId);
