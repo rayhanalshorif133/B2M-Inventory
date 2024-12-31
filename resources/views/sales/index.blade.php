@@ -81,7 +81,7 @@
                             <h5><b>Sales Info:</b></h5>
                             <p class="col-md-4 col-sm-2"><b>Code:</b> <span id="salesCode"></span></p>
                             <p class="col-md-4 col-sm-2"><b>Invoice Date:</b> <span id="invoiceDate"></span></p>
-                            <p class="col-md-4 col-sm-2"><b>Total Amount:</b> <span id="totalAmount"></span></p>
+                            <p class="col-md-4 col-sm-2"><b>Total Amount:</b> <span id="showTotalAmount"></span></p>
                             <p class="col-md-4 col-sm-2"><b>Paid Amount:</b> <span id="paidAmount"></span></p>
                             <p class="col-md-4 col-sm-2"><b>Due Amount:</b> <span id="dueAmount"></span></p>
                             <p class="col-md-4 col-sm-2"><b>Note:</b> <span id="salesNote"></span></p>
@@ -100,6 +100,10 @@
                                 </thead>
                                 <tbody id="salesDetailsBody"></tbody>
                                 <tfoot>
+                                    <tr>
+                                        <td colspan="5" class="text-end"><b>Final Discount :</b></td>
+                                        <td colspan="2" class="text-start"><span id="finalDiscount"></span> tk</td>
+                                    </tr>
                                     <tr>
                                         <td colspan="5" class="text-end"><b>Total :</b></td>
                                         <td colspan="2" class="text-start"><span id="finalTotal"></span> tk</td>
@@ -151,14 +155,15 @@
 
                     $("#salesCode").text(sales.code);
                     $("#invoiceDate").text(sales.invoice_date);
-                    $("#totalAmount").text("৳ " + sales.total_amount);
+                    $("#finalDiscount").text("৳ -" + sales.discount);
+                    $("#showTotalAmount").text("৳ " + sales.grand_total);
+                    $("#finalTotal").text("৳ " + sales.grand_total);
                     $("#paidAmount").text("৳ " + sales.paid_amount);
                     $("#dueAmount").text("৳ " + sales.due_amount);
                     $("#salesNote").text(sales.note);
 
                     // salesDetailsBody
                     $('#salesDetailsBody').empty();
-                    var finalTotal = 0;
 
                     // Insert rows into the table body
                     $.each(salesDetails, function(index, item) {
@@ -178,9 +183,8 @@
                             </tr>
                         `;
                         $('#salesDetailsBody').append(row);
-                        finalTotal += item.total;
                     });
-                    $("#finalTotal").text(finalTotal);
+
                 });
             });
 

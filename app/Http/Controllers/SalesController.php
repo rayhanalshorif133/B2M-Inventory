@@ -164,7 +164,7 @@ class SalesController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('sales.index')->with('success', 'Successfully created Sales');
+            return redirect()->route('sales.invoice', $sales->id)->with('success', 'Successfully created Sales');
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->route('sales.index')->with('error', $th->getMessage());

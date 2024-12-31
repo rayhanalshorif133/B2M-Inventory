@@ -161,6 +161,12 @@
                                 <td class="text-right" colspan="3">
                                     <span class="pr-10 text-base font-bold">Sub total:</span>
                                     Tk. {{ $sales->total_amount }}
+                                    <br />
+                                    <span class="pr-10 text-base font-bold">Final Discount:</span>
+                                    Tk. {{ $sales->discount }}
+                                    <br/>
+                                    <span class="pr-10 text-base font-bold">Total Amount:</span>
+                                    Tk. {{ $sales->grand_total }}
                                 </td>
                             </tr>
                             <tr class="px-3">
@@ -182,8 +188,7 @@
                             <tr class="px-3">
                                 <td class="p-2 text-right" colspan="3">
                                     <span class="pr-10 text-base font-bold">Due amount:</span>
-                                    Tk.
-                                    {{ number_format($sales->total_amount - $sales->paid_amount, 2) }}
+                                    Tk. {{ $sales->due_amount }}
                                 </td>
                             </tr>
                             <tr class="px-3">
