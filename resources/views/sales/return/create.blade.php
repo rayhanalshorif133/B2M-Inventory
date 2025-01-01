@@ -73,7 +73,6 @@
                                                     </p>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -91,7 +90,7 @@
                                                         <th scope="col" class="bg-success">Qty</th>
                                                         <th scope="col" class="bg-success">Sales Rate</th>
                                                         <th scope="col" class="bg-success">Discount</th>
-                                                        <th scope="col" class="w-25 bg-success">Return Qty</th>
+                                                        <th scope="col" class="w-25 bg-success">Resturn Qty</th>
                                                         <th scope="col" class="text-end bg-success">Total</th>
                                                     </tr>
                                                 </thead>
