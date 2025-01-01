@@ -25,13 +25,10 @@ app.use(vuetify);
 import TipsSkipComponent from './components/partials/TipsSkipComponent.vue';
 import BreadcrumbComponent from './components/partials/BreadcrumbComponent.vue';
 import FooterComponent from './components/partials/FooterComponent.vue';
-import TransactionTypeListComponent from './components/transaction-type/ListComponent.vue';
 
 app.component('breadcrumb-component', BreadcrumbComponent);
 app.component('tips-skip-component', TipsSkipComponent);
 
-// single component
-app.component('transaction-type-list-component', TransactionTypeListComponent);
 
 // user
 import UserCreateComponent from './components/user/UserCreateComponent.vue';
@@ -46,9 +43,7 @@ app.component('user-profile-component', UserProfileComponent);
 
 // Product
 import ProductCreateComponent from './components/product/CreateComponent.vue';
-import ProductListComponent from './components/product/ListComponent.vue';
 app.component('product-create-component', ProductCreateComponent);
-app.component('product-list-component', ProductListComponent);
 
 // Purchase
 import PurchaseCreateComponent from './components/purchase/CreateComponent.vue';

@@ -17,9 +17,9 @@ class TransactionTypeController extends Controller
         $this->checkAuth();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        if (request()->ajax()) {
+        if (request()->ajax() && $request->type == 'fetch') {
             $query = TransactionType::where('company_id', Auth::user()->company_id)->orderBy('created_at', 'desc')->with('addedBy')->get();
             return DataTables::of($query)->toJson();
         }
@@ -37,6 +37,12 @@ class TransactionTypeController extends Controller
         try {
 
 
+            if($request->type == 'status'){
+                $transactionType = TransactionType::where('id', $request->tt_id)->first();
+                $transactionType->status = $transactionType->status == 1 ? 0 : 1;
+                $transactionType->save();
+                return $this->respondWithSuccess('success','Successfully updated transaction type status');
+            }
 
             if($request->method() == 'POST'){
                 $transactionTypes = TransactionType::where('name', $request->name)->where('company_id', Auth::user()->company_id)->first();
