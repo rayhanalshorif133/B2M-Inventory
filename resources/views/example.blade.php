@@ -19,3 +19,14 @@
 
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(() => {
+            Toastr.fire({
+                icon: "success",
+                title: "Payment successful",
+            });
+        });
+    </script>
+@endpush

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Purchase;
 use App\Models\PurchasePayment;
 use App\Models\Sales;
+use App\Models\TransactionType;
 use App\Models\SalesPayment;
 use Illuminate\Support\Facades\Auth;
 
@@ -71,7 +72,9 @@ class PaymentController extends Controller
     public function salesPay(Request $request)
     {
         if ($request->method() == 'GET') {
-            return view('payment.sales.index');
+            $company_id = $request->session()->get('company_id');
+            $transactionTypes = TransactionType::select()->where('company_id', $company_id)->get();
+            return view('payment.sales.index', compact('transactionTypes'));
         }
 
         try {

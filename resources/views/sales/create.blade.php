@@ -140,7 +140,7 @@
                                 'customers' => $customers,
                             ])
                             <div class="card-body bg-white">
-                                <form class="form-horizontal" action="{{ route('sales.create') }}" method="POST">
+                                <form class="form-horizontal salesCreateForm" action="{{ route('sales.create') }}" method="POST">
                                     @csrf
                                     @method('POST')
                                     <!-- Customer Name-->
@@ -230,7 +230,7 @@
                                     <div class="row m-2">
                                         <div class="col-md-7">
                                             <div class="mb-3">
-                                                <label class="form-label font-size-16px">Customer Notes</label>
+                                                <label class="form-label font-size-14px">Customer Notes</label>
                                                 <textarea rows="4" class="bg-focus form-control" name="sales_order[customer_note]"
                                                     id="sales_order_customer_notes"></textarea>
                                             </div>
@@ -239,15 +239,17 @@
                                         <div class="col-md-5">
                                             <div class="row">
                                                 <div class="col-12 col-md-6 mt-1">
-                                                    <label class="form-label font-size-16px" style="float: right">Total Discount</label>
+                                                    <label class="form-label font-size-14px" style="float: right">Total
+                                                        Discount</label>
                                                 </div>
                                                 <div class="col-12 col-md-6">
                                                     <input type="number" class="bg-focus form-control"
                                                         name="sales_order[total_discount]" id="total_discount"
                                                         value="0" />
                                                     <p class="d-flex mt-2 ">
-                                                        <label class="form-label mx-2">Grand Total Amount:</label>
-                                                        <label class="form-label text-success"
+                                                        <label class="form-label mx-2 font-size-14px">Grand Total
+                                                            Amount:</label>
+                                                        <label class="form-label text-success font-size-14px"
                                                             id="grand_total_amount">00</label>
                                                         <input type="hidden" class="bg-focus form-control"
                                                             name="sales_order[grand_total_amount]"
@@ -258,7 +260,7 @@
                                             </div>
                                             <div class="row mt-2">
                                                 <div class="col-12 col-md-6">
-                                                    <label class="form-label">Transaction Type</label>
+                                                    <label class="form-label font-size-14px">Transaction Type</label>
                                                     <select class="form-select bg-focus form-control"
                                                         name="sales_order[transaction_type]"
                                                         id="sales_order_transaction_type">
@@ -270,14 +272,15 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-12 col-md-6">
-                                                    <label class="form-label">Paid Amount</label>
+                                                    <label class="form-label font-size-14px">Paid Amount</label>
                                                     <input type="hidden" class="bg-focus form-control"
                                                         id="set_total_amount" name="sales_order[total_amount]">
                                                     <input type="text" class="bg-focus form-control"
                                                         name="sales_order[paid_amount]" id="paid_amount" />
                                                     <p class="d-flex mt-2 ">
-                                                        <label class="form-label mx-2">Due Amount:</label>
-                                                        <label class="form-label text-danger" id="due_amount">00</label>
+                                                        <label class="form-label mx-2 font-size-14px">Due Amount:</label>
+                                                        <label class="form-label text-danger font-size-14px"
+                                                            id="due_amount">00</label>
                                                         <input type="hidden" class="bg-focus form-control"
                                                             name="sales_order[due_amount]" id="set_due_amount" />
                                                     </p>
@@ -292,8 +295,9 @@
                                     <div class="row mt-4 justify-content-end">
                                         <div class="d-flex justify-content-end">
                                             <a class="btn btn-outline-danger" style="margin-right: 10px;"
-                                                href="">Cancel</a>
-                                            <button type="submit" class="btn btn-success me-2" style="width: 20vw;">
+                                                href="{{ route('sales.create') }}">Reset</a>
+                                            <button type="button" class="btn btn-success me-2 salesCreateSubmitBtn"
+                                                style="width: 20vw;">
                                                 Submit
                                             </button>
                                         </div>
@@ -320,11 +324,16 @@
         $(document).ready(function() {
             fetchCustomers();
             fetchProducts();
-            // fetchData();
             handleCreateNewCustomer();
             handleProductChange();
-            // getProductAttributesByBarcode();
             handlePaidAmount();
+
+            $(".salesCreateSubmitBtn").click(function() {
+                $(this).text('Processing ...').prop('disabled', true);
+
+                $(".salesCreateForm").submit();
+            });
+
         });
 
 
@@ -464,22 +473,7 @@
 
 
 
-        const getProductAttributesByBarcode = () => {
 
-            $("#barcode").on('keyup', function(event) {
-                if (event.code == "Enter" || event.code == "NumpadEnter") {
-                    axios
-                        .get(
-                            `/product/fetch-attribute?barcode=${event.target.value}`
-                        )
-                        .then((response) => {
-                            const data = response.data.data;
-                            setProductDetails(data);
-                        });
-                }
-            });
-
-        };
 
         // Function to populate product details
         const setProductDetails = (item) => {
@@ -745,6 +739,6 @@
         $(function() {
             //Initialize Select2 Elements
             $('.select2').select2()
-        })
+        });
     </script>
 @endpush
