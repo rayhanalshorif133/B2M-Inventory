@@ -100,11 +100,11 @@
                                 </thead>
                                 <tbody id="salesDetailsBody"></tbody>
                                 <tfoot>
-                                    <tr>
-                                        <td colspan="5" class="text-end"><b>Final Discount :</b></td>
-                                        <td colspan="2" class="text-start"><span id="finalDiscount"></span> tk</td>
+                                    <tr style="font-size: 16px!important">
+                                        <td colspan="5" class="text-end" style="font-size: 16px!important"><b>Final Discount :</b></td>
+                                        <td colspan="2" class="text-start" style="font-size: 16px!important"><span id="finalDiscount"></span> tk</td>
                                     </tr>
-                                    <tr>
+                                    <tr style="font-size: 16px!important">
                                         <td colspan="5" class="text-end"><b>Total :</b></td>
                                         <td colspan="2" class="text-start"><span id="finalTotal"></span> tk</td>
                                     </tr>

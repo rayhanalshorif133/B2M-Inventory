@@ -78,6 +78,14 @@
         tbody td {
             white-space: nowrap;
         }
+
+        .font-size-16px {
+            font-size: 16px !important;
+        }
+
+        .font-size-14px {
+            font-size: 14px !important;
+        }
     </style>
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -222,7 +230,7 @@
                                     <div class="row m-2">
                                         <div class="col-md-7">
                                             <div class="mb-3">
-                                                <label class="form-label">Customer Notes</label>
+                                                <label class="form-label font-size-16px">Customer Notes</label>
                                                 <textarea rows="4" class="bg-focus form-control" name="sales_order[customer_note]"
                                                     id="sales_order_customer_notes"></textarea>
                                             </div>
@@ -231,7 +239,7 @@
                                         <div class="col-md-5">
                                             <div class="row">
                                                 <div class="col-12 col-md-6 mt-1">
-                                                    <label class="form-label" style="float: right">Total Discount</label>
+                                                    <label class="form-label font-size-16px" style="float: right">Total Discount</label>
                                                 </div>
                                                 <div class="col-12 col-md-6">
                                                     <input type="number" class="bg-focus form-control"
