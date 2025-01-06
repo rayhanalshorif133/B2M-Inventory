@@ -7,17 +7,14 @@
         <div class="card-body">
             <div>
                 <label class="required">Select a Date:</label>
-                <input type="date" class="form-control" value="2025-01-01" />
+                <input type="date" id="salesCustomerBasedDate" class="form-control" value="" />
             </div>
             <div>
                 <label class="required">Select a Customer:</label>
-                <select class="form-select">
+                <select class="form-select selectedCustomerBasedClass" id="salesCustomerBasedSelectCustomer">
                     <option value="0" disabled selected>
                         Select a Customer
                     </option>
-                    <option value="1">John Doe</option>
-                    <option value="2">Jane Smith</option>
-                    <option value="3">Michael Johnson</option>
                 </select>
             </div>
 
@@ -25,7 +22,7 @@
                 <div>
                     <p>
                         Due Amount:
-                        4,000 tk
+                        <span id="salesCustomerBasedDueAmount"></span> tk
                         <button class="btn btn-sm btn-info" title="Full Payment">
                             <i class="fa-solid fa-caret-down"></i>
                         </button>
@@ -33,13 +30,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label>Transaction Type</label>
-                            <select class="form-select">
+                            <select class="form-select" id="salesCustomerBasedTT_id">
                                 <option value="0" selected>
                                     Select a Transaction Type
                                 </option>
-                                <option value="1">Cash</option>
-                                <option value="2">Credit Card</option>
-                                <option value="3">Bank Transfer</option>
+                                @foreach ($transactionTypes as $transactionType)
+                                    <option value="{{ $transactionType->id }}">{{ $transactionType->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-6">

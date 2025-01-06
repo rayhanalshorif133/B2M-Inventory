@@ -35,10 +35,8 @@
     <script>
         $(() => {
             fetchInvoiceByDate();
-
+            fetchCustomerByDate();
             handlePaymentAmount();
-
-
         });
 
 
@@ -90,6 +88,8 @@
             });
         };
 
+
+
         const fetchInvoiceByDate = () => {
 
             var selectedInvoiceDate = "";
@@ -134,6 +134,81 @@
                 }, 2000);
             });
 
+
+
+            $("#salesInvoiceBasedSelectCustomer").change(function() {
+                choiceCustomer(selectedInvoiceDate, $(this).val());
+            });
+
+
+            $("#salesInvoiceBasedSelect").change(function() {
+                choiceInvoice($(this).val());
+            });
+
+
+
+
+
+        };
+
+
+        const fetchCustomerByDate = () => {
+
+            var selectedInvoiceDate = "";
+            $("#salesCustomerBasedDate").change(function() {
+                selectedInvoiceDate = $(this).val();
+                var customerList = [];
+                axios
+                    .get(`/sales/fetch-invoice/?date=${selectedInvoiceDate}`)
+                    .then((response) => {
+                        const data = response.data.data;
+                        if (data.length > 0) {
+                            data.map((item) => {
+                                customerList.push(item.customer);
+                            });
+
+                            customerList = customerList.filter(
+                                (item, index, self) =>
+                                index ===
+                                self.findIndex((s) => s.name === item.name)
+                            );
+                            var html = "";
+                            html += ` <option value="0" disabled selected>Select a Customer</option>`;
+                            customerList.map((item, index, self) => {
+                                html += `<option value="${item.id}">${item.name}</option>`;
+                            });
+
+                            $("#salesCustomerBasedSelectCustomer").html(html);
+                            $(".selectedCustomerBasedClass").addClass("form-select-green");
+                        } else {
+                            $(".selectedCustomerBasedClass").addClass("form-select-red");
+                        }
+                    });
+                setTimeout(() => {
+                    $(".selectedCustomerBasedClass").removeClass("form-select-red").removeClass(
+                        "form-select-green");
+                }, 2000);
+            });
+
+
+
+            $("#salesCustomerBasedSelectCustomer").change(function() {
+                axios
+                    .get(
+                        `/sales/fetch-invoice/?date=${selectedInvoiceDate}&customer_id=${$(this).val()}&type=customer`
+                    )
+                    .then((response) => {
+                        const data = response.data.data;
+                        $("#salesCustomerBasedDueAmount").text(data);
+
+                        // if (dueAmount.value == 0) {
+                        //     hasDueAmount.value = false;
+                        // } else {
+                        //     hasDueAmount.value = true;
+                        // }
+                        // hasSelectedCustomerInfo.value = "";
+                    });
+            });
 
 
             $("#salesInvoiceBasedSelectCustomer").change(function() {
