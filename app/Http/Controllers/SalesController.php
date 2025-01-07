@@ -11,10 +11,14 @@ use App\Models\TransactionType;
 use App\Models\SalesPayment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
 
 class SalesController extends Controller
 {
+
+
+
     public function __construct()
     {
         $this->checkAuth();
@@ -23,7 +27,8 @@ class SalesController extends Controller
     public function index(Request $request)
     {
         if ($request->type == 'fetch' && request()->ajax()) {
-            $query = Sales::where('company_id', Auth::user()->company_id)
+            $company_id = $request->session()->get('company_id');
+            $query = Sales::where('company_id', $company_id)
                 ->with('customer')->orderBy('created_at', 'desc')
                 ->get();
             return DataTables::of($query)->addIndexColumn()->toJson();
@@ -33,6 +38,7 @@ class SalesController extends Controller
 
     public function fetch($id)
     {
+
         $sales = Sales::where('company_id', Auth::user()->company_id)
             ->where('id', $id)
             ->with('customer')
@@ -255,7 +261,7 @@ class SalesController extends Controller
 
         $customers = Customer::select()->where('company_id', Auth::user()->company_id)->get();
         $transactionTypes = TransactionType::select()->where('company_id', Auth::user()->company_id)->get();
-        return view('sales.edit', compact('customers','transactionTypes'));
+        return view('sales.edit', compact('customers', 'transactionTypes'));
     }
 
     public function invoice(Request $request, $id)
@@ -278,7 +284,7 @@ class SalesController extends Controller
             $sales = Sales::select()->where('id', $id)->with('company', 'customer', 'createdBy')->first();
             $salesPayment = SalesPayment::select()->where('sales_id', $sales->id)->with('transactionType')->first();
             $print_date = date('Y-m-d');
-            return view('sales.invoice', compact('print_date','sales','salesDetails','salesPayment'));
+            return view('sales.invoice', compact('print_date', 'sales', 'salesDetails', 'salesPayment'));
         }
     }
 
@@ -298,13 +304,16 @@ class SalesController extends Controller
 
     public function paymentList(Request $request)
     {
+        $company_id = $request->session()->get('company_id');
 
         if ($request->fetch == "1") {
-            $query = SalesPayment::where('company_id', Auth::user()->company_id)
+            $query = SalesPayment::where('company_id', $company_id)
                 ->with('customer')->orderBy('created_at', 'desc')->get();
             return DataTables::of($query)->toJson();
         }
-        return view('sales.payment.list');
+
+        $transactionTypes = TransactionType::select()->where('company_id', $company_id)->get();
+        return view('sales.payment.list', compact('transactionTypes'));
     }
 
     public function dueCollection(Request $request)

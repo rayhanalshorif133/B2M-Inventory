@@ -26,7 +26,6 @@
                 </div>
             </div>
         </div>
-        <edit-component :paymentData="paymentData"></edit-component>
     </section>
 </template>
 <style>
@@ -37,7 +36,6 @@ import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import EditComponent from "./../EditComponent.vue";
 
 DataTable.use(DataTablesCore);
 
@@ -73,21 +71,18 @@ axios.get("/sales/payment-list?fetch=1").then(function (response) {
         });
 });
 
-const closeModal = (event) => {
-    showModal.value.hide();
-};
 
 // Fetch data on component mount
 onMounted(() => {
     document.addEventListener("click", (event) => {
         if (event.target.closest(".paymentEditBtn")) {
-            const id = event.target.closest(".btn").getAttribute("data-id");
-            axios.get(`/payment/fetch/${id}?type=sales`).then((response) => {
-                paymentData.value = response.data.data;
-                const modalElement = document.getElementById("paymentEditModal");
-                showModal.value = new bootstrap.Modal(modalElement);
-                showModal.value.show();
-            });
+            // const id = event.target.closest(".btn").getAttribute("data-id");
+            // axios.get(`/payment/fetch/${id}?type=sales`).then((response) => {
+            //     paymentData.value = response.data.data;
+            //     const modalElement = document.getElementById("paymentEditModal");
+            //     showModal.value = new bootstrap.Modal(modalElement);
+            //     showModal.value.show();
+            // });
         }
     });
 });
