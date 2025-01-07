@@ -191,7 +191,6 @@ class PaymentController extends Controller
     {
         try {
 
-
             if ($request->type == 'purchase') {
                 $payment = PurchasePayment::select()->where('id', $request->payment_id)->first();
             } else {
