@@ -3,6 +3,13 @@
 @endphp
 @extends('layouts.app', ['title' => $title])
 
+@section('head')
+    <style>
+        .fs-12px {
+            font-size: 12px !important;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="content-wrapper">
 
@@ -86,6 +93,8 @@
                     }
                 });
             });
+
+            payNowCustomerBased();
         };
 
 
@@ -201,12 +210,11 @@
                         const data = response.data.data;
                         $("#salesCustomerBasedDueAmount").text(data);
 
-                        // if (dueAmount.value == 0) {
-                        //     hasDueAmount.value = false;
-                        // } else {
-                        //     hasDueAmount.value = true;
-                        // }
-                        // hasSelectedCustomerInfo.value = "";
+                        if (data == 0) {
+                            $(".dueAmountAlertContainer").removeClass("hidden");
+                        } else {
+                            $(".dueAmountAlertContainer").addClass("hidden");
+                        }
                     });
             });
 
@@ -221,7 +229,104 @@
             });
 
 
+            $(".salesCustomerBasedFullPay").click(function() {
+                const amount = parseFloat($("#salesCustomerBasedDueAmount").text());
+                $(".salesCustomerBasedPayInput").val(amount);
+            });
 
+
+
+        };
+
+
+        const payNowCustomerBased = () => {
+
+            $(".salesCustomerBasedPayBtn").click(function() {
+
+                const payAmount = parseFloat($(".salesCustomerBasedPayInput").val());
+                const customer_id = $("#salesCustomerBasedSelectCustomer").val();
+                const transaction_type_id = $("#salesCustomerBasedTT_id").val();
+                const dueAmount = parseFloat($("#salesCustomerBasedDueAmount").text());
+
+
+
+                $(this).text("Processing ...");
+                $(this).addClass("fs-12px");
+                $(this).attr("disabled", true);
+
+
+
+
+                if (customer_id == null) {
+                    Toastr.fire({
+                        icon: "error",
+                        title: "Please select a customer",
+                    });
+                    $(this).text("Submit");
+                    $(this).removeClass("fs-12px");
+                    $(this).attr("disabled", false);
+                    return false;
+                }
+
+
+
+                if (transaction_type_id == 0) {
+                    Toastr.fire({
+                        icon: "error",
+                        title: "Please select a transaction type",
+                    });
+                    $(this).text("Submit");
+                    $(this).removeClass("fs-12px");
+                    $(this).attr("disabled", false);
+                    return false;
+                }
+
+                if (payAmount == 0) {
+                    Toastr.fire({
+                        icon: "error",
+                        title: "Please enter a payment amount",
+                    });
+                    $(this).text("Submit");
+                    $(this).removeClass("fs-12px");
+                    $(this).attr("disabled", false);
+                    return false;
+                }
+
+                if (payAmount > dueAmount) {
+                    Toastr.fire({
+                        icon: "error",
+                        title: "Please enter valid payment amount",
+                    });
+                    $(this).text("Submit");
+                    $(this).removeClass("fs-12px");
+                    $(this).attr("disabled", false);
+                    return false;
+                }
+
+
+
+
+
+                const data = {
+                    payment_amount: payAmount,
+                    customer_id: customer_id,
+                    transaction_type_id: transaction_type_id,
+                };
+                axios.post("/payment/sales/pay", data).then((response) => {
+                    console.clear();
+                    if (response.data.status == true) {
+                        Toastr.fire({
+                            icon: "success",
+                            title: "Payment successful",
+                        });
+
+                        setTimeout(() => {
+                            window.location.assign(
+                                `/payment/sales/pay-slip/${response.data.data}`);
+                        }, 1000);
+                    }
+                });
+            });
 
 
         };

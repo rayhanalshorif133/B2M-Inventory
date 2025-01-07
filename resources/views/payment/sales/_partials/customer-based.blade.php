@@ -23,7 +23,7 @@
                     <p>
                         Due Amount:
                         <span id="salesCustomerBasedDueAmount"></span> tk
-                        <button class="btn btn-sm btn-info" title="Full Payment">
+                        <button class="btn btn-sm btn-info salesCustomerBasedFullPay" title="Full Payment">
                             <i class="fa-solid fa-caret-down"></i>
                         </button>
                     </p>
@@ -42,8 +42,8 @@
                         <div class="col-md-6">
                             <label>Pay Amount</label>
                             <div class="d-flex">
-                                <input type="text" class="form-control w-full mr-1" value="0" />
-                                <button class="btn btn-sm btn-success" style="width: 170px">
+                                <input type="text" class="form-control w-full mr-1 salesCustomerBasedPayInput" value="0" />
+                                <button class="btn btn-sm btn-success salesCustomerBasedPayBtn" style="width: 170px">
                                     Pay Now
                                 </button>
                             </div>
@@ -53,7 +53,7 @@
             </div>
 
             <!-- If no due amount -->
-            <div class="mt-3">
+            <div class="mt-3 dueAmountAlertContainer hidden">
                 <div class="alert alert-danger" role="alert">
                     No due amount.
                 </div>
