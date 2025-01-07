@@ -74,7 +74,7 @@ class PaymentController extends Controller
         if ($request->method() == 'GET') {
             $company_id = $request->session()->get('company_id');
             $transactionTypes = TransactionType::select()->where('company_id', $company_id)->get();
-            return view('payment.sales.index', compact('transactionTypes'));
+            return view('sales.payment.index', compact('transactionTypes'));
         }
 
         try {

@@ -304,7 +304,7 @@ class SalesController extends Controller
                 ->with('customer')->orderBy('created_at', 'desc')->get();
             return DataTables::of($query)->toJson();
         }
-        return view('sales.payment-list');
+        return view('sales.payment.list');
     }
 
     public function dueCollection(Request $request)

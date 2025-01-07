@@ -28,8 +28,8 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    @include('payment/sales/_partials/invoice-based')
-                    @include('payment/sales/_partials/customer-based')
+                    @include('sales/payment/_partials/invoice-based')
+                    @include('sales/payment/_partials/customer-based')
                 </div>
             </div>
         </section>
