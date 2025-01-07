@@ -55,22 +55,21 @@
 @push('scripts')
     <script>
         $(() => {
-            Toastr.fire({
-                icon: "success",
-                title: "Payment successful",
-            });
+
             handleDataTable();
         });
 
 
         const handleDataTable = () => {
-            $('#productList').DataTable().clear().destroy();
-            url = '/product/list?type=fetch';
-            $('#productList').DataTable({
+
+
+            $('#salesPaymentList').DataTable().clear().destroy();
+            url = '/sales/payment-list?fetch=1';
+            $('#salesPaymentList').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '/product/list?type=fetch', // Replace this with your API endpoint
+                    url: '/sales/payment-list?fetch=1', // Replace this with your API endpoint
                     type: 'GET',
                     dataSrc: function(json) {
                         // Transform or filter data if necessary before passing to DataTable
@@ -93,43 +92,39 @@
                         targets: 0
                     },
                     {
-                        data: 'name', // Display the product name
-                        targets: 1
-                    },
-                    {
-                        data: 'category.name', // Display the category name
-                        targets: 2
-                    },
-                    {
-                        data: 'sub_category.name', // Display the sub-category name
-                        targets: 3
-                    },
-                    {
-                        render: function(data, type, row) {
-                            const status = `<span class="badge ${
-                    row.status == 1 ? "bg-success" : "bg-danger"
-                }">
-                    ${row.status == 1 ? "Active" : "Inactive"}</span>`;
-                            return status;
+                        render: function(data, type, row, meta) {
+                            const date =
+                                `<span>${row.created_date}</span> <span class="d-none">${row.receipt_no}</span>`;
+
+                            return date; // Display the row index (1-based)
                         },
-                        targets: 4
+                        targets: 0
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            return row.customer.name; // Display the row index (1-based)
+                        },
+                        targets: 0
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            return row.amount; // Display the row index (1-based)
+                        },
+                        targets: 0
                     },
                     {
                         render: function(data, type, row) {
-                            const btns = `
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-info btn-sm text-white showBtn"
-                            data-id="${row.id}">
-                            <i class="fa-regular fa-eye"></i> Show
-                        </button>
-                        <button type="button" class="btn statusBtn ${
-                            row.status == 0 ? "btn-success" : "btn-danger"
-                        } btn-sm text-white" data-id="${row.id}">
-                            ${row.status == 0 ? "Activate" : "Deactivate"} <i class="fa-solid ${
-                    row.status == 0 ? "fa-check" : "fa-xmark"
-                }"></i>
-                        </button>
-                    </div>`;
+                            const btns = `<div class="btn-group">
+                                    <a href="/payment/sales/pay-slip/${row.id}" type="button" class="btn btn-success btn-sm">
+                                     <i class="fa-regular fa-eye"></i> Pay Slip
+                                    </a>
+                                    <button type="button" class="btn btn-info btn-sm paymentEditBtn btn-fit" data-id="${row.id}">
+                                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm">
+                                    Delete <i class="fa-solid fa-trash"></i>
+                                    </button>
+                            </div>`;
                             return btns;
                         },
                         targets: 5
