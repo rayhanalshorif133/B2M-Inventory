@@ -9,10 +9,7 @@
             '_partials.breadcrumb',
             ['title' => $title],
             [
-                'items' => [
-                    ['name' => 'Home', 'url' => route('home')],
-                    ['name' => $title, 'url' => null],
-                ],
+                'items' => [['name' => 'Home', 'url' => route('home')], ['name' => $title, 'url' => null]],
             ]
         )
 
@@ -27,23 +24,25 @@
                             <button class="btn btn-sm btn-success mx-2" id="exportToExcel">
                                 Export to Excel
                             </button>
-                            <a class="btn btn-sm btn-success" href="/sales/create">
-                                Create New Sales
+                            <a class="btn btn-sm btn-success" href="/purchase/create">
+                                Create New Purchase
                             </a>
                         </div>
                     </div>
 
                     <div class="card-body">
                         <div class="table-responsive" style="width: 100%">
-                            <table class="table table-bordered display table-hover nowrap" id="salesPaymentList"
+                            <table class="table table-bordered display table-hover nowrap" id="purchasesList"
                                 style="width: 100%">
                                 <thead>
                                     <tr>
-                                        <th style="width: 10px">#</th>
-                                        <th style="width: 10px">Invoice Date</th>
-                                        <th style="width: 10px">Customer Name</th>
-                                        <th style="width: 10px">Payment Amount</th>
-                                        <th style="width: 10px">Actions</th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Code</th>
+                                        <th scope="col">Invoice Date</th>
+                                        <th scope="col">Supplier Name</th>
+                                        <th scope="col">Total Amount</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -60,26 +59,27 @@
 @push('scripts')
     <script>
         $(() => {
-            Toastr.fire({
-                icon: "success",
-                title: "Payment successful",
-            });
+            // Toastr.fire({
+            //     icon: "success",
+            //     title: "Payment successful",
+            // });
             handleDataTable();
         });
 
 
+
+
         const handleDataTable = () => {
-            $('#productList').DataTable().clear().destroy();
-            url = '/product/list?type=fetch';
-            $('#productList').DataTable({
+            $('#purchasesList').DataTable().clear().destroy();
+            url = '/purchase/list?type=fetch';
+            $('#purchasesList').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '/product/list?type=fetch', // Replace this with your API endpoint
+                    url: url, // Replace this with your API endpoint
                     type: 'GET',
                     dataSrc: function(json) {
-                        // Transform or filter data if necessary before passing to DataTable
-                        return json.data; // Assuming the response has a 'data' field containing the array
+                        return json.data;
                     }
                 },
                 dom: 'Bfrltip', // Add this line to include the buttons in the UI
@@ -98,23 +98,36 @@
                         targets: 0
                     },
                     {
-                        data: 'name', // Display the product name
-                        targets: 1
+                        render: function(data, type, row, meta) {
+                            return row.code; // Display the row index (1-based)
+                        },
+                        targets: 0
                     },
                     {
-                        data: 'category.name', // Display the category name
-                        targets: 2
+                        render: function(data, type, row, meta) {
+                            return row.invoice_date; // Display the row index (1-based)
+                        },
+                        targets: 0
                     },
                     {
-                        data: 'sub_category.name', // Display the sub-category name
-                        targets: 3
+                        render: function(data, type, row, meta) {
+                            var name = row.supplier ? row.supplier.name : "No Assign";
+                            return name; // Display the row index (1-based)
+                        },
+                        targets: 0
+                    },
+                    {
+                        render: function(data, type, row, meta) {
+                            return row.total_amount; // Display the row index (1-based)
+                        },
+                        targets: 0
                     },
                     {
                         render: function(data, type, row) {
-                            const status = `<span class="badge ${
-                row.status == 1 ? "bg-success" : "bg-danger"
-            }">
-                ${row.status == 1 ? "Active" : "Inactive"}</span>`;
+                            const status =
+                                row.status == "0" ?
+                                `<span class="badge badge-danger">Inactive</span>` :
+                                `<span class="badge badge-success">Active</span>`;
                             return status;
                         },
                         targets: 4
@@ -122,19 +135,17 @@
                     {
                         render: function(data, type, row) {
                             const btns = `
-                <div class="btn-group">
-                    <button type="button" class="btn btn-info btn-sm text-white showBtn"
-                        data-id="${row.id}">
-                        <i class="fa-regular fa-eye"></i> Show
-                    </button>
-                    <button type="button" class="btn statusBtn ${
-                        row.status == 0 ? "btn-success" : "btn-danger"
-                    } btn-sm text-white" data-id="${row.id}">
-                        ${row.status == 0 ? "Activate" : "Deactivate"} <i class="fa-solid ${
-                row.status == 0 ? "fa-check" : "fa-xmark"
-            }"></i>
-                    </button>
-                </div>`;
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success btn-sm showBtn btn-fit" data-id="${row.id}">
+                         <i class="fa-regular fa-eye"></i> View
+                        </button>
+                        <a href="/purchase/invoice/${row.id}" type="button" class="btn btn-primary btn-sm print btn-fit">
+                         <i class="fa-solid fa-print"></i> Print
+                        </a>
+                        <button type="button" class="btn btn-danger btn-sm deleteBtn btn-fit" data-id="${row.id}">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                    </div>`;
                             return btns;
                         },
                         targets: 5
