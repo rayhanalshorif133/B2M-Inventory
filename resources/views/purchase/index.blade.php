@@ -21,7 +21,7 @@
                     <div class="card-header justify-content-between d-flex">
                         <h3 class="card-title">Sales list</h3>
                         <div class="ml-auto">
-                            <button class="btn btn-sm btn-success mx-2" id="exportToExcel">
+                            <button class="btn btn-sm btn-success mx-2" onclick="exportToExcel()">
                                 Export to Excel
                             </button>
                             <a class="btn btn-sm btn-success" href="/purchase/create">
@@ -66,6 +66,10 @@
             handleDataTable();
         });
 
+
+        const exportToExcel = () => {
+            $(".exportToExcel").click();
+        };
 
 
 
