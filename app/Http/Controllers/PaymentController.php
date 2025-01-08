@@ -193,8 +193,10 @@ class PaymentController extends Controller
 
             if ($request->type == 'purchase') {
                 $payment = PurchasePayment::select()->where('id', $request->payment_id)->first();
+                paymentLogSend($request->transaction_type_id, 1, $request->amount, $request->payment_id);
             } else {
                 $payment = SalesPayment::select()->where('id', $request->payment_id)->first();
+                paymentLogSend($request->transaction_type_id, 3, $request->amount, $request->payment_id);
             }
 
             $payment->transaction_type_id = $request->transaction_type_id;
