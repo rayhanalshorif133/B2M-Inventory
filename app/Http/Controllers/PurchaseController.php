@@ -6,6 +6,8 @@ use App\Models\ProductAttribute;
 use App\Models\Purchase;
 use App\Models\PurchaseDetails;
 use App\Models\PurchasePayment;
+use App\Models\TransactionType;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -54,25 +56,36 @@ class PurchaseController extends Controller
 
     public function create(Request $request)
     {
+        $company_id = $request->session()->get('company_id');
         if ($request->method() == 'GET') {
-            return view('purchase.create');
+            $suppliers = Supplier::select()->where('company_id', $company_id)->get();
+            $transactionTypes = TransactionType::select()->where('company_id', $company_id)->get();
+            $purchaseCode = $this->getPurchaseCode($company_id);
+            return view('purchase.create', compact('suppliers', 'transactionTypes', 'purchaseCode'));
         }
 
         DB::beginTransaction();
         try {
 
 
+            $product_details = $request->product_details;
+
+
+
+            $company_id = $request->session()->get('company_id');
+            $purchase_order = $request->purchase_order;
+
             $purchase = new Purchase();
-            $purchase->company_id = Auth::user()->company_id;
-            $purchase->supplier_id = $request['supplier_id'];
-            $purchase->code = $this->getPurchaseCode();
-            $purchase->invoice_date = $request['invoice_date'];
-            $purchase->total_amount = $request['total_amount'];
-            $purchase->sub_amount = $request['sub_amount'];
-            $purchase->paid_amount = $request['paid_amount'];
-            $purchase->grand_total = $request['grand_total_amount'];
-            $purchase->due_amount = floatval($request['total_amount']) - floatval($request['paid_amount']);
-            $purchase->note = $request['note'];
+            $purchase->company_id = $company_id;
+            $purchase->supplier_id = $purchase_order['supplier_id'];
+            $purchase->code =  $purchase_order['voucher_number'];
+            $purchase->invoice_date = $purchase_order['invoice_date'];
+            $purchase->total_amount = $purchase_order['total_amount'];
+            $purchase->sub_amount = 0;
+            $purchase->paid_amount = $purchase_order['paid_amount'];
+            $purchase->grand_total = $purchase_order['grand_total_amount'];
+            $purchase->due_amount = floatval($purchase_order['total_amount']) - floatval($purchase_order['paid_amount']);
+            $purchase->note = $purchase_order['supplier_note'];
             $purchase->discount = 0;
             $purchase->created_by = Auth::user()->id;
             $purchase->created_time = date('H:i:s');
@@ -80,17 +93,18 @@ class PurchaseController extends Controller
             $purchase->save();
 
 
+
             /* <- Purchase Payment ->*/
             $purchasePayment = new PurchasePayment();
             $purchasePayment->purchases_id = $purchase->id;
-            $purchasePayment->transaction_type_id = $request['transaction_type_id'];
+            $purchasePayment->transaction_type_id = $purchase_order['transaction_type'];
             $purchasePayment->amount = $purchase->paid_amount;
             $purchasePayment->receipt_no = purchasePaymentReceiptNo();
             $purchasePayment->supplier_id = $purchase->supplier_id;
             $purchasePayment->discount = $purchase->discount;
             $purchasePayment->created_date = $purchase->created_date;
             $purchasePayment->added_by = Auth::user()->id;
-            $purchasePayment->company_id = Auth::user()->company_id;
+            $purchasePayment->company_id = $company_id;
             $purchasePayment->save();
 
 
@@ -98,16 +112,17 @@ class PurchaseController extends Controller
             paymentLogSend($purchasePayment->transaction_type_id, 1, $purchasePayment->amount, $purchasePayment->id);
 
 
-            $productCustomizations =  $request['productCustomizations'];
 
-            foreach ($productCustomizations as $item) {
+            foreach ($product_details as $item) {
+
+                $productAttribute  = ProductAttribute::select()->where('id', $item['product_attribute_id'])->first();
+
                 $purchaseDetails = new PurchaseDetails();
-                $purchaseDetails->product_attribute_id = $item['id'];
+                $purchaseDetails->product_attribute_id = $productAttribute->id;
                 $purchaseDetails->purchases_id = $purchase->id;
                 $purchaseDetails->qty = $item['qty'];
                 $purchaseDetails->product_id = $item['product_id'];
-                $purchaseDetails->purchase_rate = $item['purchase_price'];
-                $purchaseDetails->sales_rate = $item['sales_price'];
+                $purchaseDetails->purchase_rate = $item['last_purchase'];
                 $purchaseDetails->discount = $item['discount'];
                 $purchaseDetails->total = $item['total'];
                 $purchaseDetails->created_time = $purchase->created_time;
@@ -115,29 +130,20 @@ class PurchaseController extends Controller
                 $purchaseDetails->save();
 
 
-                $productAttribute  = ProductAttribute::select()->where('id', $item['id'])->first();
+
                 $productAttribute->current_stock = intval($productAttribute->current_stock) + intval($item['qty']);
-                $productAttribute->last_purchase = $item['purchase_price'];
+                $productAttribute->last_purchase = $item['last_purchase'];
 
                 $productAttribute->unit_cost = ((intval($productAttribute->current_stock) * floatval($productAttribute->last_purchase)) +
-                    (floatval($item['purchase_price']) * intval($item['qty']))) / (intval($productAttribute->current_stock) + intval($item['qty']));
+                    (floatval($item['last_purchase']) * intval($item['qty']))) / (intval($productAttribute->current_stock) + intval($item['qty']));
                 $productAttribute->save();
-
-
-
-                /* <- Product log send ->*/
-                $curl = curl_init();
-                $url = url('/api/log/product?product_attribute_id=' . $productAttribute->id
-                    . '&type=1&qty=' . $item['qty'] . '&ref_id=' . $purchaseDetails->id);
-                curl_setopt($curl, CURLOPT_URL, $url);
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($curl, CURLOPT_TIMEOUT, 3);
-                curl_exec($curl);
-                curl_close($curl);
+                // Sent Product Log ->>>>>>>>
+                productLogSend($productAttribute->id, 1, $item['qty'], $purchaseDetails->id);
             }
 
+
             DB::commit();
-            return $this->respondWithSuccess('Successfully created Purchases', $purchase);
+            return redirect()->route('purchase.invoice', $purchase->id)->with('success', 'Successfully created purchases');
         } catch (\Throwable $th) {
             DB::rollBack();
             return $this->respondWithError('error', $th->getMessage());
@@ -266,9 +272,9 @@ class PurchaseController extends Controller
     }
 
 
-    public function getPurchaseCode()
+    public function getPurchaseCode($company_id)
     {
-        $purchase = Purchase::where('company_id', Auth::user()->company_id)->orderBy('id', 'desc')->first();
+        $purchase = Purchase::where('company_id', $company_id)->orderBy('id', 'desc')->first();
 
         if ($purchase && $purchase->code) {
             $last__code = intval(explode("-", $purchase->code)[1]);
