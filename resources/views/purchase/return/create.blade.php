@@ -157,18 +157,18 @@
                 .then((response) => {
                     const data = response.data.data;
                     console.log(data);
-                    var SupplierList = [];
+                    var supplierList = [];
                     purchaseList = data;
 
                     data.length > 0 &&
                         data.map((item) => {
-                            SupplierList = [
-                                ...SupplierList,
+                            supplierList = [
+                                ...supplierList,
                                 item.Supplier,
                             ];
                         });
                     // unique Supplier name
-                    SupplierList = SupplierList.filter(
+                    supplierList = supplierList.filter(
                         (Supplier, index, self) =>
                         index ===
                         self.findIndex((s) => s.id === Supplier.id)
@@ -176,8 +176,8 @@
 
                     $("#selectedSupplier").empty();
                     $("#selectedSupplier").append('<option disabled selected value="0">Select a Supplier</option>');
-                    SupplierList.forEach(Supplier => {
-                        $("#selectedSupplier").append(new Option(Supplier.name, Supplier.id));
+                    supplierList.forEach(item => {
+                        $("#selectedSupplier").append(new Option(item.name, item.id));
                     });
                 });
         };
