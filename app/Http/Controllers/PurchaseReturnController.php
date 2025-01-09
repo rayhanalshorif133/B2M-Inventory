@@ -6,6 +6,7 @@ use App\Models\ProductAttribute;
 use App\Models\Purchase;
 use App\Models\PurchaseReturn;
 use App\Models\PurchaseReturnDetails;
+use App\Models\TransactionType;
 use App\Models\PurchaseReturnPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,7 +59,9 @@ class PurchaseReturnController extends Controller
     public function create(Request $request)
     {
         if ($request->method() == 'GET') {
-            return view('purchase.return.create');
+            $date = date('Y-m-d');
+            $transactionTypes = TransactionType::select()->where('company_id', Auth::user()->company_id)->get();
+            return view('purchase.return.create',compact('date', 'transactionTypes'));
         }
 
 
