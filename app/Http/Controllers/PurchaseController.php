@@ -86,7 +86,7 @@ class PurchaseController extends Controller
             $purchase->grand_total = $purchase_order['grand_total_amount'];
             $purchase->due_amount = floatval($purchase_order['total_amount']) - floatval($purchase_order['paid_amount']);
             $purchase->note = $purchase_order['supplier_note'];
-            $purchase->discount = 0;
+            $purchase->discount = $purchase_order['total_discount'];
             $purchase->created_by = Auth::user()->id;
             $purchase->created_time = date('H:i:s');
             $purchase->created_date = date('Y-m-d');

@@ -13,7 +13,6 @@
             ]
         )
 
-        <purchase-list-component></purchase-list-component>
 
         <section class="content">
             <div class="container-fluid">
@@ -52,12 +51,80 @@
                 </div>
             </div>
         </section>
+        <div class="modal fade" id="showPurchaseDetails" tabindex="-1" aria-labelledby="showPurchaseDetailsLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header" style="height: 50px">
+                        <h5 class="modal-title" id="showPurchaseDetailsLabel">
+                            Purchase Details
+                            <a class="btn btn-sm btn-outline-primary purchaseEditLink" href="#">
+                                <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                                Edit
+                            </a>
+                        </h5>
+                        <button type="button" class="btn-close text-white"
+                            onclick="hideShowPurchaseDetailsModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <h5><b>Purchase Info:</b></h5>
+                            <p class="col-md-4 col-sm-2"><b>Code:</b> <span id="purchaseCode"></span></p>
+                            <p class="col-md-4 col-sm-2"><b>Invoice Date:</b> <span id="invoiceDate"></span></p>
+                            <p class="col-md-4 col-sm-2"><b>Total Amount:</b> <span id="showTotalAmount"></span></p>
+                            <p class="col-md-4 col-sm-2"><b>Paid Amount:</b> <span id="paidAmount"></span></p>
+                            <p class="col-md-4 col-sm-2"><b>Due Amount:</b> <span id="dueAmount"></span></p>
+                            <p class="col-md-4 col-sm-2"><b>Note:</b> <span id="purchaseNote"></span></p>
+                            <hr />
+                            <h5><b>Purchase Details:</b></h5>
+                            <table class="table px-2">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Particulars</th>
+                                        <th scope="col" style="width: 7rem">Qty</th>
+                                        <th scope="col">Purchase Rate</th>
+                                        <th scope="col" style="width: 7rem">Discount</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="purchaseDetailsBody"></tbody>
+                                <tfoot>
+                                    <tr style="font-size: 16px!important">
+                                        <td colspan="5" class="text-end"><b>Total :</b></td>
+                                        <td colspan="2" class="text-start"><span id="finalTotal"></span> tk</td>
+                                    </tr>
+                                    <tr style="font-size: 16px!important">
+                                        <td colspan="5" class="text-end" style="font-size: 16px!important"><b>Final
+                                                Discount :</b></td>
+                                        <td colspan="2" class="text-start" style="font-size: 16px!important"><span
+                                                id="finalDiscount"></span></td>
+                                    </tr>
+                                    <tr style="font-size: 16px!important">
+                                        <td colspan="5" class="text-end" style="font-size: 16px!important"><b>Final
+                                                Total :</b></td>
+                                        <td colspan="2" class="text-start" style="font-size: 16px!important"><span
+                                                id="finalTotalWithDiscount"></span> tk</td>
+                                    </tr>
 
+
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary text-white"
+                            onclick="hideShowPurchaseDetailsModal()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
 @push('scripts')
     <script>
+        var showPurchaseDetails = false;
         $(() => {
             // Toastr.fire({
             //     icon: "success",
@@ -158,6 +225,77 @@
             });
 
 
+        };
+
+
+        $(document).on('click', '.showBtn', function() {
+            const id = $(this).attr('data-id');
+
+            showPurchaseDetails = new bootstrap.Modal(document.getElementById(
+                'showPurchaseDetails')); // Create the modal instance
+            showPurchaseDetails.show();
+
+
+            axios.get(`/purchase/fetch/${id}`).then((response) => {
+                $(".purchaseEditLink").attr("href", `/purchase/${id}/edit`);
+
+                const {
+                    purchase,
+                    purchaseDetails
+                } = response.data.data;
+
+                $("#purchaseCode").text(purchase.code);
+                $("#invoiceDate").text(purchase.invoice_date);
+                if (purchase.discount > 0) {
+                    $("#finalDiscount").text("৳ -" + purchase.discount + " tk");
+                    $("#finalDiscount").addClass("text-danger");
+                } else {
+                    $("#finalDiscount").text("৳ " + purchase.discount);
+                    $("#finalDiscount").removeClass("text-danger");
+                }
+
+                $("#showTotalAmount").text("৳ " + purchase.grand_total);
+
+                $("#paidAmount").text("৳ " + purchase.paid_amount);
+                $("#dueAmount").text("৳ " + purchase.due_amount);
+                $("#purchaseNote").text(purchase.note);
+
+
+                // purchaseDetailsBody
+                $('#purchaseDetailsBody').empty();
+
+                var total_price = 0;
+                // Insert rows into the table body
+                $.each(purchaseDetails, function(index, item) {
+                    total_price += item.total;
+                    const row = `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>
+                                    ${item.product_attribute.code}<br>
+                                    ${item.product.name}
+                                    ${item.product_attribute.model != null ? '|' + item.product_attribute.model : ''}
+                                    ${item.product_attribute.color != null ? '|' + item.product_attribute.color : ''}<br>
+                                </td>
+                                <td>${item.qty}</td>
+                                <td>${item.purchase_rate} tk</td>
+                                <td>${item.discount} tk</td>
+                                <td>${item.total} tk</td>
+                            </tr>
+                        `;
+                    $('#purchaseDetailsBody').append(row);
+                });
+
+                $("#finalTotal").text("৳ " + total_price);
+                total_price = parseFloat(total_price) - parseFloat(purchase.discount);
+                $("#finalTotalWithDiscount").text("৳ " + total_price);
+
+
+            });
+        });
+
+        const hideShowPurchaseDetailsModal = () => {
+            showPurchaseDetails.hide();
         };
     </script>
 @endpush
