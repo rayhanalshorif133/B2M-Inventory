@@ -1,25 +1,23 @@
-@extends('layouts.app', ['title' => 'Sales Return'])
+@php
+    $title = 'Sales Return';
+@endphp
+@extends('layouts.app', ['title' => $title])
+
 
 @section('content')
     <div class="content-wrapper">
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">Sales Return</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('home') }}" class="text-capitalize">home</a>
-                                <span class="text-gray"> / </span>
-                                <span class="text-gray">Sales Return</span>
-                            </li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+        @include(
+            '_partials.breadcrumb',
+            ['title' => $title],
+            [
+                'items' => [
+                    ['name' => 'Home', 'url' => route('home')],
+                    ['name' => 'Sales Return List', 'url' => route('sales.return.index')],
+                    ['name' => $title, 'url' => null],
+                ],
+            ]
+        )
 
 
         <div>

@@ -220,10 +220,7 @@
                                                     <td class="border-0 text-center" colspan="6">No Record</td>
                                                 </tr>
                                             </tbody>
-
                                         </table>
-
-
                                     </div>
 
 
