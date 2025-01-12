@@ -56,20 +56,20 @@ class SalesReturnController extends Controller
 
 
 
+
     //
     public function create(Request $request)
     {
         if ($request->method() == 'GET') {
             $date = date('Y-m-d');
             $transactionTypes = TransactionType::select()->where('company_id', Auth::user()->company_id)->get();
+
             return view('sales.return.create', compact('date', 'transactionTypes'));
         }
 
 
         DB::beginTransaction();
         try {
-
-
 
             $sales = Sales::find($request->sales_id);
             $salesReturn = new SalesReturn();

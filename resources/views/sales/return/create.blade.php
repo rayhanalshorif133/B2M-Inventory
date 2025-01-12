@@ -158,22 +158,17 @@
             const today = new Date();
             const formattedDate = today.toISOString().split('T')[0]; // Extracts the date in YYYY-MM-DD format
             $("#selectedDate").val(formattedDate);
-            // $("#selectedDate").val(formattedDate);
             fetchSipplier(formattedDate);
             handleChange();
             $('.submitBtn').prop('disabled', true);
-
         });
 
         const fetchSipplier = (date) => {
-
             axios.get(`/customer/fetch?type=sales-return&date=${date}`)
                 .then((response) => {
                     const data = response.data.data;
-                    console.log(data);
                     var customerList = [];
                     salesList = data;
-
                     data.length > 0 &&
                         data.map((item) => {
                             customerList = [
@@ -181,7 +176,6 @@
                                 item.customer,
                             ];
                         });
-                    // unique customer name
                     customerList = customerList.filter(
                         (customer, index, self) =>
                         index ===
@@ -220,7 +214,7 @@
                 const selectedInvoice = $(this).val();
                 axios
                     .get(
-                        `/sales/fetch-invoice?type=sales-return&sales_id=${selectedInvoice}`
+                        `/sales/fetch/${selectedInvoice}`
                     )
                     .then((response) => {
                         const {
@@ -233,7 +227,6 @@
                             $(".sales_paid_amount").text(sales.paid_amount);
                             $(".sales_due_amount").text(sales.due_amount);
                         }
-                        console.log(salesDetails);
                         salesDetailsInsert(salesDetails);
                         $('.submitBtn').prop('disabled', false);
                     });
@@ -244,8 +237,7 @@
                 returnAmount = parseFloat($(this).val());
                 const total_amount = parseFloat($('.total_amount').text());
                 const dueAmount = total_amount - returnAmount;
-                $('#due_amount').text(dueAmount);;
-
+                $('#due_amount').text(dueAmount);
             });
 
 
@@ -262,6 +254,7 @@
 
         function salesDetailsInsert(data, hasSame = true) {
             salesDetailsData = data;
+            console.log(data);
             const tbody = $('#salesDetailsBody');
             tbody.empty();
 

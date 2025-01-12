@@ -170,7 +170,7 @@ class SalesController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('sales.invoice', $sales->id)->with('success', 'Successfully created Sales');
+            return redirect('/sales/invoice/', $sales->id);
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->route('sales.index')->with('error', $th->getMessage());
@@ -264,29 +264,7 @@ class SalesController extends Controller
         return view('sales.edit', compact('customers', 'transactionTypes'));
     }
 
-    public function invoice(Request $request, $id)
-    {
 
-        if ($request->fetch == "true") {
-            $salesDetails = SalesDetails::select()->where('sales_id', $id)
-                ->with('product', 'productAttribute')
-                ->get();
-
-            $sales = Sales::select()->where('id', $id)->with('company', 'customer', 'createdBy')->first();
-            $salesPayment = SalesPayment::select()->where('sales_id', $sales->id)->with('transactionType')->first();
-            $data = ['salesDetails' => $salesDetails, 'sales' => $sales, 'salesPayment' => $salesPayment];
-            return $this->respondWithSuccess('Successfully fetch sales', $data);
-        } else {
-            $salesDetails = SalesDetails::select()->where('sales_id', $id)
-                ->with('product', 'productAttribute')
-                ->get();
-
-            $sales = Sales::select()->where('id', $id)->with('company', 'customer', 'createdBy')->first();
-            $salesPayment = SalesPayment::select()->where('sales_id', $sales->id)->with('transactionType')->first();
-            $print_date = date('Y-m-d');
-            return view('sales.invoice', compact('print_date', 'sales', 'salesDetails', 'salesPayment'));
-        }
-    }
 
     public function getSalesCode($company_id)
     {
