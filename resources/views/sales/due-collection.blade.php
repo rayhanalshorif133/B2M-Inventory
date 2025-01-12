@@ -72,11 +72,11 @@
                             Payment Received
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                        onclick="quickSalesPayModalHide()"></button>
+                            onclick="quickSalesPayModalHide()"></button>
                     </div>
                     <div class="modal-body">
                         <form>
-                            <input type="hidden" id="customerId" name="customerId"/>
+                            <input type="hidden" id="customerId" name="customerId" />
                             <div>
                                 <p>
                                     <b>Customer Name:</b>

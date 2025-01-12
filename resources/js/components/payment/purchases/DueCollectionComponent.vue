@@ -159,7 +159,6 @@ axios.get("/purchase/due-amount?fetch=1").then(function (response) {
                              Pay Now <i class="fa-solid fa-check"></i>
                     </button>
                 </div>`;
-            const date = `<span>${item.created_date}</span> <span class="d-none">${item.receipt_no}</span>`;
             var PUTDATA = [
                 index + 1,
                 item.name,

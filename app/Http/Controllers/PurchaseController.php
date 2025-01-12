@@ -305,7 +305,6 @@ class PurchaseController extends Controller
                 ->where('company_id', Auth::user()->company_id)
                 ->get()
                 ->filter(function ($supplier) {
-                    // Check if the supplier has any purchases
                     $has_purchases = DB::table('purchases')
                         ->where('supplier_id', $supplier->id)
                         ->exists();
@@ -326,10 +325,14 @@ class PurchaseController extends Controller
                     return $supplier;
                 })->filter(function ($supplier) {
                     return $supplier->due_amount > 0;
-                });;
-            return DataTables::of($query)->toJson();
+                });
+
+            return DataTables::of($query)->addIndexColumn()->toJson();
         }
-        return view('purchase.due-collection');
+
+        $company_id = $request->session()->get('company_id');
+        $transactionTypes = TransactionType::select()->where('company_id', $company_id)->get();
+        return view('purchase.due-collection', compact('transactionTypes'));
     }
 
 
