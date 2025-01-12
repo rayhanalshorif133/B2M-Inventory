@@ -179,6 +179,7 @@
                     supplierList.forEach(item => {
                         $("#selectedSupplier").append(new Option(item.name, item.id));
                     });
+
                 });
         };
 
