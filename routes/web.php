@@ -22,6 +22,7 @@ use App\Http\Controllers\TransactionTypeController;
 use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TipsAndTourController;
+use App\Http\Controllers\CommonController;
 use Illuminate\Support\Facades\Artisan;
 
 /*
@@ -168,13 +169,17 @@ Route::middleware('auth')
         Route::get('/fetch/{id}', 'fetch')->name('fetch');
         Route::match(['get', 'put'], '/{id}/edit/', 'edit')->name('edit');
         Route::delete('/{id}/delete/', 'delete')->name('delete');
-        Route::get('/invoice/{id}', 'invoice')->name('invoice');
-        Route::get('/fetch-invoice', 'fetchInvoice')->name('invoice.fetch-invoice');
+        // Route::get('/invoice/{id}', 'invoice')->name('invoice');
+        // Route::get('/fetch-invoice', 'fetchInvoice')->name('invoice.fetch-invoice');
         Route::get('/payment-list', 'paymentList')->name('payment-list');
         // due collections
         Route::get('/due-amount', 'dueCollection')->name('due-collection');
     });
 
+Route::middleware('auth')->controller(CommonController::class)
+    ->group(function () {
+        Route::get('/{type}/invoice/{id}', 'invoice')->name('type.invoice');
+    });
 
 Route::middleware('auth')
     ->prefix('sales/return')
