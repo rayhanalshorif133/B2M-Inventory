@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductAttribute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
 
 
@@ -100,7 +101,7 @@ class ProductController extends Controller
         try {
 
 
-            dd($request->all());
+
 
 
             if ($request->type == 'xlsx') {
@@ -138,10 +139,10 @@ class ProductController extends Controller
             }
 
             $product = new Product();
-            $product->name = $request['productName'];
-            $product->category_id = $request['category_id'];
+            $product->name = $request->productName;
+            $product->category_id = $request->category_id;
             $product->company_id = Auth::user()->company_id;
-            $product->sub_category_id = $request['sub_category_id'];
+            $product->sub_category_id = $request->sub_category_id;
             $product->created_by = Auth::user()->id;
             $product->save();
 
@@ -152,28 +153,32 @@ class ProductController extends Controller
 
             $productCode = $this->getProductCode();
 
-            $productDetailsInfos = $request['productDetailsInfos'];
+
+
+
+
+            $productDetailsInfos = $request->product_details;
 
             foreach ($productDetailsInfos as $item) {
+
 
                 $ProductAttribute = new ProductAttribute();
                 $ProductAttribute->product_id = $product->id;
                 $ProductAttribute->company_id = Auth::user()->company_id;
-                $ProductAttribute->code = $item['code'] ? $item['code'] : $productCode;
-                $ProductAttribute->size = $item['size'] ? $item['size'] : null;
-                $ProductAttribute->color = $item['color'] ? $item['color'] : null;
+                $ProductAttribute->code = $item['product_code'] ? $item['product_code'] : $productCode;
+                $ProductAttribute->size = $item['product_size'] ? $item['product_size'] : null;
+                $ProductAttribute->color = $item['product_color'] ? $item['product_color'] : null;
                 $ProductAttribute->current_stock = $item['current_stock'] ? $item['current_stock'] : null;
-                $ProductAttribute->last_purchase = $item['lastPurchase'] ? $item['lastPurchase'] : null;
-                $ProductAttribute->model = $item['model'] ? $item['model'] : null;
+                $ProductAttribute->last_purchase = $item['last_purchase'] ? $item['last_purchase'] : null;
+                $ProductAttribute->model = $item['product_model'] ? $item['product_model'] : null;
                 $ProductAttribute->unit_cost = $item['unit_cost'] ? $item['unit_cost'] : null;
                 $ProductAttribute->sales_rate = $item['sales_rate'] ? $item['sales_rate'] : null;
                 $ProductAttribute->save();
             }
 
+            return redirect()->route('product.list');
 
-            return $this->respondWithSuccess('success', 'Successfully created product');
         } catch (\Throwable $th) {
-            return $this->respondWithError('error', $th->getMessage());
             return $this->respondWithError('error', 'Something went wrong');
         }
     }
