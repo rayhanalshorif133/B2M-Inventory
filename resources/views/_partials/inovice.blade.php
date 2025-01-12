@@ -136,12 +136,14 @@
                                 <tr class="px-3 border-b-2 border-t-2 w-full">
                                     <td class="p-2 text-right">{{ $index + 1 }}</td>
                                     <td class="p-2 text-right">
-                                        {{ $itemDetail->product->name }} <br />
-                                        {{ $itemDetail->productAttribute->model }} ::
-                                        {{ $itemDetail->productAttribute->size }} ::
-                                        {{ $itemDetail->productAttribute->color }}
+                                        {{ $itemDetail->name }} <br />
+                                        {{ $itemDetail->model }} ::
+                                        {{ $itemDetail->size }} ::
+                                        {{ $itemDetail->color }}
                                     </td>
-                                    <td class="p-2 text-right">{{ $itemDetail->qty }}</td>
+                                    <td class="p-2 text-right">
+                                        {{ $itemDetail->qty }}
+                                    </td>
                                     <td class="p-2 text-right">
                                         Tk. {{ $itemDetail->sales_rate }}
                                     </td>

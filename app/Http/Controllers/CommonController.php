@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\SalesDetails;
 use App\Models\Sales;
 use App\Models\SalesPayment;
+use App\Models\SalesReturn;
+use App\Models\SalesReturnDetails;
+use App\Models\SalesReturnPayment;
+use Illuminate\Support\Facades\DB;
 
 
 class CommonController extends Controller
@@ -18,16 +22,17 @@ class CommonController extends Controller
         $invoice_name = $type . ' Invoice';
 
         if ($type == 'sales') {
-            $itemDetails = SalesDetails::select()->where('sales_id', $id)
-                ->with('product', 'productAttribute')
+
+            $itemDetails = DB::table('sales_details')
+                ->join('products', 'sales_details.product_id', '=', 'products.id')
+                ->join('product_attributes', 'sales_details.product_attribute_id', '=', 'product_attributes.id')
+                ->where('sales_details.sales_id', $id)
                 ->get();
 
             $item = Sales::select()->where('id', $id)->with('company', 'customer', 'createdBy')->first();
             $payment = SalesPayment::select()->where('sales_id', $item->id)->with('transactionType')->first();
             $invoice_name = 'Invoice';
         }
-
-
 
         return view('_partials.inovice', compact('print_date', 'item', 'itemDetails', 'payment', 'type', 'invoice_name'));
     }
