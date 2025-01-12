@@ -164,11 +164,11 @@
                                     <span class="pr-10 text-base font-bold">Sub total:</span>
                                     Tk. {{ $item->total_amount }}
                                     <br />
-                                    <span class="pr-10 text-base font-bold">Final Discount:</span>
-                                    Tk. {{ $item->discount }}
-                                    <br/>
+                                    {{-- <span class="pr-10 text-base font-bold">Final Discount:</span>
+                                    Tk. {{ $item->discount }} --}}
+                                    {{-- <br/>
                                     <span class="pr-10 text-base font-bold">Total Amount:</span>
-                                    Tk. {{ $item->grand_total }}
+                                    Tk. {{ $item->grand_total }} --}}
                                 </td>
                             </tr>
                             <tr class="px-3">
@@ -183,7 +183,7 @@
                                                 {{ $payment->created_date }}
                                             </p>
                                         </div>
-                                        <p>Tk. {{ $item->paid_amount }}</p>
+                                        <p>Tk. {{ $item->return_amount }}</p>
                                     </div>
                                 </td>
                             </tr>
