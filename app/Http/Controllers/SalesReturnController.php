@@ -141,19 +141,18 @@ class SalesReturnController extends Controller
     public function invoice(Request $request, $id)
     {
 
-        if ($request->fetch == "true") {
-            $salesReturnDetails = SalesReturnDetails::select()->where('Sales_returns_id', $id)
+
+        $print_date = date('Y-m-d');
+        $invoice_name = 'Sales Return Invoice';
+        $itemDetails = SalesReturnDetails::select()->where('Sales_returns_id', $id)
                 ->with('productAttribute', 'productAttribute.product')
                 ->get();
+        $item  = SalesReturn::select()->where('id', $id)->with('company', 'customer', 'createdBy')->first();
+        $payment = SalesReturnPayment::select()->where('Sales_return_id', $item->id)->with('transactionType')->first();
+        $invoice_name = 'Invoice';
+        $back_url = "/sales/return/list";
 
-            $salesReturn = SalesReturn::select()->where('id', $id)->with('company', 'customer', 'createdBy')->first();
-
-            $salesReturnPayment = SalesReturnPayment::select()->where('Sales_return_id', $salesReturn->id)->with('transactionType')->first();
-            $data = ['salesReturnDetails' => $salesReturnDetails, 'salesReturn' => $salesReturn, 'salesReturnPayment' => $salesReturnPayment];
-            return $this->respondWithSuccess('Successfully fetch Saless', $data);
-        } else {
-            return view('sales.return.invoice');
-        }
+        return view('sales.return.invoice', compact('print_date', 'item', 'itemDetails', 'back_url','payment', 'invoice_name'));
     }
 
 
