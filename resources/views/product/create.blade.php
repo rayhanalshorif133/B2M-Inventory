@@ -199,6 +199,10 @@
                                             </div>
                                         </div>
                                     </form>
+                                    <div>
+                                        <p>Uploaded File</p>
+                                        <div class="data-container"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -326,7 +330,6 @@
 
         const handleFileUpload = (event) => {
             const file = event.target.files[0];
-            console.log(file);
 
             if (file && file.type.includes("sheet")) {
                 const reader = new FileReader();
@@ -344,8 +347,19 @@
                     // Convert the sheet to JSON
                     var jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-                    jsonData = Array.from(jsonData.value);
-                    console.log(jsonData);
+                    jsonData = Array.from(jsonData);
+
+                    const container = document.getElementById('data-container');
+
+                    const itemDiv = document.createElement('div');
+                    jsonData.map(item => {
+                        for (const key in item) {
+                            if (Object.hasOwnProperty.call(item, key)) {
+                                content += `<li><strong>${key}:</strong> ${item[key] || 'N/A'}</li>`;
+                            }
+                        }
+                    });
+
 
                     Toastr.fire({
                         icon: "success",
