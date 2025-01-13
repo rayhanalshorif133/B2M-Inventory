@@ -259,9 +259,17 @@ class SalesController extends Controller
             }
         }
 
-        $customers = Customer::select()->where('company_id', Auth::user()->company_id)->get();
-        $transactionTypes = TransactionType::select()->where('company_id', Auth::user()->company_id)->get();
-        return view('sales.edit', compact('customers', 'transactionTypes'));
+
+        $sales = Sales::find($id);
+        $salesPayments = SalesPayment::select()->where('sales_id', $id)->first();
+        $salesDetails = SalesDetails::select()->where('sales_id', $id)
+            ->with('product', 'productAttribute')
+            ->get();
+        $company_id = $request->session()->get('company_id');
+        $customers = Customer::select()->where('company_id', $company_id)->get();
+        $transactionTypes = TransactionType::select()->where('company_id', $company_id)->get();
+        $sales_code = $sales->code;
+        return view('sales.edit', compact('sales','customers','salesDetails','salesPayments','transactionTypes','sales_code'));
     }
 
 

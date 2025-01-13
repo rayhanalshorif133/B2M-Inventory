@@ -1,10 +1,5 @@
 @extends('layouts.app', ['title' => 'Add New Sales'])
 
-
-
-
-
-
 @section('head')
     <style type="text/css">
         :host,
@@ -90,9 +85,6 @@
 
 
 @endsection
-
-
-
 
 
 @section('content')

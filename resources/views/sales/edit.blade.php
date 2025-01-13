@@ -1,20 +1,106 @@
-@extends('layouts.app', ['title' => 'Sales Update'])
+@extends('layouts.app', ['title' => 'Add New Sales'])
+
+@section('head')
+    <style type="text/css">
+        :host,
+        :root {
+            --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Solid";
+            --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Regular";
+            --fa-font-light: normal 300 1em/1 "Font Awesome 6 Light";
+            --fa-font-thin: normal 100 1em/1 "Font Awesome 6 Thin";
+            --fa-font-duotone: normal 900 1em/1 "Font Awesome 6 Duotone";
+            --fa-font-sharp-solid: normal 900 1em/1 "Font Awesome 6 Sharp";
+            --fa-font-sharp-regular: normal 400 1em/1 "Font Awesome 6 Sharp";
+            --fa-font-sharp-light: normal 300 1em/1 "Font Awesome 6 Sharp";
+            --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands"
+        }
+
+        svg:not(:host).svg-inline--fa,
+        svg:not(:root).svg-inline--fa {
+            overflow: visible;
+            box-sizing: content-box
+        }
+
+        .svg-inline--fa {
+            display: var(--fa-display, inline-block);
+            height: 1em;
+            overflow: visible;
+            vertical-align: -.125em
+        }
+
+        .svg-inline--fa.fa-2xs {
+            vertical-align: .1em
+        }
+
+        .svg-inline--fa.fa-xs {
+            vertical-align: 0
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            z-index: 9999;
+            left: -100%;
+            transform: translate(22%, 0px);
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown.action-btn {
+            position: relative;
+        }
+
+        .card {
+            box-shadow: none;
+        }
+
+        .table {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        thead th,
+        tbody td {
+            white-space: nowrap;
+        }
+
+        .font-size-16px {
+            font-size: 16px !important;
+        }
+
+        .font-size-14px {
+            font-size: 14px !important;
+        }
+    </style>
+@endsection
+
 
 @section('content')
     <div class="content-wrapper">
+
 
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Sales Update</h1>
+                        <h1 class="m-0">Update Sales</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
                                 <a href="{{ route('home') }}" class="text-capitalize">home</a>
                                 <span class="text-gray"> / </span>
-                                <span class="text-gray">Sales Update</span>
+                                <span class="text-gray">Update Sales</span>
                             </li>
                         </ol>
                     </div>
@@ -22,162 +108,261 @@
             </div>
         </div>
 
+
         <section class="content overflow-x-hidden">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-info">
-                        <div class="card-header">
-                            <h3 class="card-title">Update Sales</h3>
+            <div class="col-12">
+                <!-- Default box -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Update Seles Order</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
-                        <div class="card-body">
-                            <form>
-                                <div class="row">
-                                    <div class="col-12 col-md-7 col-lg-7">
-                                        <div class="form-group d-flex">
-                                            <label for="customer" class="d-flex mx-1">Customer
-                                                <span class="text-danger mx-1">*</span></label>
-                                            <select class="form-control" id="customer">
-                                                <option value="">Select a customer</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-5 col-lg-5">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <button data-toggle="modal" data-target="#addNewCustomerModal"
-                                                    class="btn btn-navy btn-sm h-2" type="button">
-                                                    <i class="fa fa-plus"></i> Add
-                                                    New
-                                                </button>
-                                            </div>
-                                            <div class="col-md-8 d-flex">
-                                                <label for="invoice_date" class="d-flex mx-1 w-8rem">Invoice Time:
-                                                    <span class="text-danger mx-1">*</span></label>
-                                                <input type="date" id="invoice_date" class="form-control w-10rem" />
+                    </div>
+                    <div class="card-body">
+                        <div class="card mb-3 mt-2" data-controller="calculate-sales-order">
+                            @include('sales._partials.addNewCustomerModal', [
+                                'customers' => $customers,
+                            ])
+                            <div class="card-body bg-white">
+                                <form class="form-horizontal salesCreateForm" action="{{ route('sales.edit', $sales->id) }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('POST')
+                                    <!-- Customer Name-->
+                                    <div class="row mb-3">
+                                        <input type="hidden" id="GET_Customer_ID" value="{{ $sales->customer_id }}" />
+                                        <label class="col-sm-2 col-md-2 text-capitalize" for="q_billing_status">Customer
+                                            Name</label><br>
+                                        <div class="col-sm-3 col-md-2 mb-3">
+                                            <div class="form-group">
+                                                <select class="form-control select2" id="customer"
+                                                    name="sales_order[customer_id]" style="width: 100%;"></select>
                                             </div>
                                         </div>
-                                        @include('sales._partials.addNewCustomerModal', [
-                                            'customers' => $customers,
-                                        ])
-                                    </div>
-                                    <div class="col-12 col-md-7 col-lg-7">
-                                        <div class="form-group d-flex">
-                                            <label for="Product" class="d-flex mx-1">Product
-                                                <span class="text-danger mx-1">*</span></label>
-                                            <select class="form-control" id="product" name="product">
-                                                <option value="" selected disabled>
-                                                    Select a product
-                                                </option>
-                                            </select>
+                                        <div class="col-sm-2 col-md-2 mb-2">
+                                            <a class="btn btn-outline-success btn-sm ms-2" data-toggle="modal"
+                                                data-target="#addNewCustomerModal">
+                                                <i class="fa fa-plus" style="color: #0a7822"></i>
+                                                New Customer
+                                            </a>
                                         </div>
-                                    </div>
-                                    <div class="col-12 col-md-5 col-lg-5 row">
-                                        <input type="text" id="barcode" class="form-control" placeholder="Barcode" />
-                                    </div>
-                                    <div class="col-md-12 col-lg-4">
-                                        <div class="card card-navy">
-                                            <div class="card-header">
-                                                Product Details
-                                            </div>
-                                            <div class="card-body">
-                                                <table class="table table-striped table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="4" class="text-center text-capitalize"
-                                                                id="product_name">
-                                                            </th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Attribute</th>
-                                                            <th>Sales Rate</th>
-                                                            <th>Stock</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="productAttributes">
-                                                        <td colspan="4" class="text-center text-danger font-semibold">
-                                                            Not Found
-                                                        </td>
-                                                    </tbody>
-                                                </table>
+                                        <label class="col-sm-2 col-md-2 control-label-required text-end"
+                                            for="datepickerVal">Date Of
+                                            Issue : </label>
+                                        <div class="col-sm-3 col-md-3 position-relative">
+                                            <div class="input-group has-validation">
+                                                <input type="date" name="sales_order[invoice_date]" id="invoice_date"
+                                                    value="{{ date('Y-m-d') }}" class="form-control" required="required">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-lg-8 col-md-12">
-                                        <div class="card card-success">
-                                            <div class="card-header">Product Customization</div>
-                                            <div class="card-body">
-                                                <table class="table table-striped table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Particulars</th>
-                                                            <th>Qty</th>
-                                                            <th class="text-center">
-                                                                Rate <br />
-                                                                <small>Sales</small>
-                                                            </th>
-                                                            <th>Discount</th>
-                                                            <th>Total</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="productCustomization"></tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <td colspan="2" class="bg-success text-end">Total</td>
-                                                            <td class="bg-success text-center" id="salesTotalQty">0</td>
-                                                            <td class="bg-success text-center"></td>
-                                                            <td class="bg-success text-center"></td>
-                                                            <td class="bg-success text-center" id="salesTotalAmount">0.00
+
+
+
+                                    <!-- Voucher Number-->
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 control-label-required text-end">Sales Order #</label>
+                                        <div class="col-sm-3">
+                                            <label class="control-label align-middle">
+                                                {{ $sales_code }}
+                                                <input autocomplete="off" type="hidden" value="{{ $sales_code }}"
+                                                    name="sales_order[voucher_number]">
+                                            </label>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="row mt-3">
+                                        <label class="col-sm-2 control-label-required text-end text-capitalize"
+                                            for="customer-name">Product
+                                            Name</label>
+                                        <div class="col-sm-10 mb-3">
+                                            <div class="form-group">
+                                                <select class="form-control select2" id="product" style="width: 100%;">
+                                                    <option value="">Select Product</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4" style="width: 100%;">
+                                        <table class="table table-bordered">
+                                            <thead class="light">
+                                                <tr class="bg-light dark__bg-1000">
+                                                    <th scope="col" class="col-3 control-label-required">Item Name</th>
+                                                    <th scope="col" class="col-1 control-label-required">Qty</th>
+                                                    <th scope="col" class="col-2 control-label-required">Sales Rate</th>
+                                                    <th scope="col" class="col-2">Discount
+                                                    </th>
+                                                    <th scope="col" class="col-1 text-end">Amount
+                                                    </th>
+                                                    <th scope="col" class="col-1 text-end">Action
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="insertProductItemForSales">
+                                                @if (count($salesDetails) > 0)
+                                                    @foreach ($salesDetails as $salesDetail)
+                                                        <tr id="{{ $salesDetail->id }}}" class="slsord_line">
+                                                            <td class="col-3">
+                                                                <input type="hidden"
+                                                                    name="product_details[${item.id}][product_id]"
+                                                                    value="${item.product.id}">
+                                                                <input type="hidden"
+                                                                    name="product_details[${item.id}][product_attribute_id]"
+                                                                    value="${item.id}">
+                                                                <small class="text-xs font-semibold">
+                                                                    {{ $salesDetail->product?->name }}
+                                                                </small>
+                                                                <br />
+                                                                <small class="text-xs font-semibold">
+                                                                    {{ $salesDetail->productAttribute }}
+                                                                </small>
+                                                                <br />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="number"
+                                                                    name="product_details[${item.id}][qty]" value="1"
+                                                                    class="input_qty bg-focus form-control text-right"
+                                                                    required="required">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number"
+                                                                    name="product_details[${item.id}][sales_rate]"
+                                                                    value="${item.sales_rate? item.sales_rate : 0}"
+                                                                    class="bg-focus form-control text-right input_sales_rate"
+                                                                    required="required">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number"
+                                                                    name="product_details[${item.id}][discount]"
+                                                                    value="0"
+                                                                    class="input_discount bg-focus form-control text-right">
+                                                            </td>
+                                                            <td class="col-1 text-end total">
+                                                                ${item.sales_rate? item.sales_rate : 0}
+                                                            </td>
+                                                            <td class="remove-sales-order col-1">
+                                                                <input type="hidden"
+                                                                    name="product_details[${item.id}][total]"
+                                                                    value="${item.sales_rate? item.sales_rate : 0}"
+                                                                    class="bg-focus form-control text-right input_total">
+                                                                <span id="cancel"
+                                                                    class="text-danger cursor-pointer d-block text-right"
+                                                                    href="">
+                                                                    <i class="fa fa-trash fs-5 " aria-hidden="true"></i>
+                                                                </span>
                                                             </td>
                                                         </tr>
-                                                    </tfoot>
-                                                </table>
-                                                <div class="product_customization_note_amount mt-1">
-                                                    <div class="product_customization_note">
-                                                        <label class="mt-2 mx-2 w-8rem">Note:</label>
-                                                        <textarea type="text" class="form-control" id="note" placeholder="Note"></textarea>
-                                                    </div>
-                                                    <div class="flex-column product_customization_amount">
-                                                        <div class="d-flex mt-1">
-                                                            <div>
-                                                                <label class="w-8rem">Transaction Type</label>
-                                                                <select class="form-control w-fit" id="transaction_type">
-                                                                    @foreach ($transactionTypes as $trans)
-                                                                        <option value="{{ $trans->id }}">
-                                                                            {{ $trans->name }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div class="mx-2">
-                                                                <label class="mx-2 w-8rem">Paid Amount</label>
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="Paid amount" id="paid_amount" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="d-flex mt-1 justify-content-end">
-                                                            <label>Due Amount: <span id="due_amount">00</span></label>
-                                                        </div>
-                                                        <div class="d-flex mt-1 justify-content-end">
-                                                            <button class="btn btn-success btn-sm" type="button"
-                                                                onclick="handleSubmit()">Submit</button>
-                                                        </div>
-                                                    </div>
+                                                    @endforeach
+                                                @else
+                                                    <tr class="slsord_line" id="no_record">
+                                                        <td class="border-0 text-center" colspan="6">No Record</td>
+                                                    </tr>
+                                                @endif
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                    <div class="row m-2">
+                                        <div class="col-md-7">
+                                            <div class="mb-3">
+                                                <label class="form-label font-size-14px">Customer Notes</label>
+                                                <textarea rows="4" class="bg-focus form-control" name="sales_order[customer_note]"
+                                                    id="sales_order_customer_notes"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-5">
+                                            <div class="row">
+                                                <div class="col-12 col-md-6 mt-1">
+                                                    <label class="form-label font-size-14px" style="float: right">Total
+                                                        Discount</label>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <input type="number" class="bg-focus form-control"
+                                                        name="sales_order[total_discount]" id="total_discount"
+                                                        value="0" />
+                                                    <p class="d-flex mt-2 ">
+                                                        <label class="form-label mx-2 font-size-14px">Grand Total
+                                                            Amount:</label>
+                                                        <label class="form-label text-success font-size-14px"
+                                                            id="grand_total_amount">00</label>
+                                                        <input type="hidden" class="bg-focus form-control"
+                                                            name="sales_order[grand_total_amount]"
+                                                            id="set_grand_total_amount" />
+                                                    </p>
+                                                </div>
+
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-12 col-md-6">
+                                                    <label class="form-label font-size-14px">Transaction Type</label>
+                                                    <select class="form-select bg-focus form-control"
+                                                        name="sales_order[transaction_type]"
+                                                        id="sales_order_transaction_type">
+                                                        <option value="" selected>Select Transaction Type</option>
+                                                        @foreach ($transactionTypes as $type)
+                                                            <option value="{{ $type->id }}">{{ $type->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label class="form-label font-size-14px">Paid Amount</label>
+                                                    <input type="hidden" class="bg-focus form-control"
+                                                        id="set_total_amount" name="sales_order[total_amount]">
+                                                    <input type="text" class="bg-focus form-control"
+                                                        name="sales_order[paid_amount]" id="paid_amount" />
+                                                    <p class="d-flex mt-2 ">
+                                                        <label class="form-label mx-2 font-size-14px">Due Amount:</label>
+                                                        <label class="form-label text-danger font-size-14px"
+                                                            id="due_amount">00</label>
+                                                        <input type="hidden" class="bg-focus form-control"
+                                                            name="sales_order[due_amount]" id="set_due_amount" />
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
+
+
                                     </div>
 
-
-                                </div>
-                            </form>
+                                    <!-- Form Buttons-->
+                                    <div class="row mt-4 justify-content-end">
+                                        <div class="d-flex justify-content-end">
+                                            <a class="btn btn-outline-danger" style="margin-right: 10px;"
+                                                href="{{ route('sales.create') }}">Reset</a>
+                                            <button type="button" class="btn btn-success me-2 salesCreateSubmitBtn"
+                                                style="width: 20vw;">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <!-- /.card -->
             </div>
+
         </section>
+
     </div>
 @endsection
+
 
 @push('scripts')
     <script>
@@ -186,32 +371,71 @@
         var setProductAttributeData = [];
         $(document).ready(function() {
             fetchProducts();
-            fetchData();
             handleCreateNewCustomer();
             handleProductChange();
-            getProductAttributesByBarcode();
             handlePaidAmount();
+            fetchSalesInformation();
+            fetchCustomers();
+
+
+            $(".salesCreateSubmitBtn").click(function() {
+                $(this).text('Processing ...').prop('disabled', true);
+
+                $(".salesCreateForm").submit();
+            });
+
         });
+
+        const fetchSalesInformation = () => {
+            const url = window.location.href;
+            const idMatch = url.match(/\/sales\/(\d+)\/edit/);
+            if (idMatch && idMatch[1]) {
+                const id = idMatch[1];
+                axios.get(`/sales/fetch/${id}/`)
+                    .then(function(response) {
+                        const {
+                            sales,
+                            salesDetails
+                        } = response.data.data;
+                        console.log(sales, salesDetails);
+
+
+                    });
+            }
+
+        };
+
+
+        const handleTotalGrandAmount = () => {
+            const total_discount = parseFloat($("#total_discount").val());
+            const total_amount = parseFloat($("#set_total_amount").val());
+            const grand_total_amount = total_amount - total_discount;
+            $("#grand_total_amount").text(grand_total_amount);
+            $("#set_grand_total_amount").val(grand_total_amount);
+        };
 
 
         const handlePaidAmount = () => {
+            $("#total_discount").keyup(function() {
+                handleTotalGrandAmount();
+            });
+
+
             $("#paid_amount").keyup(function() {
-                const paidAmount = $(this).val();
-                const salesTotalAmount = parseFloat($("#salesTotalAmount").text());
+                const paidAmount = parseFloat($(this).val());
+                const total_amount = $("#set_grand_total_amount").val();
                 var dueAmount = 0;
-                dueAmount = salesTotalAmount - parseFloat(paidAmount);
-                if (paidAmount > salesTotalAmount) {
+                if (paidAmount > total_amount) {
                     Toastr.fire({
                         icon: "error",
                         title: "Payment amount is Error",
                     });
                     return false;
                 }
-                setTimeout(()=>{
-                    $(this).val(salesTotalAmount);
-                    $("#due_amount").text(0);
-                },4000);
+                dueAmount = total_amount - parseFloat(paidAmount);
+
                 $("#due_amount").text(dueAmount);
+                $("#set_due_amount").val(dueAmount);
             });
         };
 
@@ -223,12 +447,20 @@
             const selectedCustomer = $("#customer").val();
             const paid_amount = $("#paid_amount").val();
 
+            $(".submitbtn").text('Processing ...');
+            $(".submitbtn").attr('disabled', true);
+
+
+
 
             if (!transaction_type) {
                 Toastr.fire({
                     icon: "error",
                     title: "Please Selected a transaction type",
                 });
+
+                $(".submitbtn").text('Submit');
+                $(".submitbtn").attr('disabled', false);
                 return false;
             }
 
@@ -240,6 +472,8 @@
                     icon: "error",
                     title: "Please Selected a Customer",
                 });
+                $(".submitbtn").text('Submit');
+                $(".submitbtn").attr('disabled', false);
                 return false;
             }
 
@@ -248,6 +482,8 @@
                     icon: "error",
                     title: "Please add product for customizations",
                 });
+                $(".submitbtn").text('Submit');
+                $(".submitbtn").attr('disabled', false);
                 return false;
             }
 
@@ -257,12 +493,13 @@
                     icon: "error",
                     title: "Please Enter a paid amount",
                 });
+                $(".submitbtn").text('Submit');
+                $(".submitbtn").attr('disabled', false);
                 return false;
             }
 
 
             const data = {
-                sales_id: window.getId(),
                 customer_id: selectedCustomer,
                 invoice_date: $("#invoice_date").val(),
                 total_amount: parseFloat($("#salesTotalAmount").text()),
@@ -276,17 +513,16 @@
 
 
 
-
-
             axios
-                .put(`/sales/${data.sales_id}/edit/`, data)
+                .post(`/sales/create`, data)
                 .then((response) => {
                     const data = response.data.data;
                     const status = response.data.status;
                     if (status == true) {
+                        $(".submitbtn").text('Submit');
                         Toastr.fire({
                             icon: "success",
-                            title: "Successfully updated Sales",
+                            title: "Successfully created Sales",
                         });
 
                         setTimeout(() => {
@@ -297,6 +533,8 @@
                             icon: "error",
                             title: "Something went wrong, Please try again.!",
                         });
+                        $(".submitbtn").text('Submit');
+                        $(".submitbtn").attr('disabled', false);
                     }
                 });
         };
@@ -304,69 +542,148 @@
 
 
 
-        const getProductAttributesByBarcode = () => {
 
-            $("#barcode").on('keyup', function(event) {
-                if (event.code == "Enter" || event.code == "NumpadEnter") {
-                    axios
-                        .get(
-                            `/product/fetch-attribute?barcode=${event.target.value}`
-                        )
-                        .then((response) => {
-                            const data = response.data.data;
-                            setProductDetails(data);
-                        });
+
+        // Function to populate product details
+        const setProductDetails = (item) => {
+
+            const tbody = $("#insertProductItemForSales");
+            const tfoot = $("#insertProductItemForSales").next();
+            const hasNoRecord = tbody.find("tr#no_record");
+            const id = `row-${item.id}`;
+            if (hasNoRecord) {
+                hasNoRecord.addClass('hidden');
+            }
+            const rowWithId = tbody.find('#' + id) ? tbody.find('#' + id) :
+                false;
+
+
+
+            if (rowWithId.length == 0) {
+
+
+                var rowHTML = `
+            <tr id="${id}" class="slsord_line">
+                <td class="col-3">
+                    <input type="hidden" name="product_details[${item.id}][product_id]" value="${item.product.id}">
+                    <input type="hidden" name="product_details[${item.id}][product_attribute_id]" value="${item.id}">
+                    <small class="text-xs font-semibold">${item.product?.name ? item.product.name : ''}</small><br/>
+                    <small class="text-xs font-semibold">${item.code ? item.code : ''} ${item.model ? ' / ' + item.model : ''} ${item.size ? ' / ' + item.size : ''} ${item.color ? ' / ' + item.color : ''}</small><br/>
+                </td>
+                <td>
+                    <input type="number" name="product_details[${item.id}][qty]" value="1" class="input_qty bg-focus form-control text-right" required="required">
+                </td>
+                <td>
+                    <input type="number" name="product_details[${item.id}][sales_rate]" value="${item.sales_rate? item.sales_rate : 0}" class="bg-focus form-control text-right input_sales_rate" required="required">
+                </td>
+                <td>
+                    <input type="number" name="product_details[${item.id}][discount]" value="0" class="input_discount bg-focus form-control text-right">
+                    </td>
+                    <td class="col-1 text-end total">
+                        ${item.sales_rate? item.sales_rate : 0}
+                    </td>
+                    <td class="remove-sales-order col-1">
+                        <input type="hidden" name="product_details[${item.id}][total]" value="${item.sales_rate? item.sales_rate : 0}" class="bg-focus form-control text-right input_total">
+                    <span id="cancel" class="text-danger cursor-pointer d-block text-right" href="">
+                        <i class="fa fa-trash fs-5 " aria-hidden="true"></i>
+                    </span>
+                </td>
+            </tr>`;
+                tbody.append(rowHTML);
+
+                // Calculate total amount
+                console.clear();
+                var total_amount = 0
+                tbody.find('tr').each(function() {
+                    // find td has total class
+                    const total = parseFloat($(this).find('td.total').text().trim());
+                    if (!isNaN(total)) {
+                        total_amount += total;
+                    }
+                });
+
+
+
+                const table_Foot = `
+                <tr class="footer">
+                        <td colspan="4" class="bg-success text-end">Total</td>
+                        <td class="bg-success text-center" id="salesTotalAmount">${total_amount}</td>
+                        <td class="bg-success text-center" id="salesTotalQty"></td>
+                    </tr>
+                `;
+
+                $("#set_total_amount").val(total_amount);
+
+                // if has already then delete
+                tbody.find('tr.footer').remove();
+                tbody.find('tr').last().after(table_Foot);
+
+
+            } else {
+
+                const qtyInput = rowWithId.find('td').eq(1).find('.input_qty');
+                // input_total
+                const input_total = rowWithId.find('.input_total');
+                let salesRate = parseFloat(rowWithId.find('.input_sales_rate').val());
+                let currentQty = parseInt(qtyInput.val()) + 1;
+                qtyInput.val(currentQty);
+                rowWithId.find('td').eq(4).html(currentQty * salesRate);
+                input_total.val(currentQty * salesRate);
+
+            }
+
+
+
+
+
+
+
+            $(".remove-sales-order").click(function() {
+                $(this).closest('tr').remove();
+                if ($("#insertProductItemForSales").find('tr').length == 1) {
+                    $("#insertProductItemForSales").find("tr#no_record").removeClass('hidden');
                 }
             });
 
+            $('.input_sales_rate, .input_qty, .input_discount').on('blur', updateTotalAmount);
+
+            handleTotalGrandAmount();
+
+
         };
 
-        // Function to populate product details
-        const setProductDetails = (productAttributes) => {
-            if (productAttributes.length > 0) {
-                $("#product_name").text(productAttributes[0].product.name);
-            }
-            const tbody = $("#productAttributes");
-            tbody.empty();
-            if (productAttributes.length > 0) {
-                productAttributes.forEach((item) => {
-                    const row = $("<tr>");
-                    row.html(`
-                <td>
-                    <small class="text-xs font-semibold">${item.code || ""}</small><br/>
-                    <small class="text-xs font-semibold">${item.color || ""}</small><br/>
-                    <small class="text-xs font-semibold">${item.model || ""}</small><br/>
-                    <small class="text-xs font-semibold">${item.size || ""}</small>
-                </td>
-                <td>${item.sales_rate}</td>
-                <td>${item.current_stock}</td>
-                <td>
-                    ${
-                        parseInt(item.current_stock) > 0
-                            ? `<button type="button" class="btn btn-sm btn-success"
-                                            onclick="addToProductCustomization(${item.id})"> Add <i class="fa fa-plus"></i> </button>`
-                            : "No Stock Available"
-                    }
-                </td>
-            `);
+        function updateTotalAmount() {
+            const rowWithId = $(this).closest('tr');
+            const salesRate = parseFloat(rowWithId.find('.input_sales_rate').val());
+            const currentQty = parseInt(rowWithId.find('.input_qty').val());
+            const discount = parseFloat(rowWithId.find('.input_discount').val()) ||
+                0; // Default to 0 if no discount
+            const totalAmount = currentQty * (salesRate - discount); // Apply discount if any
+            rowWithId.find('td').eq(4).html(totalAmount.toFixed(2));
+            //  total amount calculation
+            const tbody = $("#insertProductItemForSales");
+            var total_amount = 0
+            tbody.find('tr').each(function() {
+                // find td has total class
+                const total = parseFloat($(this).find('td.total').text().trim());
+                if (!isNaN(total)) {
+                    total_amount += total;
+                }
+            });
+            tbody.find('tr.footer').find('td').eq(1).text(total_amount.toFixed(2));
+            $("#set_total_amount").val(total_amount.toFixed(2));
 
-                    tbody.append(row);
-                });
-            } else {
-                const notFoundRow = $("<tr>").html(`
-            <td colspan="4" class="text-center text-danger font-semibold">
-                Not Found
-            </td>
-        `);
-                tbody.append(notFoundRow);
-            }
-        };
+            const input_total = rowWithId.find('.input_total');
+            input_total.val(totalAmount);
+
+            handleTotalGrandAmount();
+        }
 
 
         // Function to handle adding to product customization
         function addToProductCustomization(productAttrID) {
 
-            const hasCusomizationData = setCusomizationData.find(item => item.product_id === productAttrID);
+            const hasCusomizationData = setCusomizationData.find(item => item.id === productAttrID);
 
             if (hasCusomizationData) {
                 hasCusomizationData.qty += 1;
@@ -379,7 +696,7 @@
                     p_code: productAttr.code,
                     product_attribute_id: productAttr.id,
                     p_name: productAttr.product.name,
-                    product_id: productAttr.id,
+                    product_id: productAttr.product.id,
                     p_color: productAttr.color,
                     p_model: productAttr.model,
                     p_size: productAttr.size,
@@ -396,138 +713,11 @@
             handleCusomizeData(setCusomizationData);
         }
 
-        // Populate the product details when the page loads
-
-
-        const fetchData = () => {
-            const id = window.getId();
-            axios.get(`/sales/fetch/${id}`).then((response) => {
-                const data = response.data.data;
-                SALESDATA.push(data);
-                fetchCustomers(data.sales.customer_id);
-                $("#invoice_date").val(data.sales.invoice_date);
-                if (data.salesDetails.length > 0) {
-                    data.salesDetails.map((item) => {
-                        console.log(item);
-                        const SET_VALUE = {
-                            id: item.id,
-                            p_code: item.product_attribute.code,
-                            product_attribute_id: item.product_attribute.id,
-                            p_name: item.product.name,
-                            product_id: item.product.id,
-                            p_color: item.product_attribute.color,
-                            p_model: item.product_attribute.model,
-                            p_size: item.product_attribute.size,
-                            p_model: item.product_attribute.model,
-                            purchase_rate: item.product_attribute.last_purchase,
-                            sales_rate: item.sales_rate,
-                            qty: item.qty,
-                            discount: item.discount,
-                            total: item.total,
-                        };
-
-                        setCusomizationData.push(SET_VALUE);
-                        handleCusomizeData(setCusomizationData);
-                    });
-                }
-
-            });
-        };
-
-
-        const handleCusomizeData = (setCusomizationData) => {
-            const tbody = $("#productCustomization");
-            var salesTotalQty = 0;
-            var salesTotalAmount = 0;
-            tbody.empty();
-            if (setCusomizationData.length > 0) {
-                setCusomizationData.forEach((item) => {
-                    salesTotalQty += parseInt(item.qty);
-                    salesTotalAmount += parseInt(item.total);
-                    const row = $(`<tr data-product_id='${item.product_id}'>`);
-                    row.html(`
-                    <td><button type="button" class="btn btn-sm btn-danger" onclick="removeToProductCustomization(${item.id})"><i class="fa fa-minus"></i></button></td>
-                <td>
-                    <small class="text-xs font-semibold">${item.p_code || ""} -</small>
-                    <small class="text-xs font-semibold">${item.p_name || ""}</small><br/>
-                    <small class="text-xs font-semibold">${item.p_color || ""} -</small>
-                    <small class="text-xs font-semibold">${item.p_model || ""} -</small>
-                    <small class="text-xs font-semibold">${item.p_size || ""}</small>
-                </td>
-                <td><input type="number" value="${item.qty}" class="form-control changeSalesQty" /></td>
-                <td><input type="number" value="${item.sales_rate}" class="form-control changeSalesRate" /></td>
-                <td><input type="number" value="${item.discount}" class="form-control changeSalesDiscount" /></td>
-                <td>
-                    ${item.total}
-                </td>
-            `);
-
-                    tbody.append(row);
-                });
-            } else {
-                const notFoundRow = $("<tr>").html(`
-            <td colspan="6" class="text-center text-danger font-semibold">
-                Not Found
-            </td>
-        `);
-                tbody.append(notFoundRow);
-            }
-
-            $("#salesTotalQty").text(salesTotalQty);
-            $("#salesTotalAmount").text(salesTotalAmount);
-
-
-            $(".changeSalesQty").on('blur', function(e) {
-                const product_id = parseInt($(this).closest('tr').attr('data-product_id'));
-                const qty = $(this).val();
-
-                if (qty == '') {
-                    return false;
-                }
-                setCusomizationData.forEach(item => {
-                    if (item.product_id === product_id) {
-                        item.qty = qty;
-                        item.total = item.qty * (item.sales_rate - item.discount);
-                    }
-                });
-                handleCusomizeData(setCusomizationData);
-            });
-            $(".changeSalesRate").on('blur', function(e) {
-                const product_id = parseInt($(this).closest('tr').attr('data-product_id'));
-                const sales_rate = $(this).val();
-
-                if (sales_rate == '') {
-                    return false;
-                }
-                setCusomizationData.forEach(item => {
-                    if (item.product_id === product_id) {
-                        item.sales_rate = sales_rate;
-                        item.total = item.qty * (item.sales_rate - item.discount);
-                    }
-                });
-                handleCusomizeData(setCusomizationData);
-            });
-
-            $(".changeSalesDiscount").on('blur', function(e) {
-                const product_id = parseInt($(this).closest('tr').attr('data-product_id'));
-                const discount = $(this).val();
-
-                if (discount == '') {
-                    return false;
-                }
-                setCusomizationData.forEach(item => {
-                    if (item.product_id === product_id) {
-                        item.discount = discount;
-                        item.total = item.qty * (item.sales_rate - item.discount);
-                    }
-                });
-                handleCusomizeData(setCusomizationData);
-            });
 
 
 
 
-        };
+
 
         const removeToProductCustomization = (targetId) => {
             const indexToDelete = setCusomizationData.findIndex(item => item.id === targetId);
@@ -546,12 +736,10 @@
                 const p_id = $(this).val();
                 axios
                     .get(
-                        `/product/fetch-attribute?product_id=${p_id}`
+                        `/product/fetch-attribute?product_attribute_id=${p_id}`
                     )
                     .then((response) => {
                         const data = response.data.data;
-                        setProductAttributeData = [];
-                        setProductAttributeData = data;
                         setProductDetails(data);
                     });
             });
@@ -580,29 +768,43 @@
             });
         };
 
-        const fetchCustomers = (customer_id) => {
+        const fetchCustomers = () => {
             axios.get("/customer/fetch").then((response) => {
                 const data = response.data.data;
+                const GETCustomerID = $('#GET_Customer_ID').val();
+                console.log(GETCustomerID);
                 $("#customer").empty();
-                $("#customer").append('<option value="" disabled>Select a customer</option>');
+                $("#customer").append('<option value="" disabled selected>Select a customer</option>');
                 data.forEach((item) => {
-                    const option = `<option value="${item.id}">${item.name}</option>`;
+                    var option = "";
+
+                    if (GETCustomerID == item.id) {
+                        option = `<option value="${item.id}" selected>${item.name}</option>`;
+                    } else {
+                        option = `<option value="${item.id}">${item.name}</option>`;
+                    }
+
                     $("#customer").append(option);
                 });
-                $("#customer").val(customer_id);
 
             });
 
         };
 
         const fetchProducts = () => {
-            axios.get("/product/fetch").then((response) => {
+            axios.get("/product/fetch?type=new-sales").then((response) => {
                 const data = response.data.data;
                 $("#product").empty();
                 $("#product").append('<option value="">Select a product</option>');
                 data.forEach((item) => {
                     const option =
-                        `<option value="${item.id}">${item.name}</option>`;
+                        `<option value="${item.id || ''}">
+                            ${item.product?.name ? item.product.name : ''}
+                            ${item.code ? ' / ' + item.code : ''}
+                            ${item.model ? ' / ' + item.model : ''}
+                            ${item.size ? ' / ' + item.size : ''}
+                            ${item.color ? ' / ' + item.color : ''}
+                            </option>`;
                     $("#product").append(option);
                 });
             });
