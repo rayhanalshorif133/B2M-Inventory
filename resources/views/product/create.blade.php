@@ -200,8 +200,12 @@
                                         </div>
                                     </form>
                                     <div>
-                                        <p>Uploaded File</p>
-                                        <div class="data-container"></div>
+                                        <div class="text-bold relative">
+                                            <p> Uploaded File</p>
+                                            <div class="underline absolute"
+                                                style="height: 5px;top:24px; width:6rem;backgound:#666666"></div>
+                                        </div>
+                                        <div class="uploaded-file-container"></div>
                                     </div>
                                 </div>
                             </div>
@@ -221,6 +225,7 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script>
+        var jsonData = {};
         $(document).ready(function() {
 
             // Dynamically populate subcategories based on selected category
@@ -315,6 +320,11 @@
             });
 
 
+            $(document).on('click', '#upload-btn', function() {
+                handleUploadFileSubmit(jsonData);
+            });
+
+
             sampleUploadFile();
 
 
@@ -322,8 +332,14 @@
         });
 
 
+        var categories = [];
+
         $(document).on('change', '#importFile', function(e) {
             handleFileUpload(e);
+            axios.get('/category/fetch')
+                .then((response) => {
+                    categories = response.data.data;
+                });
         });
 
 
@@ -345,20 +361,24 @@
                     const worksheet = workbook.Sheets[sheetName];
 
                     // Convert the sheet to JSON
-                    var jsonData = XLSX.utils.sheet_to_json(worksheet);
+                    jsonData = XLSX.utils.sheet_to_json(worksheet);
 
                     jsonData = Array.from(jsonData);
-
-                    const container = document.getElementById('data-container');
-
-                    const itemDiv = document.createElement('div');
-                    jsonData.map(item => {
-                        for (const key in item) {
-                            if (Object.hasOwnProperty.call(item, key)) {
-                                content += `<li><strong>${key}:</strong> ${item[key] || 'N/A'}</li>`;
+                    let content = "";
+                    jsonData.map((item, index) => {
+                        if (index > 0) {
+                            content += '<div class="col-md-4"><ul>';
+                            for (const key in item) {
+                                if (Object.hasOwnProperty.call(item, key)) {
+                                    content += `<li><strong>${key}:</strong> ${item[key] || 'N/A'}</li>`;
+                                }
                             }
+                            content += '</ul></div>';
                         }
                     });
+
+                    $(".uploaded-file-container").html(`<div class="row">${content}</div>`);
+
 
 
                     Toastr.fire({
@@ -498,6 +518,76 @@
 
 
 
+        };
+
+
+        const handleUploadFileSubmit = (jsonData) => {
+
+            var data = [];
+
+            console.clear();
+
+            jsonData.slice(1).map((item, index) => {
+
+
+
+
+
+
+                const findCategory = categories.find(
+                    (category) => category.name === item.Category
+                );
+
+
+
+
+                // Extract the category name or fallback to a default value
+                const category_id = findCategory ? findCategory.id : "none";
+                const findSubCategory = findCategory.subCategories.find(
+                    (subCategory) => subCategory.name === item["Subcategories"]
+                );
+                const subcategories_id = findSubCategory ?
+                    findSubCategory.id :
+                    "none";
+
+
+                data.push({
+                    category: item.Category,
+                    category_id: category_id,
+                    subcategories: item.Subcategories,
+                    sub_category_id: subcategories_id,
+                    productName: item["Product Name"],
+                    productCode: item["Product Code (optional)"],
+                    productColor: item["Product Color (optional)"],
+                    productModel: item["Product Model (optional)"],
+                    currentStock: item["Current Stock (optional)"],
+                    productSize: item["Product Size (optional)"],
+                    salesRate: item["Sales Rate (optional)"],
+                    unitCost: item["Unit Cost (optional)"],
+                    lastPurchase: item["Last Purchase (optional)"],
+                });
+            });
+            sendCreateDataToBackend("/product/create?type=xlsx",{data: data});
+        };
+
+
+
+
+        const sendCreateDataToBackend = (url, data) => {
+            axios.post(url, data).then(function (response) {
+                const data = response.data.data;
+                const message = response.data.message;
+                Toastr.fire({
+                    icon: message,
+                    title: data,
+                });
+
+                if (message == "success") {
+                    setTimeout(() => {
+                        window.location.href = "/product/list";
+                    }, 1600);
+                }
+            });
         };
     </script>
 @endpush

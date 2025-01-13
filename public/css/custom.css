@@ -121,6 +121,15 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 
+.relative {
+    position: relative;
+}
+
+
+.absolute {
+    position: absolute;
+}
+
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
 
