@@ -530,12 +530,8 @@
             jsonData.slice(1).map((item, index) => {
 
 
-
-
-
-
                 const findCategory = categories.find(
-                    (category) => category.name === item.Category
+                    (category) => category.name == item.Category
                 );
 
 
@@ -543,12 +539,8 @@
 
                 // Extract the category name or fallback to a default value
                 const category_id = findCategory ? findCategory.id : "none";
-                const findSubCategory = findCategory.subCategories.find(
-                    (subCategory) => subCategory.name === item["Subcategories"]
-                );
-                const subcategories_id = findSubCategory ?
-                    findSubCategory.id :
-                    "none";
+                const findSubCategory = findCategory.subCategories.find((subCategory) => subCategory.name == item.Subcategories);
+                const subcategories_id = findSubCategory ? findSubCategory.id : "none";
 
 
                 data.push({
