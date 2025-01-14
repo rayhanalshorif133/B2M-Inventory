@@ -17,7 +17,7 @@
         <div class="row">
             @foreach ($products as $index => $item)
                 @for ($i = 0; $i < $item['count']; $i++)
-                    <div class="col-md-2">
+                    <div class="col-md-2 col-sm-2 col-2">
                         <svg id="barcode-{{ $index }}"></svg>
                         <script>
                             document.addEventListener('DOMContentLoaded', function() {
@@ -26,7 +26,7 @@
                                     displayValue: true,
                                     fontSize: 12,
                                     width: 1, // Adjust the line width for the barcode
-                                    height: 25 // Adjust the height of the barcode
+                                    height: 20 // Adjust the height of the barcode
                                 });
                             });
                         </script>
