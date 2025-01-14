@@ -88,9 +88,11 @@ Route::middleware('auth')->controller(ProductController::class)
         Route::get('/list', 'list')->name('list');
         Route::match(['get', 'post'], '/create', 'create')->name('create');
         Route::get('/fetch/{id?}', 'fetch')->name('fetch');
+        Route::get('/fetch-by-code', 'fetchByCode')->name('fetch-by-code');
         Route::get('/show-product-details/{id?}', 'showProductDetails')->name('show.product.details');
         Route::get('/fetch-attribute', 'fetchAttribute')->name('fetch-attribute');
         Route::get('/check-duplicate-code/{code}', 'checkDuplicateCode')->name('check-duplicate-code');
+        Route::get('/barcode', 'barCode')->name('barcode');
         // update
         Route::put('/update/{id}', 'update')->name('update');
         Route::get('/getProductCode', 'getProductCode')->name('getProductCode');

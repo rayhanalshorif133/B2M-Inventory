@@ -31,6 +31,7 @@
                     <div class="card-header d-flex justify-content-between">
                         <h3 class="card-title">Product List</h3>
                         <div class="ml-auto">
+                            <a href="{{ route('product.barcode') }}" class="btn btn-sm btn-navy mx-2">Barcode <i class="fa-solid fa-barcode"></i></a>
                             <a href="{{ route('product.create') }}" class="btn btn-sm btn-success">Create New Product</a>
                             <button class="btn btn-sm btn-success mx-2" id="exportToExcel">
                                 Export to Excel

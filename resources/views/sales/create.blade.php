@@ -82,8 +82,6 @@
             font-size: 14px !important;
         }
     </style>
-
-
 @endsection
 
 
@@ -132,7 +130,8 @@
                                 'customers' => $customers,
                             ])
                             <div class="card-body bg-white">
-                                <form class="form-horizontal salesCreateForm" action="{{ route('sales.create') }}" method="POST">
+                                <form class="form-horizontal salesCreateForm" action="{{ route('sales.create') }}"
+                                    method="POST">
                                     @csrf
                                     @method('POST')
                                     <!-- Customer Name-->
@@ -166,28 +165,43 @@
 
 
                                     <!-- Voucher Number-->
-                                    <div class="row mb-3">
-                                        <label class="col-sm-2 control-label-required text-end">Sales Order #</label>
-                                        <div class="col-sm-3">
-                                            <label class="control-label align-middle">
-                                                {{ $sales_code }}
-                                                <input autocomplete="off" type="hidden" value="{{ $sales_code }}"
-                                                    name="sales_order[voucher_number]">
-                                            </label>
+                                    <div class="row">
+                                        <div class="col-md-6 col-12">
+                                            <div class="row mb-3">
+                                                <label class="col-sm-2 control-label-required text-end">Sales Order
+                                                    #</label>
+                                                <div class="col-sm-3">
+                                                    <label class="control-label align-middle">
+                                                        {{ $sales_code }}
+                                                        <input autocomplete="off" type="hidden" value="{{ $sales_code }}"
+                                                            name="sales_order[voucher_number]">
+                                                    </label>
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="row mt-3">
+                                                <label class="col-sm-2 control-label-required text-end text-capitalize"
+                                                    for="customer-name">Product
+                                                    Name</label>
+                                                <div class="col-sm-10 mb-3">
+                                                    <div class="form-group">
+                                                        <select class="form-control select2" id="product"
+                                                            style="width: 100%;">
+                                                            <option value="">Select Product</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-
-
-
-                                    <div class="row mt-3">
-                                        <label class="col-sm-2 control-label-required text-end text-capitalize"
-                                            for="customer-name">Product
-                                            Name</label>
-                                        <div class="col-sm-10 mb-3">
-                                            <div class="form-group">
-                                                <select class="form-control select2" id="product" style="width: 100%;">
-                                                    <option value="">Select Product</option>
-                                                </select>
+                                        <div class="col-md-6 col-12">
+                                            <label class="col-sm-2 control-label-required text-start text-capitalize"
+                                                for="customer-name">Barcode</label>
+                                            <div class="col-sm-10 mb-3">
+                                                <div class="form-group">
+                                                    <input autocomplete="off" class="form-control" type="text" id="barcode" placeholder="Enter or scan barcode">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -316,6 +330,7 @@
             handleCreateNewCustomer();
             handleProductChange();
             handlePaidAmount();
+            handleBarcodeScan();
 
             $(".salesCreateSubmitBtn").click(function() {
                 $(this).text('Processing ...').prop('disabled', true);
@@ -324,6 +339,24 @@
             });
 
         });
+
+
+        const handleBarcodeScan = () => {
+            $("#barcode").keyup(function(e){
+                if(e.code == 'Enter'){
+                    const barcode = $(this).val();
+                    axios.get(`/product/fetch-by-code/?barcode=${barcode}`)
+                        .then(function(response){
+                            const data = response.data.data;
+                            setProductDetails(data);
+                            setTimeout(() => {
+                                $("#barcode").val('');
+                                $("#barcode").click();
+                            }, 500);
+                        });
+                }
+            });
+        };
 
 
         const handleTotalGrandAmount = () => {
@@ -467,6 +500,7 @@
         // Function to populate product details
         const setProductDetails = (item) => {
 
+
             const tbody = $("#insertProductItemForSales");
             const tfoot = $("#insertProductItemForSales").next();
             const hasNoRecord = tbody.find("tr#no_record");
@@ -485,7 +519,7 @@
                 var rowHTML = `
             <tr id="${id}" class="slsord_line">
                 <td class="col-3">
-                    <input type="hidden" name="product_details[${item.id}][product_id]" value="${item.product.id}">
+                    <input type="hidden" name="product_details[${item.id}][product_id]" value="${item.product_id}">
                     <input type="hidden" name="product_details[${item.id}][product_attribute_id]" value="${item.id}">
                     <small class="text-xs font-semibold">${item.product?.name ? item.product.name : ''}</small><br/>
                     <small class="text-xs font-semibold">${item.code ? item.code : ''} ${item.model ? ' / ' + item.model : ''} ${item.size ? ' / ' + item.size : ''} ${item.color ? ' / ' + item.color : ''}</small><br/>
@@ -721,6 +755,4 @@
             });
         };
     </script>
-
-
 @endpush

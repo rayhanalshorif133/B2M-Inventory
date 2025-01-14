@@ -54,6 +54,20 @@ class ProductController extends Controller
         return $this->respondWithSuccess('Successfully fetched product data', $products);
     }
 
+    public function fetchByCode(Request $request)
+    {
+        if ($request->barcode) {
+            $products = ProductAttribute::select()
+                ->where('company_id', Auth::user()->company_id)
+                ->where('code', 'LIKE', '%' . $request->barcode . '%')
+                ->with('product')
+                ->first();
+            return $this->respondWithSuccess('Successfully fetched product data', $products);
+        } else {
+            return $this->respondWithError('Error fetching product data');
+        }
+    }
+
     public function fetchAttribute(Request $request)
     {
         if ($request->product_attribute_id) {
@@ -94,7 +108,7 @@ class ProductController extends Controller
             $categories = Category::where('company_id', Auth::user()->company_id)
                 ->where('status', 1)
                 ->where('parent_category_id', null)
-            ->get();
+                ->get();
             return view('product.create', compact('categories'));
         }
 
@@ -177,7 +191,6 @@ class ProductController extends Controller
             }
 
             return redirect()->route('product.list');
-
         } catch (\Throwable $th) {
             return $this->respondWithError('error', 'Something went wrong');
         }
@@ -254,10 +267,17 @@ class ProductController extends Controller
         }
     }
 
+
+    public function barCode(Request $request)
+    {
+        $productAttribute = ProductAttribute::select()->get();
+        return view('product.barcode', compact('productAttribute'));
+    }
+
     // getProductCode
     public function getProductCode()
     {
-        $code = '#P_' . random_int(000000, 999999);
+        $code = 'P_' . random_int(000000, 999999);
         $product = ProductAttribute::where('company_id', Auth::user()->company_id)->where('code', $code)->first();
 
         if ($product) {
