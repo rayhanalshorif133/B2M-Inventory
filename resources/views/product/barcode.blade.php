@@ -32,33 +32,11 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <h3 class="card-title">Product's Barcode List</h3>
-                        <div class="ml-auto">
-                            <button class="btn btn-sm btn-success mx-2" id="selectAllProduct">
-                                Select All
-                            </button>
 
-                            <button class="btn btn-sm btn-navy mx-2" id="printBarcodeBtn">
-                                Print Barcode <i class="fa-solid fa-barcode"></i>
-                            </button>
-                        </div>
                     </div>
 
                     <div class="card-body">
-                        {{-- <div class="table-responsive" style="width: 100%">
-                            <table class="table table-bordered display table-hover nowrap" id="productBarcode"
-                                style="width: 100%">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Product's Details</th>
-                                        <th>Barcode</th>
-                                        <th>Print Count</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div> --}}
+
                         <div class="row">
                             <div class="col-12 col-md-6">
                                 <div class="form-group">
