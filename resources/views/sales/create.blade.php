@@ -500,7 +500,6 @@
         // Function to populate product details
         const setProductDetails = (item) => {
 
-
             const tbody = $("#insertProductItemForSales");
             const tfoot = $("#insertProductItemForSales").next();
             const hasNoRecord = tbody.find("tr#no_record");
@@ -511,11 +510,7 @@
             const rowWithId = tbody.find('#' + id) ? tbody.find('#' + id) :
                 false;
 
-
-
             if (rowWithId.length == 0) {
-
-
                 var rowHTML = `
             <tr id="${id}" class="slsord_line">
                 <td class="col-3">

@@ -1,14 +1,13 @@
 @php
-    if(Auth::check()){
+    if (Auth::check()) {
         $user = \App\Models\User::select()
-        ->where('company_id', Auth::user()->company_id)
-        ->where('id', Auth::user()->id)
-        ->with('company', 'roles')
-        ->first();
-    }else{
+            ->where('company_id', Auth::user()->company_id)
+            ->where('id', Auth::user()->id)
+            ->with('company', 'roles')
+            ->first();
+    } else {
         return redirect()->route('logout');
     }
-
 
     $currentRouteName = Route::currentRouteName();
 @endphp
@@ -16,7 +15,8 @@
     @if (strlen($user->company->name) > 20)
         <a href="/home" class="brand-link underline-none d-flex flex-column justify-content-center" style="">
             <img src="{{ asset($user->company->logo) }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" />
-            <span class="brand-text font-weight-light mx-auto text-center" style="font-size: 14px">{{ $user->company->name }}</span>
+            <span class="brand-text font-weight-light mx-auto text-center"
+                style="font-size: 14px">{{ $user->company->name }}</span>
         </a>
     @else
         <a href="/home" class="brand-link underline-none">
@@ -271,12 +271,14 @@
                         $currentRouteName == 'category.create' ||
                         $currentRouteName == 'category.list' ||
                         $currentRouteName == 'product.create' ||
+                        $currentRouteName == 'product.barcode' ||
                         $currentRouteName == 'product.list') menu-is-opening menu-open @endif">
                     <a href="#" class="nav-link @if (
                         $currentRouteName == 'report.current-stock' ||
                             $currentRouteName == 'category.create' ||
                             $currentRouteName == 'category.list' ||
                             $currentRouteName == 'product.create' ||
+                            $currentRouteName == 'product.barcode' ||
                             $currentRouteName == 'product.list') active menu-open @endif">
                         <i class="fa-solid text-cyan fa-clipboard-list nav-icon" style="font-size: 1.3rem"></i>
                         <p>
@@ -318,6 +320,13 @@
                                 class="nav-link @if ($currentRouteName == 'product.list') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Product List</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('product.barcode') }}"
+                                class="nav-link @if ($currentRouteName == 'product.barcode') active @endif">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Product Barcode</p>
                             </a>
                         </li>
                     </ul>

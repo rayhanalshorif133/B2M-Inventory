@@ -92,7 +92,7 @@ Route::middleware('auth')->controller(ProductController::class)
         Route::get('/show-product-details/{id?}', 'showProductDetails')->name('show.product.details');
         Route::get('/fetch-attribute', 'fetchAttribute')->name('fetch-attribute');
         Route::get('/check-duplicate-code/{code}', 'checkDuplicateCode')->name('check-duplicate-code');
-        Route::get('/barcode', 'barCode')->name('barcode');
+        Route::match(['get', 'post'], '/barcode', 'barcode')->name('barcode');
         // update
         Route::put('/update/{id}', 'update')->name('update');
         Route::get('/getProductCode', 'getProductCode')->name('getProductCode');

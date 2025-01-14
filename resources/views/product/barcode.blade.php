@@ -1,52 +1,139 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Product's Barcode</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Barcode Generator Library -->
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode/dist/JsBarcode.all.min.js"></script>
-</head>
-<body>
-    <div class="container my-5">
-        <h1 class="text-center mb-4">Product Barcodes</h1>
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Barcode</th>
-                        <th scope="col">Scan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($productAttribute as $index => $item)
-                        <tr>
-                            <th scope="row">{{ $index + 1 }}</th>
-                            <td>{{ $item->code }}</td>
-                            <td>
-                                <svg id="barcode-{{ $index }}"></svg>
-                                <script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-                                        JsBarcode("#barcode-{{ $index }}", "{{ $item->code }}", {
-                                            format: "CODE128",
-                                            displayValue: true,
-                                            fontSize: 14
-                                        });
-                                    });
-                                </script>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+@extends('layouts.app', ['title' => 'Product Barcode'])
 
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+
+@section('head')
+
+@endsection
+
+
+@section('content')
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Product Barcode</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('home') }}" class="text-capitalize">home</a>
+                                <span class="text-gray"> / </span>
+                                <span class="text-gray">Product Barcode</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <h3 class="card-title">Product's Barcode List</h3>
+                        <div class="ml-auto">
+                            <button class="btn btn-sm btn-success mx-2" id="selectAllProduct">
+                                Select All
+                            </button>
+
+                            <button class="btn btn-sm btn-navy mx-2" id="printBarcodeBtn">
+                                Print Barcode <i class="fa-solid fa-barcode"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        {{-- <div class="table-responsive" style="width: 100%">
+                            <table class="table table-bordered display table-hover nowrap" id="productBarcode"
+                                style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Product's Details</th>
+                                        <th>Barcode</th>
+                                        <th>Print Count</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div> --}}
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label for="productSelect">Select Product</label>
+                                    <select id="productSelect" class="product-select custom-select" style="width: 100%;">
+                                        @foreach ($productAttribute as $item)
+                                            <option data-name="{{ $item->product->name }}" data-code="{{ $item->code }}"
+                                                value="{{ $item->id }}">{{ $item->product->name }} - {{ $item->code }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="card p-3">
+                                    <form class="selectedProductContainer" action="{{ route('product.barcode') }}" method="POST">
+                                        @csrf
+                                        @method('POST')
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Product Name</th>
+                                                    <th>Product Code</th>
+                                                    <th>Quantity</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="insertSelectedProduct"></tbody>
+                                        </table>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                            <div class="col-12 col-md-6"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+    </div>
+@endsection
+
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#productSelect').select2({
+                placeholder: "Choose a product", // Placeholder text
+                allowClear: true // Adds a clear button
+            });
+
+            $('#productSelect').on('change', function() {
+                const selectedOption = $(this).find(':selected'); // Get the selected option
+                const productId = selectedOption.val(); // Get value attribute
+                const productName = selectedOption.data('name'); // Get data-name attribute
+                const productCode = selectedOption.data('code'); // Get data-code attribute
+                const html = `
+                    <tr>
+                        <td>${productName}</td>
+                        <td>${productCode}</td>
+                        <td>
+                            <input type="text" class="form-control mx-2 d-none" name="selectedProducts[${productId}][id]" value="${productId}">
+                            <input type="text" class="form-control mx-2 d-none" name="selectedProducts[${productId}][code]"
+                            value="${productCode}">
+                            <input type="number" class="form-control mx-2 px-2" name="selectedProducts[${productId}][count]" value="1">
+                        </td>
+                    </tr>
+                `;
+
+                // Append the row to an existing table body
+                $(".insertSelectedProduct").append(html);
+            });
+        });
+    </script>
+@endpush

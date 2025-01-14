@@ -165,7 +165,7 @@ class ProductController extends Controller
 
 
 
-            $productCode = $this->getProductCode();
+
 
 
 
@@ -175,7 +175,7 @@ class ProductController extends Controller
 
             foreach ($productDetailsInfos as $item) {
 
-
+                $productCode = $this->getProductCode();
                 $ProductAttribute = new ProductAttribute();
                 $ProductAttribute->product_id = $product->id;
                 $ProductAttribute->company_id = Auth::user()->company_id;
@@ -270,8 +270,19 @@ class ProductController extends Controller
 
     public function barCode(Request $request)
     {
-        $productAttribute = ProductAttribute::select()->get();
-        return view('product.barcode', compact('productAttribute'));
+        if ($request->method() == 'GET') {
+
+            $company_id = $request->session()->get('company_id');
+            $productAttribute = ProductAttribute::select()->where('company_id', $company_id)
+                ->with('product')->get();
+
+            return view('product.barcode', compact('productAttribute'));
+        } else {
+
+            $products = $request->selectedProducts;
+            return view('product.barcode-print', compact('products'));
+
+        }
     }
 
     // getProductCode
