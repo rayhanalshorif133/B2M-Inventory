@@ -139,7 +139,7 @@
                                 'suppliers' => $suppliers,
                             ])
                             <div class="card-body bg-white">
-                                <form class="form-horizontal salesCreateForm" action="{{ route('sales.create') }}"
+                                <form class="form-horizontal salesCreateForm" action="{{ route('purchase.create') }}"
                                     method="POST">
                                     @csrf
                                     @method('POST')
@@ -249,9 +249,9 @@
                                     <div class="row m-2">
                                         <div class="col-md-7">
                                             <div class="mb-3">
-                                                <label class="form-label font-size-14px">Customer Notes</label>
-                                                <textarea rows="4" class="bg-focus form-control" name="purchase_order[customer_note]"
-                                                    id="purchase_order_customer_notes"></textarea>
+                                                <label class="form-label font-size-14px">Supplier Notes</label>
+                                                <textarea rows="4" class="bg-focus form-control" name="purchase_order[supplier_note]"
+                                                    id="purchase_order_supplier_notes"></textarea>
                                             </div>
                                         </div>
 

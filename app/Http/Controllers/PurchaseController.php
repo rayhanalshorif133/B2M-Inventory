@@ -43,6 +43,9 @@ class PurchaseController extends Controller
             ->with('supplier')
             ->orderBy('created_at', 'desc')
             ->first();
+        $purchase->payment = PurchasePayment::select()->where('company_id', Auth::user()->company_id)
+            ->where('purchases_id', $id)
+            ->first();
         $purchaseDetails = PurchaseDetails::select()
             ->where('purchases_id', $id)
             ->with('product', 'productAttribute')
@@ -69,9 +72,6 @@ class PurchaseController extends Controller
 
 
             $product_details = $request->product_details;
-
-
-
             $company_id = $request->session()->get('company_id');
             $purchase_order = $request->purchase_order;
 
@@ -137,7 +137,7 @@ class PurchaseController extends Controller
                 $productAttribute->unit_cost = ((intval($productAttribute->current_stock) * floatval($productAttribute->last_purchase)) +
                     (floatval($item['last_purchase']) * intval($item['qty']))) / (intval($productAttribute->current_stock) + intval($item['qty']));
                 $productAttribute->save();
-                // Sent Product Log ->>>>>>>>
+                // Sent Product Log ->
                 productLogSend($productAttribute->id, 1, $item['qty'], $purchaseDetails->id);
             }
 
@@ -248,7 +248,17 @@ class PurchaseController extends Controller
             }
         }
 
-        return view('purchase.edit');
+
+        $purchase = Purchase::find($id);
+        $purchasePayments = PurchasePayment::select()->where('purchases_id', $id)->first();
+        $purchaseDetails = PurchaseDetails::select()->where('purchases_id', $id)
+            ->with('product', 'productAttribute')
+            ->get();
+        $company_id = $request->session()->get('company_id');
+        $suppliers = Supplier::select()->where('company_id', $company_id)->get();
+        $transactionTypes = TransactionType::select()->where('company_id', $company_id)->get();
+        $purchase_code = $purchase->code;
+        return view('purchase.edit', compact('purchase', 'suppliers', 'purchaseDetails', 'purchasePayments', 'transactionTypes', 'purchase_code'));
     }
 
 
