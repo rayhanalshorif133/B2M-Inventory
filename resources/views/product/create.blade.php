@@ -49,7 +49,10 @@
                                         <div class="row">
                                             <div class="col-12 col-md-4">
                                                 <div class="form-group">
-                                                    <label for="selectCategory" class="required">Select a Category</label>
+                                                    <label for="selectCategory" class="required">
+                                                        Select a Category
+                                                    </label>
+
                                                     <select class="custom-select" id="selectCategory" name="category_id">
                                                         <option value="" selected disabled>Choose a Category</option>
                                                         @foreach ($categories as $category)
@@ -539,7 +542,8 @@
 
                 // Extract the category name or fallback to a default value
                 const category_id = findCategory ? findCategory.id : "none";
-                const findSubCategory = findCategory.subCategories.find((subCategory) => subCategory.name == item.Subcategories);
+                const findSubCategory = findCategory.subCategories.find((subCategory) => subCategory.name ==
+                    item.Subcategories);
                 const subcategories_id = findSubCategory ? findSubCategory.id : "none";
 
 
@@ -559,14 +563,16 @@
                     lastPurchase: item["Last Purchase (optional)"],
                 });
             });
-            sendCreateDataToBackend("/product/create?type=xlsx",{data: data});
+            sendCreateDataToBackend("/product/create?type=xlsx", {
+                data: data
+            });
         };
 
 
 
 
         const sendCreateDataToBackend = (url, data) => {
-            axios.post(url, data).then(function (response) {
+            axios.post(url, data).then(function(response) {
                 const data = response.data.data;
                 const message = response.data.message;
                 Toastr.fire({

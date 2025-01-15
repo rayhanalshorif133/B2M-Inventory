@@ -116,19 +116,7 @@ class SalesController extends Controller
 
 
             /* <- Sales Payment log send ->*/
-            $curl = curl_init();
-            $url = url('/api/log/transection?transaction_type_id=' . $salesPayment->transaction_type_id
-                . '&type=3&amount=' . $salesPayment->amount . '&ref_id=' . $salesPayment->id);
-            // Set cURL options
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true); // Return the response as a string instead of outputting it
-            curl_setopt($curl, CURLOPT_TIMEOUT, 3); // Set a timeout for the request (in seconds)
-            curl_exec($curl);
-            curl_close($curl);
-
-
-
-
+            paymentLogSend($salesPayment->transaction_type_id, 3, $salesPayment->amount, $salesPayment->id);
 
             foreach ($product_details as $item) {
                 $productAttribute  = ProductAttribute::select()->where('id', $item['product_attribute_id'])->first();
@@ -154,25 +142,15 @@ class SalesController extends Controller
 
 
                 $productAttribute->save();
-
-
-
-
                 /* <- Product log send ->*/
-                $curl = curl_init();
-                $url = url('/api/log/product?product_attribute_id=' . $productAttribute->id
-                    . '&type=3&qty=' . $item['qty'] . '&ref_id=' . $salesDetails->id);
-                curl_setopt($curl, CURLOPT_URL, $url);
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($curl, CURLOPT_TIMEOUT, 3);
-                curl_exec($curl);
-                curl_close($curl);
+                productLogSend($productAttribute->id, 3, $item['qty'], $salesDetails->id);
             }
 
             DB::commit();
-            return redirect('/sales/invoice/', $sales->id);
+            return redirect()->route('type.invoice', ['type' => 'sales', 'id' => $sales->id]);
         } catch (\Throwable $th) {
             DB::rollBack();
+            dd($th->getMessage());
             return redirect()->route('sales.index')->with('error', $th->getMessage());
         }
     }

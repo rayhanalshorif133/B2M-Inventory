@@ -125,6 +125,7 @@ input[type='number']::-webkit-outer-spin-button {
     position: relative;
 }
 
+
 table.dataTable tbody  tr.selected {
     background-color: #d3e2ff!important; /* Light blue */
     color: #000; /* Optional: Change text color */

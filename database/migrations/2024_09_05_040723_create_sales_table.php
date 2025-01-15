@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained('companies');
             $table->foreignId('customer_id')->constrained('customers');
             $table->string('code')->unique();
-            $table->unsignedBigInteger('status')->default(1)->nullable();
+            $table->tinyInteger('status')->default(1)->unsigned();
             $table->date('invoice_date');
             $table->float('total_amount', 8, 2)->default(0)->nullable();
             $table->float('sub_amount', 8,2)->default(0)->nullable();

@@ -185,13 +185,18 @@
                                                 <label class="col-sm-2 control-label-required text-end text-capitalize"
                                                     for="customer-name">Product
                                                     Name</label>
-                                                <div class="col-sm-10 mb-3">
+                                                <div class="col-sm-8 mb-3">
                                                     <div class="form-group">
                                                         <select class="form-control select2" id="product"
                                                             style="width: 100%;">
                                                             <option value="">Select Product</option>
                                                         </select>
                                                     </div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <a href="{{ route('product.create') }}" class="btn btn-primary btn-sm">
+                                                        Add New <i class="fa fa-plus"></i>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -200,7 +205,8 @@
                                                 for="customer-name">Barcode</label>
                                             <div class="col-sm-10 mb-3">
                                                 <div class="form-group">
-                                                    <input autocomplete="off" class="form-control" type="text" id="barcode" placeholder="Enter or scan barcode">
+                                                    <input autocomplete="off" class="form-control" type="text"
+                                                        id="barcode" placeholder="Enter or scan barcode">
                                                 </div>
                                             </div>
                                         </div>
@@ -212,7 +218,8 @@
                                                 <tr class="bg-light dark__bg-1000">
                                                     <th scope="col" class="col-3 control-label-required">Item Name</th>
                                                     <th scope="col" class="col-1 control-label-required">Qty</th>
-                                                    <th scope="col" class="col-2 control-label-required">Sales Rate</th>
+                                                    <th scope="col" class="col-2 control-label-required">Sales Rate
+                                                    </th>
                                                     <th scope="col" class="col-2">Discount
                                                     </th>
                                                     <th scope="col" class="col-1 text-end">Amount
@@ -342,11 +349,11 @@
 
 
         const handleBarcodeScan = () => {
-            $("#barcode").keyup(function(e){
-                if(e.code == 'Enter'){
+            $("#barcode").keyup(function(e) {
+                if (e.code == 'Enter') {
                     const barcode = $(this).val();
                     axios.get(`/product/fetch-by-code/?barcode=${barcode}`)
-                        .then(function(response){
+                        .then(function(response) {
                             const data = response.data.data;
                             setProductDetails(data);
                             setTimeout(() => {
