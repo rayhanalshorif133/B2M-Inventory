@@ -66,6 +66,7 @@ class TransactionTypeController extends Controller
                 return $this->respondWithSuccess('success','Successfully updated transaction type');
             }
         } catch (\Throwable $th) {
+            return $this->respondWithError('error', $th->getMessage());
             return $this->respondWithError('error', 'Could not create transaction type');
         }
 

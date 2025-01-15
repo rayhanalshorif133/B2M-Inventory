@@ -53,41 +53,7 @@
         </section>
 
         <!-- Modal -->
-        <div class="modal fade" id="transactionTypeModal" tabindex="-1" aria-labelledby="transactionTypeModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="transactionTypeModalLabel">
-                            Add New Transaction Type
-                        </h5>
-                        <button type="button" class="btn-close" onclick="hideModal()"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="name" class="d-flex mx-1">
-                                    Transaction Type Name
-                                    <span class="text-danger mx-1">*</span>
-                                </label>
-                                <input type="hidden" class="form-control" id="action_type" value="create" />
-                                <input type="hidden" class="form-control" id="tt_id" value="" />
-                                <input class="form-control" id="name" name="name" value="{{ old('name') }}"
-                                    placeholder="Enter a Transaction Type Name" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" onclick="hideModal()">
-                            Close
-                        </button>
-                        <button type="button" onclick="submitBtn()" class="btn btn-primary">
-                            Save
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('transactionType.create')
     </div>
 @endsection
 
@@ -144,7 +110,7 @@
                 const id = $(this).data('id');
                 const name = $(this).data('name');
                 $('#transactionTypeModalLabel').text('Update Transaction Type');
-                $('#name').val(name);
+                $('#createTransactionName').val(name);
                 $('#action_type').val('update');
                 $('#tt_id').val(id);
                 $('#transactionTypeModal').modal('show');
@@ -158,7 +124,7 @@
             $('#transactionTypeModal').modal('show');
             $('#action_type').val('create');
             $('#tt_id').val('');
-            $('#name').val('');
+            $('#createTransactionName').val('');
             $('#transactionTypeModalLabel').text('Add New Transaction Type');
         };
 
@@ -169,7 +135,7 @@
 
         // submitBtn
         const submitBtn = () => {
-            const name = $('#name').val();
+            const name = $('#createTransactionName').val();
             const action_type = $('#action_type').val();
             if (name == '') {
                 toastr.error('Transaction Type Name is required');

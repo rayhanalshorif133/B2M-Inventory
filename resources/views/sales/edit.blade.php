@@ -223,32 +223,36 @@
                                                                 </small>
                                                                 <br />
                                                                 <small class="text-xs font-semibold">
-                                                                    {{ $salesDetail->productAttribute }}
+                                                                    {{ $salesDetail->productAttribute->code }}
+                                                                    {{ $salesDetail->productAttribute->color }} /
+                                                                    {{ $salesDetail->productAttribute->model }} /
+                                                                    {{ $salesDetail->productAttribute->size }}
                                                                 </small>
                                                                 <br />
 
                                                             </td>
                                                             <td>
                                                                 <input type="number"
-                                                                    name="product_details[${item.id}][qty]" value="1"
+                                                                    name="product_details[${item.id}][qty]"
+                                                                    value="{{ $salesDetail->qty }}"
                                                                     class="input_qty bg-focus form-control text-right"
                                                                     required="required">
                                                             </td>
                                                             <td>
                                                                 <input type="number"
                                                                     name="product_details[${item.id}][sales_rate]"
-                                                                    value="${item.sales_rate? item.sales_rate : 0}"
+                                                                    value="{{ $salesDetail->sales_rate }}"
                                                                     class="bg-focus form-control text-right input_sales_rate"
                                                                     required="required">
                                                             </td>
                                                             <td>
                                                                 <input type="number"
                                                                     name="product_details[${item.id}][discount]"
-                                                                    value="0"
+                                                                    value="{{ $salesDetail->discount }}"
                                                                     class="input_discount bg-focus form-control text-right">
                                                             </td>
                                                             <td class="col-1 text-end total">
-                                                                ${item.sales_rate? item.sales_rate : 0}
+                                                                {{ $salesDetail->total }}
                                                             </td>
                                                             <td class="remove-sales-order col-1">
                                                                 <input type="hidden"

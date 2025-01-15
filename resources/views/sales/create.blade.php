@@ -126,6 +126,12 @@
                     </div>
                     <div class="card-body">
                         <div class="card mb-3 mt-2" data-controller="calculate-sales-order">
+                            @if (count($transactionTypes) == 0)
+                                <div class="alert alert-warning" role="alert">
+                                    No transaction types found. Please
+                                    <a href="{{ route('transaction-types.index') }}" class="alert-link">add one</a> !
+                                </div>
+                            @endif
                             @include('sales._partials.addNewCustomerModal', [
                                 'customers' => $customers,
                             ])
@@ -270,7 +276,19 @@
                                             </div>
                                             <div class="row mt-2">
                                                 <div class="col-12 col-md-6">
-                                                    <label class="form-label font-size-14px">Transaction Type</label>
+
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <label class="form-label font-size-14px">Transaction
+                                                                Type</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button type="button" class="btn btn-sm btn-navy mx-2"
+                                                                data-toggle="modal" data-target="#transactionTypeModal">
+                                                                Add <i class="fa fa-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                     <select class="form-select bg-focus form-control"
                                                         name="sales_order[transaction_type]"
                                                         id="sales_order_transaction_type">
@@ -322,6 +340,7 @@
 
         </section>
 
+        @include('transactionType.create')
     </div>
 @endsection
 
@@ -346,6 +365,11 @@
             });
 
         });
+
+
+        // const createTransactionModal = () => {
+
+        // };
 
 
         const handleBarcodeScan = () => {
@@ -497,6 +521,23 @@
                         $(".submitbtn").attr('disabled', false);
                     }
                 });
+        };
+
+
+
+        const submitBtn = () => {
+            const name = $('#createTransactionName').val();
+
+            axios
+                .post("/transaction-types/create", {
+                    name: name
+                })
+                .then((response) => {
+                    const data = response.data.data;
+                    const message = response.data.message;
+                    console.log(response.data);
+                });
+
         };
 
 
