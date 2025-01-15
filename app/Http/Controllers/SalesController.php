@@ -42,10 +42,13 @@ class SalesController extends Controller
         $sales = Sales::where('company_id', Auth::user()->company_id)
             ->where('id', $id)
             ->with('customer')
-            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $sales->payment = SalesPayment::select()->where('company_id', Auth::user()->company_id)
+            ->where('sales_id', $id)
             ->first();
         $salesDetails = SalesDetails::select()
-            ->where('Sales_id', $id)
+            ->where('sales_id', $id)
             ->with('product', 'productAttribute')
             ->get();
         $data = [
@@ -162,75 +165,83 @@ class SalesController extends Controller
             DB::beginTransaction();
             try {
 
-                $sales = Sales::find($request->sales_id);
-                if ($sales) {
 
 
-                    $sales->company_id = Auth::user()->company_id;
-                    $sales->customer_id = $request['customer_id'];
-                    $sales->invoice_date = $request['invoice_date'];
-                    $sales->total_amount = $request['total_amount'];
-                    $sales->sub_amount = $request['sub_amount'];
-                    $sales->paid_amount = $request['paid_amount'];
-                    $sales->grand_total = $request['grand_total_amount'];
-                    $sales->due_amount = floatval($request['total_amount']) - floatval($request['paid_amount']);
-                    $sales->note = $request['note'];
-                    $sales->discount = 0;
-                    $sales->created_by = Auth::user()->id;
-                    $sales->created_time = date('H:i:s');
-                    $sales->created_date = date('Y-m-d');
-                    $sales->save();
 
 
-                    /* <- Sales Payment ->*/
-                    $salesPayment = new SalesPayment();
-                    $salesPayment->sales_id = $sales->id;
-                    $salesPayment->transaction_type_id = $request['transaction_type_id'];
-                    $salesPayment->amount = $sales->paid_amount;
-                    $salesPayment->receipt_no = salesPaymentReceiptNo();
-                    $salesPayment->customer_id = $sales->customer_id;
-                    $salesPayment->discount = $sales->discount;
-                    $salesPayment->created_date = $sales->created_date;
-                    $salesPayment->added_by = Auth::user()->id;
-                    $salesPayment->company_id = Auth::user()->company_id;
-                    $salesPayment->save();
+
+                $product_details = $request->product_details;
 
 
-                    /* <- Sales Payment log send ->*/
-                    paymentLogSend($salesPayment->transaction_type_id, 3, $salesPayment->amount, $salesPayment->id);
-                    $productCustomizations =  $request['productCustomizations'];
+                $company_id = $request->session()->get('company_id');
+                $sales_order = $request->sales_order;
 
-                    foreach ($productCustomizations as $item) {
+                $sales = Sales::find($id);
+                $sales->company_id = $company_id;
+                $sales->customer_id = $sales_order['customer_id'];
+                $sales->code = $sales_order['voucher_number'];
+                $sales->status = 1;
+                $sales->invoice_date = $sales_order['invoice_date'];
+                $sales->total_amount = $sales_order['total_amount'];
+                $sales->sub_amount = 0;
+                $sales->paid_amount = $sales_order['paid_amount'];
+                $sales->grand_total = $sales_order['grand_total_amount'];
+                $sales->due_amount = $sales_order['due_amount'];
+                $sales->note = $sales_order['customer_note'];
+                $sales->discount = $sales_order['total_discount'];
+                $sales->created_time = date('H:i:s');
+                $sales->created_date = date('Y-m-d');
+                $sales->save();
 
-                        $productAttribute  = ProductAttribute::select()->where('id', $item['product_attribute_id'])->first();
 
-                        $salesDetails = SalesDetails::find($item['id']);
-                        if ($salesDetails) {
-                            $beforeQty = $salesDetails->qty;
-                        } else {
-                            $salesDetails = new SalesDetails();
-                            $beforeQty = 0;
-                        }
-                        $salesDetails->product_attribute_id = $item['product_attribute_id'];
-                        $salesDetails->sales_id = $sales->id;
-                        $salesDetails->qty = $item['qty'];
-                        $salesDetails->product_id = $item['product_id'];
-                        $salesDetails->sales_rate = $item['sales_rate'];
-                        $salesDetails->discount = $item['discount'];
-                        $salesDetails->current_unit_cost = $productAttribute->unit_cost;
-                        $salesDetails->total = $item['total'];
-                        $salesDetails->created_time = $sales->created_time;
-                        $salesDetails->created_date = $sales->created_date;
-                        $salesDetails->save();
-                        $productAttribute->current_stock = intval($productAttribute->current_stock) +  intval($beforeQty) - intval($salesDetails->qty);
-                        $productAttribute->sales_rate = $item['sales_rate'];
-                        $productAttribute->save();
-                        productLogSend($productAttribute->id, 3, $salesDetails->qty, $salesDetails->id);
+                /* <- Sales Payment ->*/
+                $salesPayment = SalesPayment::select()->where('sales_id', $id)->first();
+                $salesPayment->transaction_type_id = $sales_order['transaction_type'];
+                $salesPayment->amount = $sales->paid_amount;
+                $salesPayment->customer_id = $sales->customer_id;
+                $salesPayment->discount = $sales->discount;
+                $salesPayment->created_date = $sales->created_date;
+                $salesPayment->added_by = Auth::user()->id;
+                $salesPayment->company_id = Auth::user()->company_id;
+                $salesPayment->save();
+
+
+                /* <- Sales Payment log send ->*/
+                paymentLogSend($salesPayment->transaction_type_id, 3, $salesPayment->amount, $salesPayment->id);
+
+                foreach ($product_details as $item) {
+                    $productAttribute  = ProductAttribute::select()->where('id', $item['product_attribute_id'])->first();
+
+                    $salesDetails = SalesDetails::find($item['id']);
+
+                    if ($salesDetails) {
+                        $beforeQty = $salesDetails->qty;
+                    } else {
+                        $salesDetails = new SalesDetails();
+                        $beforeQty = 0;
                     }
 
-                    DB::commit();
-                    return $this->respondWithSuccess('Successfully updated Sales', $sales);
+                    $salesDetails->product_attribute_id = $item['product_attribute_id'];
+                    $salesDetails->sales_id = $sales->id;
+
+
+                    $salesDetails->qty = $item['qty'];
+                    $salesDetails->product_id = $item['product_id'];
+                    $salesDetails->sales_rate = $item['sales_rate'];
+                    $salesDetails->discount = $item['discount'];
+                    $salesDetails->total = $item['total'];
+                    $salesDetails->created_time = $sales->created_time;
+                    $salesDetails->created_date = $sales->created_date;
+                    $salesDetails->current_unit_cost = $productAttribute->unit_cost;
+                    $salesDetails->save();
+
+                    $productAttribute->current_stock = intval($productAttribute->current_stock) +  intval($beforeQty) - intval($salesDetails->qty);
+                    $productAttribute->sales_rate = $item['sales_rate'];
+                    $productAttribute->save();
+                    productLogSend($productAttribute->id, 3, $item['qty'], $salesDetails->id);
                 }
+                DB::commit();
+                return redirect()->route('type.invoice', ['type' => 'sales', 'id' => $sales->id]);
             } catch (\Throwable $th) {
                 DB::rollBack();
                 return $this->respondWithError('error', $th->getMessage());
@@ -247,7 +258,7 @@ class SalesController extends Controller
         $customers = Customer::select()->where('company_id', $company_id)->get();
         $transactionTypes = TransactionType::select()->where('company_id', $company_id)->get();
         $sales_code = $sales->code;
-        return view('sales.edit', compact('sales','customers','salesDetails','salesPayments','transactionTypes','sales_code'));
+        return view('sales.edit', compact('sales', 'customers', 'salesDetails', 'salesPayments', 'transactionTypes', 'sales_code'));
     }
 
 
