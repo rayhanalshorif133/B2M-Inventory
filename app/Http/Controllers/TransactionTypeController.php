@@ -55,7 +55,10 @@ class TransactionTypeController extends Controller
                 $transactionType->company_id = Auth::user()->company_id;
                 $transactionType->added_by = Auth::user()->id;
                 $transactionType->save();
-                return $this->respondWithSuccess('success','Successfully created transaction type');
+                return $this->respondWithSuccess('success', [
+                    'msg' => 'Successfully created transaction type',
+                    'transactionType' => $transactionType
+                ]);
             }else{
                 $transactionType = TransactionType::where('id', $request->tt_id)
                 ->where('company_id', Auth::user()->company_id)->first();

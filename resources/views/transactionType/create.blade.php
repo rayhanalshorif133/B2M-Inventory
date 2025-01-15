@@ -26,7 +26,7 @@
                 <button type="button" class="btn btn-secondary" onclick="hideModal()"  data-dismiss="modal">
                     Close
                 </button>
-                <button type="button" onclick="submitBtn()" class="btn btn-primary">
+                <button type="button" onclick="submitBtn()" data-dismiss="modal" class="btn btn-primary">
                     Save
                 </button>
             </div>

@@ -149,8 +149,6 @@
                         name: name
                     })
                     .then((response) => {
-                        const data = response.data.data;
-                        const message = response.data.message;
                         setTimeout(() => {
                             hideModal();
                             handleDataTable();
@@ -164,8 +162,6 @@
                         name: name
                     })
                     .then((response) => {
-                        const data = response.data.data;
-                        const message = response.data.message;
                         setTimeout(() => {
                             hideModal();
                             handleDataTable();

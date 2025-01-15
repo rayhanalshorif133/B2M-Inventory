@@ -132,6 +132,9 @@
                                     <a href="{{ route('transaction-types.index') }}" class="alert-link">add one</a> !
                                 </div>
                             @endif
+                            <div class="alert alert-success d-none ttAddedsuccssAlart" role="alert">
+                                Transaction types Added successfully.
+                            </div>
                             @include('sales._partials.addNewCustomerModal', [
                                 'customers' => $customers,
                             ])
@@ -534,8 +537,17 @@
                 })
                 .then((response) => {
                     const data = response.data.data;
-                    const message = response.data.message;
-                    console.log(response.data);
+                    if (data) {
+                        $("#sales_order_transaction_type").append(
+                            `<option value="${data.transactionType.id}">${data.transactionType.name}</option>`
+                        );
+
+                        $(".ttAddedsuccssAlart").removeClass('d-none');
+
+                        setTimeout(() => {
+                            $(".ttAddedsuccssAlart").addClass('d-none');
+                        }, 4000);
+                    }
                 });
 
         };
