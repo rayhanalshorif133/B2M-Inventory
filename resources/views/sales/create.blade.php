@@ -143,28 +143,38 @@
                                     method="POST">
                                     @csrf
                                     @method('POST')
+                                    <label class="control-label align-middle">
+                                        Sales Order #{{ $sales_code }}
+                                        <input autocomplete="off" type="hidden" value="{{ $sales_code }}"
+                                            name="sales_order[voucher_number]">
+                                    </label>
                                     <!-- Customer Name-->
                                     <div class="row mb-3">
-                                        <label class="col-sm-2 col-md-2 text-capitalize" for="q_billing_status">Customer
-                                            Name</label><br>
-                                        <div class="col-sm-3 col-md-2 mb-3">
-                                            <div class="form-group">
-                                                <select class="form-control select2" id="customer"
-                                                    name="sales_order[customer_id]" style="width: 100%;"></select>
+                                        <div class="col-md-6 col-12 mb-3">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-12">
+                                                    <div class="form-group">
+                                                        <label class="text-capitalize" for="q_billing_status">
+                                                            Customer Name
+                                                        </label>
+                                                        <select class="form-control select2" id="customer"
+                                                            name="sales_order[customer_id]" style="width: 100%;"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-12">
+                                                    <a class="btn btn-outline-success btn-sm ms-2 addNewModalBtn"
+                                                        data-toggle="modal" data-target="#addNewCustomerModal">
+                                                        <i class="fa fa-plus"></i>
+                                                        New Customer
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-2 col-md-2 mb-2">
-                                            <a class="btn btn-outline-success btn-sm ms-2" data-toggle="modal"
-                                                data-target="#addNewCustomerModal">
-                                                <i class="fa fa-plus" style="color: #0a7822"></i>
-                                                New Customer
-                                            </a>
-                                        </div>
-                                        <label class="col-sm-2 col-md-2 control-label-required text-end"
-                                            for="datepickerVal">Date Of
-                                            Issue : </label>
-                                        <div class="col-sm-3 col-md-3 position-relative">
+                                        <div class="col-md-6 col-12 mb-3">
                                             <div class="input-group has-validation">
+                                                <label class="col-md-6 col-12 control-label-required text-end mt-2"
+                                                    for="datepickerVal">Date Of
+                                                    Issue : </label>
                                                 <input type="date" name="sales_order[invoice_date]" id="invoice_date"
                                                     value="{{ date('Y-m-d') }}" class="form-control" required="required">
                                             </div>
@@ -173,56 +183,46 @@
 
 
 
-                                    <!-- Voucher Number-->
-                                    <div class="row">
-                                        <div class="col-md-6 col-12">
-                                            <div class="row mb-3">
-                                                <label class="col-sm-2 control-label-required text-end">Sales Order
-                                                    #</label>
-                                                <div class="col-sm-3">
-                                                    <label class="control-label align-middle">
-                                                        {{ $sales_code }}
-                                                        <input autocomplete="off" type="hidden" value="{{ $sales_code }}"
-                                                            name="sales_order[voucher_number]">
-                                                    </label>
-                                                </div>
-                                            </div>
+                                    <div class="row mb-3">
 
-
-
-                                            <div class="row mt-3">
-                                                <label class="col-sm-2 control-label-required text-end text-capitalize"
-                                                    for="customer-name">Product
-                                                    Name</label>
-                                                <div class="col-sm-8 mb-3">
+                                        <div class="col-md-6 col-12 mb-3">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-12">
                                                     <div class="form-group">
+                                                        <label class="text-capitalize" for="q_billing_status">
+                                                            Product Name
+                                                        </label>
                                                         <select class="form-control select2" id="product"
                                                             style="width: 100%;">
                                                             <option value="">Select Product</option>
                                                         </select>
+
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-2">
-                                                    <a href="{{ route('product.create') }}" class="btn btn-primary btn-sm">
-                                                        Add New <i class="fa fa-plus"></i>
+                                                <div class="col-lg-6 col-12">
+                                                    <a class="btn btn-outline-success btn-sm ms-2 addNewModalBtn"
+                                                        href="{{ route('product.create') }}">
+                                                        <i class="fa fa-plus"></i>
+                                                        New Product
                                                     </a>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-12">
-                                            <label class="col-sm-2 control-label-required text-start text-capitalize"
-                                                for="customer-name">Barcode</label>
-                                            <div class="col-sm-10 mb-3">
-                                                <div class="form-group">
-                                                    <input autocomplete="off" class="form-control" type="text"
-                                                        id="barcode" placeholder="Enter or scan barcode">
-                                                </div>
+                                        <div class="col-md-6 col-12 mb-3">
+                                            <div class="input-group has-validation">
+                                                <label class="col-md-6 col-12 control-label-required text-end mt-2"
+                                                    for="datepickerVal">Barcode : </label>
+                                                <input autocomplete="off" class="form-control" type="text"
+                                                    id="barcode" placeholder="Enter or scan barcode">
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="mt-4" style="width: 100%;">
-                                        <table class="table table-bordered">
+
+                                    <!-- Voucher Number-->
+
+                                    <div class="mt-4 table-responsive" style="width: 100%;">
+                                        <table class="table">
                                             <thead class="light">
                                                 <tr class="bg-light dark__bg-1000">
                                                     <th scope="col" class="col-3 control-label-required">Item Name</th>

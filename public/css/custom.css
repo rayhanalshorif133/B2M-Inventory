@@ -6,8 +6,8 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 
-.dt-length select{
-    margin-right: 5px!important;
+.dt-length select {
+    margin-right: 5px !important;
 }
 
 .d-flex-item-center {
@@ -16,8 +16,8 @@ input[type='number']::-webkit-outer-spin-button {
     align-items: center !important;
 }
 
-.form-label{
-    font-size: 12px!important;
+.form-label {
+    font-size: 12px !important;
 }
 
 .text-xs {
@@ -126,23 +126,25 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 
-table.dataTable tbody  tr.selected {
-    background-color: #d3e2ff!important; /* Light blue */
-    color: #000; /* Optional: Change text color */
+table.dataTable tbody tr.selected {
+    background-color: #d3e2ff !important;
+    /* Light blue */
+    color: #000;
+    /* Optional: Change text color */
 }
 
 .absolute {
     position: absolute;
 }
 
-.dataTables_length .custom-select{
-    width: 4rem!important;
+.dataTables_length .custom-select {
+    width: 4rem !important;
 }
 
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
 
-    margin-top: -8px!important;
+    margin-top: -8px !important;
 }
 
 .nav-tabs .nav-link.active,
@@ -649,32 +651,44 @@ button {
     color: #fff;
 }
 
-.tooltip-content i{
+.tooltip-content i {
     position: relative;
     top: -12px;
     font-size: 20px;
-    color: black!important;
+    color: black !important;
 
 }
 
 .typing-text {
-    font-family: 'Courier', monospace; /* Monospace font for typewriter effect */
-    white-space: nowrap; /* Prevents the text from wrapping */
-    overflow: hidden; /* Ensures content is clipped when it overflows */
-    border-right: 2px solid; /* Creates the cursor effect */
-    width: 100%; /* Start with no width */
+    font-family: 'Courier', monospace;
+    /* Monospace font for typewriter effect */
+    white-space: nowrap;
+    /* Prevents the text from wrapping */
+    overflow: hidden;
+    /* Ensures content is clipped when it overflows */
+    border-right: 2px solid;
+    /* Creates the cursor effect */
+    width: 100%;
+    /* Start with no width */
     animation: typing 4s steps(50, end), blink 0.75s step-end infinite;
 }
 
 /* Typing effect */
 @keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
 }
 
 /* Blinking cursor effect */
 @keyframes blink {
-    50% { border-color: transparent; }
+    50% {
+        border-color: transparent;
+    }
 }
 
 
@@ -767,11 +781,30 @@ button {
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
+
+.addNewModalBtn {
+    margin-top: 30px;
+}
+
+.addNewModalBtn i{
+    color: #198754;
+}
+
+.addNewModalBtn:hover i{
+    color: #ffffff;
+}
+
+
 /* media tag devices:start */
 /*  320px — 480px: Mobile devices */
 @media screen and (min-width: 320px) and (max-width: 480px) {
     .profile-container {
         width: 100% !important;
+    }
+
+
+    .addNewModalBtn {
+        margin-top: 2px;
     }
 }
 
@@ -779,6 +812,10 @@ button {
 @media screen and (min-width: 481px) and (max-width: 768px) {
     .profile-container {
         width: 100% !important;
+    }
+
+    .addNewModalBtn {
+        margin-top: 2px;
     }
 }
 
@@ -825,10 +862,17 @@ button {
 }
 
 /* 769px — 1024px: Small screens, laptops */
+@media screen and (min-width: 769px) and (max-width: 991px) {
+    .addNewModalBtn {
+        margin-top: 2px;
+    }
+}
+
 @media screen and (min-width: 769px) and (max-width: 1024px) {
     .profile-container {
         width: 100% !important;
     }
+
 }
 
 /* 1025px — 1200px: Desktops, large screens */
