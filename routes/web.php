@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReportController;
+use Illuminate\Http\Request;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ExpensesIncomeController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TipsAndTourController;
 use App\Http\Controllers\CommonController;
 use Illuminate\Support\Facades\Artisan;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,9 +38,13 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
     // return redirect()->route('auth.login');
-    return view('welcome');
+    $user = $request->session()->get('loginId');
+    if($user){
+        $user = User::find($user);
+    }
+    return view('welcome', compact('user'));
 });
 
 Route::get('/link', function () {
@@ -177,6 +183,7 @@ Route::middleware('auth')
 Route::middleware('auth')->controller(CommonController::class)
     ->group(function () {
         Route::get('/{type}/invoice/{id}', 'invoice')->name('type.invoice');
+        Route::get('/reset-user-data/{id}', 'resetUserData')->name('reset-user-data');
     });
 
 Route::middleware('auth')

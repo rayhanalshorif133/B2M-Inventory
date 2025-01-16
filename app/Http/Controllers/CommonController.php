@@ -10,6 +10,7 @@ use App\Models\Purchase;
 use App\Models\PurchasePayment;
 use App\Models\SalesReturnDetails;
 use App\Models\SalesReturnPayment;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 
@@ -49,5 +50,28 @@ class CommonController extends Controller
         }
 
         return view('_partials.inovice', compact('print_date', 'item', 'itemDetails', 'payment', 'type', 'invoice_name'));
+    }
+
+
+
+    // for debugging purposes
+    public function resetUserData($id)
+    {
+        $user = User::find($id);
+
+        try {
+            if ($user) {
+                $company_id = $user->company_id;
+                DB::table('products')->whereIn('category_id', function ($query) use ($company_id) {
+                    $query->select('id')
+                        ->from('categories')
+                        ->where('company_id', $company_id);
+                })->delete();
+                DB::table('companies')->where('id', $company_id)->delete();
+                dd($company_id);
+            }
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
     }
 }

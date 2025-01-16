@@ -53,15 +53,17 @@
                         <li><a href="#service">Our Services</a></li>
                         <li><a href="#contact">Contact Us</a></li>
                         <div class="loging-register-btn-mobile">
-                            @if(Auth::check())
-                            hello
+                            @if ($user)
+                                <a href="{{ route('auth.login') }}" value="0" id="login"
+                                    class="scrollto">{{ $user->name }}</a>
+                            @else
+                                <li class="dropdown_item-1"> <a href="{{ route('auth.login') }}" value="0"
+                                        id="login" class="scrollto">Login </a>
+                                </li>
+                                <li class="dropdown_item-2"><a href="{{ route('auth.register') }}" id="signup"
+                                        class="scrollto"> Sign Up </a></li>
                             @endif
 
-                            <li class="dropdown_item-1"> <a href="{{ route('auth.login') }}" value="0"
-                                    id="login" class="scrollto">Login </a>
-                            </li>
-                            <li class="dropdown_item-2"><a href="{{ route('auth.register') }}" id="signup"
-                                    class="scrollto"> Sign Up </a></li>
 
                         </div>
                     </ul>
@@ -69,11 +71,18 @@
                 </nav>
 
                 <ul class="loging-register-btn">
-                    <li class="dropdown_item-1"> <a href="{{ route('auth.login') }}" value="0" id="login"
-                            class="scrollto">Login </a>
-                    </li>
-                    <li class="dropdown_item-2"><a href="{{ route('auth.register') }}" id="signup" class="scrollto">
-                            Sign Up </a></li>
+                    @if ($user)
+                        <a href="{{ route('auth.login') }}" value="0" id="login"
+                            class="scrollto">{{ $user->name }} </a>
+                    @else
+                        <li class="dropdown_item-1"> <a href="{{ route('auth.login') }}" value="0" id="login"
+                                class="scrollto">Login </a>
+                        </li>
+                        <li class="dropdown_item-2"><a href="{{ route('auth.register') }}" id="signup"
+                                class="scrollto">
+                                Sign Up </a></li>
+                    @endif
+
                 </ul>
             </div>
         </div>
