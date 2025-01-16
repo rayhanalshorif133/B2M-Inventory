@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\Customer;
 use App\Models\Purchase;
+use App\Models\SalesPayment;
 use App\Models\Sales;
 use App\Models\ExpensesIncome;
 use App\Models\TipsAndTour;
@@ -63,11 +64,11 @@ class HomeController extends Controller
                     ->get()
                     ->sum('total_amount'),
 
-                'totalsPaymentReceived' => Sales::select('paid_amount')
+                'totalsPaymentReceived' => SalesPayment::select('amount')
                     ->where('company_id', $company_id)
                     ->whereDate('created_date', Carbon::today())
                     ->get()
-                    ->sum('paid_amount'),
+                    ->sum('amount'),
 
                 'todaysTotalsSales' => Sales::select('total_amount')
                     ->where('company_id', $company_id)

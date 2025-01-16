@@ -306,7 +306,7 @@ class SalesController extends Controller
                 ->map(function ($customer) {
                     $total_amount = DB::table('sales')
                         ->where('customer_id', $customer->id)
-                        ->sum('total_amount');
+                        ->sum('grand_total');
 
                     $total_pay_amount = DB::table('sales_payments')
                         ->where('customer_id', $customer->id)

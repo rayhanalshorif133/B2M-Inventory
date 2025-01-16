@@ -303,7 +303,7 @@
                                                     <input type="hidden" class="bg-focus form-control"
                                                         id="set_total_amount" name="sales_order[total_amount]">
                                                     <input type="text" class="bg-focus form-control"
-                                                        name="sales_order[paid_amount]" id="paid_amount" />
+                                                        name="sales_order[paid_amount]" id="paid_amount" value="0"/>
                                                     <p class="d-flex mt-2 ">
                                                         <label class="form-label mx-2 font-size-14px">Due Amount:</label>
                                                         <label class="form-label text-danger font-size-14px"
