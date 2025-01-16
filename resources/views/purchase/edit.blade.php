@@ -612,7 +612,7 @@
                 <td class="col-3">
                     <input type="hidden" name="product_details[${item.id}][id]" value="${item.id}">
                     <input type="hidden" name="product_details[${item.id}][product_id]" value="${item.product_id}">
-                    <input type="hidden" name="product_details[${item.id}][product_attribute_id]" value="${item.id}">
+                    <input type="hidden" name="product_details[${item.id}][product_attribute_id]" value="${item.product_attribute_id}">
                     <small class="text-xs font-semibold">${item.product?.name ? item.product.name : ''}</small><br/>
                     <small class="text-xs font-semibold">${item.code ? item.code : ''} ${item.model ? ' / ' + item.model : ''} ${item.size ? ' / ' + item.size : ''} ${item.color ? ' / ' + item.color : ''}</small><br/>
                 </td>
@@ -626,11 +626,11 @@
                     <input type="number" name="product_details[${item.id}][discount]" value="${item.discount? item.discount : 0}" class="input_discount bg-focus form-control text-right">
                     </td>
                     <td class="col-1 text-end total">
-                        ${item.purchase_rate? item.purchase_rate * item.qty : 0}
+                        ${item.purchase_rate? (item.purchase_rate - item.discount) * item.qty : 0}
                     </td>
                     <td class="remove-purchase-order col-1">
 
-                        <input type="hidden" name="product_details[${item.id}][total]" value="${item.purchase_rate? item.purchase_rate * item.qty : 0}" class="bg-focus form-control text-right input_total">
+                        <input type="hidden" name="product_details[${item.id}][total]" value="${item.purchase_rate? (item.purchase_rate - item.discount) * item.qty : 0}" class="bg-focus form-control text-right input_total">
                     <span id="cancel" class="text-danger cursor-pointer d-block text-right" href="">
                         <i class="fa fa-trash fs-5 " aria-hidden="true"></i>
                     </span>

@@ -622,14 +622,14 @@
                     <input type="number" name="product_details[${item.id}][sales_rate]" value="${item.sales_rate? item.sales_rate : 0}" class="bg-focus form-control text-right input_sales_rate" required="required">
                 </td>
                 <td>
-                    <input type="number" name="product_details[${item.id}][discount]" value="0" class="input_discount bg-focus form-control text-right">
+                    <input type="number" name="product_details[${item.id}][discount]" value="${item.discount? item.discount : 0}" class="input_discount bg-focus form-control text-right">
                     </td>
                     <td class="col-1 text-end total">
-                        ${item.sales_rate? item.sales_rate * item.qty : 0}
+                        ${item.sales_rate? (item.sales_rate - item.discount) * item.qty : 0}
                     </td>
                     <td class="remove-sales-order col-1">
 
-                        <input type="hidden" name="product_details[${item.id}][total]" value="${item.sales_rate? item.sales_rate * item.qty : 0}" class="bg-focus form-control text-right input_total">
+                        <input type="hidden" name="product_details[${item.id}][total]" value="${item.sales_rate? (item.sales_rate - item.discount) * item.qty : 0}" class="bg-focus form-control text-right input_total">
                     <span id="cancel" class="text-danger cursor-pointer d-block text-right" href="">
                         <i class="fa fa-trash fs-5 " aria-hidden="true"></i>
                     </span>

@@ -395,6 +395,11 @@
             const grand_total_amount = total_amount - total_discount;
             $("#grand_total_amount").text(grand_total_amount);
             $("#set_grand_total_amount").val(grand_total_amount);
+
+            var paidAmount = $("#paid_amount").val()? $("#paid_amount").val() : 0;
+            var dueAmount = parseFloat(grand_total_amount) - parseFloat(paidAmount);
+            $("#due_amount").text(dueAmount);
+            $("#set_due_amount").val(dueAmount);
         };
 
 

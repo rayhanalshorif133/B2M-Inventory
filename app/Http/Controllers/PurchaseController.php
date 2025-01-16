@@ -207,6 +207,7 @@ class PurchaseController extends Controller
                     foreach ($product_details as $item) {
                         $productAttribute  = ProductAttribute::select()->where('id', $item['product_attribute_id'])->first();
 
+
                         $purchaseDetails = PurchaseDetails::find($item['id']);
 
                         if ($purchaseDetails) {
@@ -215,6 +216,7 @@ class PurchaseController extends Controller
                             $purchaseDetails = new PurchaseDetails();
                             $beforeQty = 0;
                         }
+
 
                         $purchaseDetails->product_attribute_id = $item['product_attribute_id'];
                         $purchaseDetails->purchases_id = $purchase->id;
@@ -228,10 +230,11 @@ class PurchaseController extends Controller
                         $purchaseDetails->save();
 
 
+
                         $productAttribute->current_stock = intval($productAttribute->current_stock) + intval($item['qty']) - intval($beforeQty);
                         $productAttribute->last_purchase = $item['purchase_rate'];
 
-                        $productAttribute->unit_cost = ((intval($productAttribute->current_stock) * floatval($productAttribute->purchase_rate)) +
+                        $productAttribute->unit_cost = ((intval($productAttribute->current_stock) * floatval($productAttribute->last_purchase)) +
                             (floatval($item['purchase_rate']) * intval($item['qty']))) / (intval($productAttribute->current_stock) + intval($item['qty']));
                         $productAttribute->save();
 
@@ -245,7 +248,6 @@ class PurchaseController extends Controller
                 }
             } catch (\Throwable $th) {
                 DB::rollBack();
-                dd($th->getMessage());
                 return $this->respondWithError('error', $th->getMessage());
             }
         }

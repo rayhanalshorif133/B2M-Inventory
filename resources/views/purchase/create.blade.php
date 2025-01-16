@@ -395,6 +395,11 @@
             const grand_total_amount = total_amount - total_discount;
             $("#grand_total_amount").text(grand_total_amount);
             $("#set_grand_total_amount").val(grand_total_amount);
+
+            var paidAmount = $("#paid_amount").val()? $("#paid_amount").val() : 0;
+            var dueAmount = parseFloat(grand_total_amount) - parseFloat(paidAmount);
+            $("#due_amount").text(dueAmount);
+            $("#set_due_amount").val(dueAmount);
         };
 
 
@@ -556,6 +561,7 @@
         // Function to populate product details
         const setProductDetails = (item) => {
 
+            console.log(item);
             const tbody = $("#insertProductItemForSales");
             const tfoot = $("#insertProductItemForSales").next();
             const hasNoRecord = tbody.find("tr#no_record");
@@ -582,16 +588,16 @@
                     <input type="number" name="product_details[${item.id}][qty]" value="${SETQTY}" class="input_qty bg-focus form-control text-right" required="required">
                 </td>
                 <td>
-                    <input type="number" name="product_details[${item.id}][purchase_rate]" value="${item.purchase_rate? item.purchase_rate : 0}" class="bg-focus form-control text-right input_purchase_rate" required="required">
+                    <input type="number" name="product_details[${item.id}][purchase_rate]" value="${item.last_purchase? item.last_purchase : 0}" class="bg-focus form-control text-right input_purchase_rate" required="required">
                 </td>
                 <td>
                     <input type="number" name="product_details[${item.id}][discount]" value="0" class="input_discount bg-focus form-control text-right">
                     </td>
                     <td class="col-1 text-end total">
-                        ${item.purchase_rate? item.purchase_rate : 0}
+                        ${item.last_purchase? item.last_purchase : 0}
                     </td>
                     <td class="remove-sales-order col-1">
-                        <input type="hidden" name="product_details[${item.id}][total]" value="${item.purchase_rate? item.purchase_rate : 0}" class="bg-focus form-control text-right input_total">
+                        <input type="hidden" name="product_details[${item.id}][total]" value="${item.last_purchase? item.last_purchase : 0}" class="bg-focus form-control text-right input_total">
                     <span id="cancel" class="text-danger cursor-pointer d-block text-right" href="">
                         <i class="fa fa-trash fs-5 " aria-hidden="true"></i>
                     </span>
