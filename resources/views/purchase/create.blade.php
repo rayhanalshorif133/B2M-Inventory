@@ -568,6 +568,8 @@
                 false;
 
             if (rowWithId.length == 0) {
+                var SETQTY = 1;
+                if(item.qty > 0) SETQTY = item.qty;
                 var rowHTML = `
             <tr id="${id}" class="slsord_line">
                 <td class="col-3">
@@ -577,7 +579,7 @@
                     <small class="text-xs font-semibold">${item.code ? item.code : ''} ${item.model ? ' / ' + item.model : ''} ${item.size ? ' / ' + item.size : ''} ${item.color ? ' / ' + item.color : ''}</small><br/>
                 </td>
                 <td>
-                    <input type="number" name="product_details[${item.id}][qty]" value="1" class="input_qty bg-focus form-control text-right" required="required">
+                    <input type="number" name="product_details[${item.id}][qty]" value="${SETQTY}" class="input_qty bg-focus form-control text-right" required="required">
                 </td>
                 <td>
                     <input type="number" name="product_details[${item.id}][last_purchase]" value="${item.last_purchase? item.last_purchase : 0}" class="bg-focus form-control text-right input_last_purchase" required="required">

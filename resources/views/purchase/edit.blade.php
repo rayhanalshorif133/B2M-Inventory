@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Add New purchase'])
+@extends('layouts.app', ['title' => 'Update purchase'])
 
 @section('head')
     <style type="text/css">
@@ -93,14 +93,14 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Add New purchase</h1>
+                        <h1 class="m-0">Update Purchase</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
                                 <a href="{{ route('home') }}" class="text-capitalize">home</a>
                                 <span class="text-gray"> / </span>
-                                <span class="text-gray">Add New purchase</span>
+                                <span class="text-gray">Update Purchase</span>
                             </li>
                         </ol>
                     </div>
@@ -114,7 +114,7 @@
                 <!-- Default box -->
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Seles Order</h3>
+                        <h3 class="card-title">Purchase Order</h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>
@@ -376,6 +376,16 @@
                         } = response.data.data;
                         fetchSupplier(purchase.supplier_id);
                         purchaseDetails.length > 0 && purchaseDetails.map(function(item) {
+                            const {
+                                code,
+                                model,
+                                size,
+                                color
+                            } = item.product_attribute;
+                            item.code = code;
+                            item.model = model;
+                            item.size = size;
+                            item.color = color;
                             setProductDetails(item);
                         });
                         $("#purchase_order_transaction_type").val(purchase.payment.transaction_type_id);
@@ -581,6 +591,11 @@
         // Function to populate product details
         const setProductDetails = (item) => {
 
+            console.clear();
+            console.log(item);
+
+            item.qty = item.qty ? item.qty : 1;
+
             const tbody = $("#insertProductItemForpurchase");
             const tfoot = $("#insertProductItemForpurchase").next();
             const hasNoRecord = tbody.find("tr#no_record");
@@ -605,13 +620,13 @@
                     <input type="number" name="product_details[${item.id}][qty]" value="${item.qty}" class="input_qty bg-focus form-control text-right" required="required">
                 </td>
                 <td>
-                    <input type="number" name="product_details[${item.id}][purchase_rate]" value="${item.purchase_rate? item.purchase_rate : 0}" class="bg-focus form-control text-right input_purchase_rate" required="required">
+                    <input type="number" name="product_details[${item.id}][purchase_rate]" value="${item.last_purchase? item.last_purchase : 0}" class="bg-focus form-control text-right input_purchase_rate" required="required">
                 </td>
                 <td>
                     <input type="number" name="product_details[${item.id}][discount]" value="0" class="input_discount bg-focus form-control text-right">
                     </td>
                     <td class="col-1 text-end total">
-                        ${item.purchase_rate? item.purchase_rate * item.qty : 0}
+                        ${item.last_purchase? item.last_purchase * item.qty : 0}
                     </td>
                     <td class="remove-purchase-order col-1">
 
@@ -670,7 +685,35 @@
 
 
             $(".remove-purchase-order").click(function() {
-                $(this).closest('tr').remove();
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var id = $(this).closest('tr').attr('id');
+                        $(this).closest('tr').detach();
+                        if ($("#insertProductItemForpurchase").find('tr').length == 1) {
+                            $("#insertProductItemForpurchase").find("tr#no_record").removeClass(
+                                'hidden');
+                        }
+                        id = id.split('-')[1];
+                        axios.delete(`/purchase/${id}/delete/?type=details`)
+                            .then(function(res) {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "Your file has been deleted.",
+                                    icon: "success"
+                                });
+                            });
+
+                    }
+                });
+
                 if ($("#insertProductItemForpurchase").find('tr').length == 1) {
                     $("#insertProductItemForpurchase").find("tr#no_record").removeClass('hidden');
                 }

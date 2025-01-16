@@ -379,6 +379,11 @@
                         } = response.data.data;
                         fetchCustomers(sales.company_id);
                         salesDetails.length > 0 && salesDetails.map(function(item) {
+                            const {code, model, size, color} = item.product_attribute;
+                            item.code = code;
+                            item.model = model;
+                            item.size = size;
+                            item.color = color;
                             setProductDetails(item);
                         });
                         $("#sales_order_transaction_type").val(sales.payment.transaction_type_id);
@@ -584,6 +589,7 @@
         // Function to populate product details
         const setProductDetails = (item) => {
 
+            item.qty = item.qty? item.qty : 1;
             const tbody = $("#insertProductItemForSales");
             const tfoot = $("#insertProductItemForSales").next();
             const hasNoRecord = tbody.find("tr#no_record");

@@ -155,61 +155,73 @@ class PurchaseController extends Controller
     public function edit(Request $request, $id)
     {
 
+
+
         if ($request->method() == 'PUT') {
             DB::beginTransaction();
             try {
 
-                $purchase = Purchase::find($request->purchase_id);
+
+
+                $product_details = $request->product_details;
+
+
+                $company_id = $request->session()->get('company_id');
+                $purchase_order = $request->purchase_order;
+
+                $purchase = Purchase::find($id);
                 if ($purchase) {
                     // $purchaseDetails = PurchaseDetails::where('purchases_id', $purchase->id)->delete();
 
-
-                    $purchase->company_id = Auth::user()->company_id;
-                    $purchase->supplier_id = $request['supplier_id'];
-                    $purchase->invoice_date = $request['invoice_date'];
-                    $purchase->total_amount = $request['total_amount'];
-                    $purchase->sub_amount = $request['sub_amount'];
-                    $purchase->paid_amount = $request['paid_amount'];
-                    $purchase->grand_total = $request['grand_total_amount'];
-                    $purchase->due_amount = floatval($request['total_amount']) - floatval($request['paid_amount']);
-                    $purchase->note = $request['note'];
-                    $purchase->discount = 0;
-                    $purchase->created_by = Auth::user()->id;
+                    $purchase->company_id = $company_id;
+                    $purchase->supplier_id = $purchase_order['supplier_id'];
+                    $purchase->invoice_date = $purchase_order['invoice_date'];
+                    $purchase->code = $purchase_order['voucher_number'];
+                    $purchase->total_amount = $purchase_order['total_amount'];
+                    $purchase->sub_amount = $request['sub_amount'] ? $request['sub_amount'] : 0;
+                    $purchase->paid_amount = $purchase_order['paid_amount'];
+                    $purchase->grand_total = $purchase_order['grand_total_amount'];
+                    $purchase->due_amount = floatval($purchase_order['total_amount']) - floatval($purchase_order['paid_amount']);
+                    $purchase->status = 1;
+                    $purchase->note = $purchase_order['supplier_note'];
+                    $purchase->discount = $purchase_order['total_discount'];
                     $purchase->created_time = date('H:i:s');
                     $purchase->created_date = date('Y-m-d');
+                    $purchase->created_by = Auth::user()->id;
                     $purchase->save();
 
 
-                    /* <- Purchase Payment ->*/
-                    $purchasePayment = new PurchasePayment();
-                    $purchasePayment->purchases_id = $purchase->id;
-                    $purchasePayment->transaction_type_id = $request['transaction_type_id'];
+                     /* <- Purchase Payment ->*/
+                    $purchasePayment = PurchasePayment::select()->where('purchases_id', $id)->first();
+                    $purchasePayment->transaction_type_id = $purchase_order['transaction_type'];
                     $purchasePayment->amount = $purchase->paid_amount;
-                    $purchasePayment->receipt_no = purchasePaymentReceiptNo();
                     $purchasePayment->supplier_id = $purchase->supplier_id;
                     $purchasePayment->discount = $purchase->discount;
                     $purchasePayment->created_date = $purchase->created_date;
                     $purchasePayment->added_by = Auth::user()->id;
-                    $purchasePayment->company_id = Auth::user()->company_id;
+                    $purchasePayment->company_id = $company_id;
                     $purchasePayment->save();
-
 
                     /* <- Purchase Payment log send ->*/
                     paymentLogSend($purchasePayment->transaction_type_id, 1, $purchasePayment->amount, $purchasePayment->id);
 
-                    $productCustomizations =  $request['productCustomizations'];
-
-                    foreach ($productCustomizations as $item) {
-
+                    foreach ($product_details as $item) {
+                        $productAttribute  = ProductAttribute::select()->where('id', $item['product_attribute_id'])->first();
 
                         $purchaseDetails = PurchaseDetails::find($item['id']);
-                        $beforeQty = $purchaseDetails->qty;
+
+                        if ($purchaseDetails) {
+                            $beforeQty = $purchaseDetails->qty;
+                        } else {
+                            $purchaseDetails = new PurchaseDetails();
+                            $beforeQty = 0;
+                        }
+
                         $purchaseDetails->product_attribute_id = $item['product_attribute_id'];
                         $purchaseDetails->purchases_id = $purchase->id;
                         $purchaseDetails->qty = $item['qty'];
                         $purchaseDetails->product_id = $item['product_id'];
                         $purchaseDetails->purchase_rate = $item['purchase_rate'];
-                        $purchaseDetails->sales_rate = $item['sales_rate'];
                         $purchaseDetails->discount = $item['discount'];
                         $purchaseDetails->total = $item['total'];
                         $purchaseDetails->created_time = $purchase->created_time;
@@ -217,8 +229,6 @@ class PurchaseController extends Controller
                         $purchaseDetails->save();
 
 
-
-                        $productAttribute  = ProductAttribute::select()->where('id', $item['product_attribute_id'])->first();
                         $productAttribute->current_stock = intval($productAttribute->current_stock) + intval($item['qty']) - intval($beforeQty);
                         $productAttribute->last_purchase = $item['purchase_rate'];
 
@@ -226,24 +236,17 @@ class PurchaseController extends Controller
                             (floatval($item['purchase_rate']) * intval($item['qty']))) / (intval($productAttribute->current_stock) + intval($item['qty']));
                         $productAttribute->save();
 
-
-
                         /* <- Product log send ->*/
-                        $curl = curl_init();
-                        $url = url('/api/log/product?product_attribute_id=' . $productAttribute->id
-                            . '&type=1&qty=' . $item['qty'] . '&ref_id=' . $purchaseDetails->id);
-                        curl_setopt($curl, CURLOPT_URL, $url);
-                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                        curl_setopt($curl, CURLOPT_TIMEOUT, 3);
-                        curl_exec($curl);
-                        curl_close($curl);
+
+                        productLogSend($productAttribute->id, 1, $item['qty'], $purchaseDetails->id);
                     }
 
                     DB::commit();
-                    return $this->respondWithSuccess('Successfully updated Purchases', $purchase);
+                    return redirect()->route('purchase.invoice', ['id' => $purchase->id]);
                 }
             } catch (\Throwable $th) {
                 DB::rollBack();
+                dd($th->getMessage());
                 return $this->respondWithError('error', $th->getMessage());
             }
         }
@@ -404,9 +407,16 @@ class PurchaseController extends Controller
 
 
     // delete
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
         try {
+
+            if($request->type == 'details'){
+                $purchaseDetail = PurchaseDetails::find($id);
+                $purchaseDetail->delete();
+                return $this->respondWithSuccess('Purchase Details deleted successfully', $purchaseDetail);
+            }
+
             $purchase = Purchase::find($id);
             $purchase->status = 0;
             $purchase->save();
