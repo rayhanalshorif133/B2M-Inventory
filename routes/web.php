@@ -143,7 +143,6 @@ Route::middleware('auth')
         Route::get('/fetch/{id}', 'fetch')->name('fetch');
         Route::match(['get', 'put'], '/{id}/edit/', 'edit')->name('edit');
         Route::delete('/{id}/delete/', 'delete')->name('delete');
-        Route::get('/invoice/{id}', 'invoice')->name('invoice');
         Route::get('/fetch-invoice', 'fetchInvoice')->name('invoice.fetch-invoice');
         Route::get('/payment-list', 'paymentList')->name('payment-list');
 

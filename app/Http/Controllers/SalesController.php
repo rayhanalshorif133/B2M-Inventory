@@ -384,7 +384,7 @@ class SalesController extends Controller
 
             if ($request->type == 'sales_details') {
                 $salesDetails = SalesDetails::find($id);
-                $salesDetails->save();
+                $salesDetails->delete();
                 return $this->respondWithSuccess('Sales Details deleted successfully', $salesDetails);
             }
 

@@ -620,13 +620,13 @@
                     <input type="number" name="product_details[${item.id}][qty]" value="${item.qty}" class="input_qty bg-focus form-control text-right" required="required">
                 </td>
                 <td>
-                    <input type="number" name="product_details[${item.id}][purchase_rate]" value="${item.last_purchase? item.last_purchase : 0}" class="bg-focus form-control text-right input_purchase_rate" required="required">
+                    <input type="number" name="product_details[${item.id}][purchase_rate]" value="${item.purchase_rate? item.purchase_rate : 0}" class="bg-focus form-control text-right input_purchase_rate" required="required">
                 </td>
                 <td>
-                    <input type="number" name="product_details[${item.id}][discount]" value="0" class="input_discount bg-focus form-control text-right">
+                    <input type="number" name="product_details[${item.id}][discount]" value="${item.discount? item.discount : 0}" class="input_discount bg-focus form-control text-right">
                     </td>
                     <td class="col-1 text-end total">
-                        ${item.last_purchase? item.last_purchase * item.qty : 0}
+                        ${item.purchase_rate? item.purchase_rate * item.qty : 0}
                     </td>
                     <td class="remove-purchase-order col-1">
 

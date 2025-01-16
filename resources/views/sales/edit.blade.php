@@ -379,7 +379,12 @@
                         } = response.data.data;
                         fetchCustomers(sales.company_id);
                         salesDetails.length > 0 && salesDetails.map(function(item) {
-                            const {code, model, size, color} = item.product_attribute;
+                            const {
+                                code,
+                                model,
+                                size,
+                                color
+                            } = item.product_attribute;
                             item.code = code;
                             item.model = model;
                             item.size = size;
@@ -589,7 +594,7 @@
         // Function to populate product details
         const setProductDetails = (item) => {
 
-            item.qty = item.qty? item.qty : 1;
+            item.qty = item.qty ? item.qty : 1;
             const tbody = $("#insertProductItemForSales");
             const tfoot = $("#insertProductItemForSales").next();
             const hasNoRecord = tbody.find("tr#no_record");
@@ -679,7 +684,37 @@
 
 
             $(".remove-sales-order").click(function() {
-                $(this).closest('tr').remove();
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var id = $(this).closest('tr').attr('id');
+                        id = id.split('-')[1];
+                        $(this).closest('tr').detach();
+                        if ($("#insertProductItemForpurchase").find('tr').length == 1) {
+                            $("#insertProductItemForpurchase").find("tr#no_record").removeClass(
+                                'hidden');
+                        }
+                        axios.delete(`/sales/${id}/delete/?type=sales_details`)
+                            .then(function(res) {
+
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "Your file has been deleted.",
+                                    icon: "success"
+                                });
+                            });
+
+                    }
+                });
+
                 if ($("#insertProductItemForSales").find('tr').length == 1) {
                     $("#insertProductItemForSales").find("tr#no_record").removeClass('hidden');
                 }

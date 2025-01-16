@@ -96,11 +96,15 @@
                 <div class="flex justify-between" class="marginTopClass">
                     <div>
                         <p class="text-sm font-normal">From</p>
+                        @if($item->customer)
                         <p class="text-sm font-semibold">{{ $item->customer->name }}</p>
                         <p class="text-sm font-normal">{{ $item->customer->address }}</p>
-                        <p class="text-sm font-normal">
-                            Phone: {{ $item->customer->contact }}
-                        </p>
+                        <p class="text-sm font-normal">Phone: {{ $item->customer->contact }}</p>
+                        @else
+                        <p class="text-sm font-semibold">{{ $item->supplier->name }}</p>
+                        <p class="text-sm font-normal">{{ $item->supplier->address }}</p>
+                        <p class="text-sm font-normal">Phone: {{ $item->supplier->contact }}</p>
+                        @endif
                     </div>
                     <div class="hiddenClass">
                         <h2 class="text-2xl font-bold mt-3 px-5 py-2 border-2 border-gray-700 border-dotted">

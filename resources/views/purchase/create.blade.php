@@ -582,16 +582,16 @@
                     <input type="number" name="product_details[${item.id}][qty]" value="${SETQTY}" class="input_qty bg-focus form-control text-right" required="required">
                 </td>
                 <td>
-                    <input type="number" name="product_details[${item.id}][last_purchase]" value="${item.last_purchase? item.last_purchase : 0}" class="bg-focus form-control text-right input_last_purchase" required="required">
+                    <input type="number" name="product_details[${item.id}][purchase_rate]" value="${item.purchase_rate? item.purchase_rate : 0}" class="bg-focus form-control text-right input_purchase_rate" required="required">
                 </td>
                 <td>
                     <input type="number" name="product_details[${item.id}][discount]" value="0" class="input_discount bg-focus form-control text-right">
                     </td>
                     <td class="col-1 text-end total">
-                        ${item.last_purchase? item.last_purchase : 0}
+                        ${item.purchase_rate? item.purchase_rate : 0}
                     </td>
                     <td class="remove-sales-order col-1">
-                        <input type="hidden" name="product_details[${item.id}][total]" value="${item.last_purchase? item.last_purchase : 0}" class="bg-focus form-control text-right input_total">
+                        <input type="hidden" name="product_details[${item.id}][total]" value="${item.purchase_rate? item.purchase_rate : 0}" class="bg-focus form-control text-right input_total">
                     <span id="cancel" class="text-danger cursor-pointer d-block text-right" href="">
                         <i class="fa fa-trash fs-5 " aria-hidden="true"></i>
                     </span>
@@ -631,7 +631,7 @@
                 const qtyInput = rowWithId.find('td').eq(1).find('.input_qty');
                 // input_total
                 const input_total = rowWithId.find('.input_total');
-                let lastPurchase = parseFloat(rowWithId.find('.input_last_purchase').val());
+                let lastPurchase = parseFloat(rowWithId.find('.input_purchase_rate').val());
                 let currentQty = parseInt(qtyInput.val()) + 1;
                 qtyInput.val(currentQty);
                 rowWithId.find('td').eq(4).html(currentQty * lastPurchase);
@@ -652,7 +652,7 @@
                 }
             });
 
-            $('.input_last_purchase, .input_qty, .input_discount').on('blur', updateTotalAmount);
+            $('.input_purchase_rate, .input_qty, .input_discount').on('blur', updateTotalAmount);
 
             handleTotalGrandAmount();
 
@@ -661,7 +661,7 @@
 
         function updateTotalAmount() {
             const rowWithId = $(this).closest('tr');
-            const purchaseRate = parseFloat(rowWithId.find('.input_last_purchase').val());
+            const purchaseRate = parseFloat(rowWithId.find('.input_purchase_rate').val());
             const currentQty = parseInt(rowWithId.find('.input_qty').val());
             const discount = parseFloat(rowWithId.find('.input_discount').val()) ||
                 0; // Default to 0 if no discount

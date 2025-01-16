@@ -84,7 +84,7 @@ class PurchaseController extends Controller
             $purchase->sub_amount = 0;
             $purchase->paid_amount = $purchase_order['paid_amount'];
             $purchase->grand_total = $purchase_order['grand_total_amount'];
-            $purchase->due_amount = floatval($purchase_order['total_amount']) - floatval($purchase_order['paid_amount']);
+            $purchase->due_amount = floatval($purchase_order['total_amount']) - floatval($purchase_order['paid_amount']) - floatval($purchase_order['total_discount']);
             $purchase->note = $purchase_order['supplier_note'];
             $purchase->discount = $purchase_order['total_discount'];
             $purchase->created_by = Auth::user()->id;
@@ -122,7 +122,7 @@ class PurchaseController extends Controller
                 $purchaseDetails->purchases_id = $purchase->id;
                 $purchaseDetails->qty = $item['qty'];
                 $purchaseDetails->product_id = $item['product_id'];
-                $purchaseDetails->purchase_rate = $item['last_purchase'];
+                $purchaseDetails->purchase_rate = $item['purchase_rate'];
                 $purchaseDetails->discount = $item['discount'];
                 $purchaseDetails->total = $item['total'];
                 $purchaseDetails->created_time = $purchase->created_time;
@@ -132,10 +132,10 @@ class PurchaseController extends Controller
 
 
                 $productAttribute->current_stock = intval($productAttribute->current_stock) + intval($item['qty']);
-                $productAttribute->last_purchase = $item['last_purchase'];
+                $productAttribute->last_purchase = $item['purchase_rate'];
 
                 $productAttribute->unit_cost = ((intval($productAttribute->current_stock) * floatval($productAttribute->last_purchase)) +
-                    (floatval($item['last_purchase']) * intval($item['qty']))) / (intval($productAttribute->current_stock) + intval($item['qty']));
+                    (floatval($item['purchase_rate']) * intval($item['qty']))) / (intval($productAttribute->current_stock) + intval($item['qty']));
                 $productAttribute->save();
                 // Sent Product Log ->
                 productLogSend($productAttribute->id, 1, $item['qty'], $purchaseDetails->id);
@@ -143,7 +143,7 @@ class PurchaseController extends Controller
 
 
             DB::commit();
-            return redirect()->route('purchase.invoice', $purchase->id)->with('success', 'Successfully created purchases');
+            return redirect()->route('type.invoice', ['type' => 'purchase', 'id' => $purchase->id]);
         } catch (\Throwable $th) {
             DB::rollBack();
             return $this->respondWithError('error', $th->getMessage());
@@ -171,7 +171,6 @@ class PurchaseController extends Controller
 
                 $purchase = Purchase::find($id);
                 if ($purchase) {
-                    // $purchaseDetails = PurchaseDetails::where('purchases_id', $purchase->id)->delete();
 
                     $purchase->company_id = $company_id;
                     $purchase->supplier_id = $purchase_order['supplier_id'];
@@ -181,7 +180,7 @@ class PurchaseController extends Controller
                     $purchase->sub_amount = $request['sub_amount'] ? $request['sub_amount'] : 0;
                     $purchase->paid_amount = $purchase_order['paid_amount'];
                     $purchase->grand_total = $purchase_order['grand_total_amount'];
-                    $purchase->due_amount = floatval($purchase_order['total_amount']) - floatval($purchase_order['paid_amount']);
+                    $purchase->due_amount = floatval($purchase_order['total_amount']) - floatval($purchase_order['paid_amount']) - floatval($purchase_order['total_discount']);
                     $purchase->status = 1;
                     $purchase->note = $purchase_order['supplier_note'];
                     $purchase->discount = $purchase_order['total_discount'];
@@ -232,7 +231,7 @@ class PurchaseController extends Controller
                         $productAttribute->current_stock = intval($productAttribute->current_stock) + intval($item['qty']) - intval($beforeQty);
                         $productAttribute->last_purchase = $item['purchase_rate'];
 
-                        $productAttribute->unit_cost = ((intval($productAttribute->current_stock) * floatval($productAttribute->last_purchase)) +
+                        $productAttribute->unit_cost = ((intval($productAttribute->current_stock) * floatval($productAttribute->purchase_rate)) +
                             (floatval($item['purchase_rate']) * intval($item['qty']))) / (intval($productAttribute->current_stock) + intval($item['qty']));
                         $productAttribute->save();
 
@@ -242,7 +241,7 @@ class PurchaseController extends Controller
                     }
 
                     DB::commit();
-                    return redirect()->route('purchase.invoice', ['id' => $purchase->id]);
+                    return redirect()->route('type.invoice', ['type' => 'purchase', 'id' => $purchase->id]);
                 }
             } catch (\Throwable $th) {
                 DB::rollBack();
