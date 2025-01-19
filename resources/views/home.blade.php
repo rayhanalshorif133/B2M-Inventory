@@ -179,7 +179,7 @@
                     success: function(response) {
                         const data = response.data;
                         $("#totalPurchaseDue").text(`৳ ${data.totalPurchaseDue}`);
-                        $("#totalSalesDue").text(`৳ ${data.totalSalesDue - data.totalsPaymentReceived}`);
+                        $("#totalSalesDue").text(`৳ ${data.totalSalesDue}`);
                         $("#totalSalesAmount").text(`৳ ${data.totalSalesAmount}`);
                         $("#totalExpenseAmount").text(`৳ ${data.totalExpenseAmount}`);
                         $("#todaysTotalPurchase").text(`৳ ${data.totalsTotalPurchase}`);

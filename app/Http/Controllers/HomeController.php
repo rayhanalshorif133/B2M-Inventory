@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 use App\Models\Customer;
 use App\Models\Purchase;
 use App\Models\SalesPayment;
@@ -34,19 +35,28 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+
+
+
+
         if ($request->type == 'fetch') {
+
             $company_id = Auth::user()->company_id;
+
+            // For purchases
+            $purchases_grand_total = DB::table('purchases')->select()->where('company_id', '=', $company_id)->get()->sum('grand_total');
+            $purchases_pay = DB::table('purchase_payments')->select()->where('company_id', '=', $company_id)->get()->sum('amount');
+
+            // For Sales
+            $sales_grand_total = DB::table('sales')->select()->where('company_id', '=', $company_id)->get()->sum('grand_total');
+
+            $sales_pay = DB::table('sales_payments')->select()->where('company_id', '=', $company_id)->get()->sum('amount');
+
+
             $data = [
-                'totalPurchaseDue' => Purchase::select('due_amount')
-                    ->where('company_id', $company_id)
-                    ->get()
-                    ->sum('due_amount'),
+                'totalPurchaseDue' => $purchases_pay > $purchases_grand_total ? 0 :  $purchases_grand_total - $purchases_pay,
 
-                'totalSalesDue' => Sales::select('due_amount')
-                    ->where('company_id', $company_id)
-                    ->get()
-                    ->sum('due_amount'),
-
+                'totalSalesDue' => $sales_pay > $sales_grand_total ? 0 :  $sales_grand_total - $sales_pay,
                 'totalSalesAmount' => Sales::select('total_amount')
                     ->where('company_id', $company_id)
                     ->get()
@@ -109,6 +119,8 @@ class HomeController extends Controller
         }
 
 
+        return view('home');
+
 
 
         // if (!TipsAndTour::select()->where('user_id', Auth::user()->id)->first()) {
@@ -124,6 +136,5 @@ class HomeController extends Controller
         // }
 
 
-        return view('home');
     }
 }

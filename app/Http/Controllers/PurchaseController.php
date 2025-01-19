@@ -328,7 +328,7 @@ class PurchaseController extends Controller
                 ->map(function ($supplier) {
                     $total_amount = DB::table('purchases')
                         ->where('supplier_id', $supplier->id)
-                        ->sum('total_amount'); // Total amount of purchases
+                        ->sum('grand_total'); // Total amount of purchases
 
                     $total_pay_amount = DB::table('purchase_payments')
                         ->where('supplier_id', $supplier->id)
