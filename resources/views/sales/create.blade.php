@@ -303,7 +303,8 @@
                                                     <input type="hidden" class="bg-focus form-control"
                                                         id="set_total_amount" name="sales_order[total_amount]">
                                                     <input type="text" class="bg-focus form-control"
-                                                        name="sales_order[paid_amount]" id="paid_amount" value="0"/>
+                                                        name="sales_order[paid_amount]" id="paid_amount"
+                                                        value="0" />
                                                     <p class="d-flex mt-2 ">
                                                         <label class="form-label mx-2 font-size-14px">Due Amount:</label>
                                                         <label class="form-label text-danger font-size-14px"
@@ -358,6 +359,47 @@
             handleBarcodeScan();
 
             $(".salesCreateSubmitBtn").click(function() {
+
+                const customer = $("#customer").val();
+                const transaction_type = $("#sales_order_transaction_type").val();
+
+                if (customer == null) {
+                    Toastr.fire({
+                        icon: 'error',
+                        title: 'Please select a customer',
+                    })
+                    return false;
+                }
+
+                if (!transaction_type) {
+                    Toastr.fire({
+                        icon: 'error',
+                        title: 'Please select a transaction type',
+                    })
+                    return false;
+
+                }
+
+                if ($(".slsord_line").length < 2) {
+                    Toastr.fire({
+                        icon: 'error',
+                        title: 'Please Insert product item',
+                    })
+                    return false;
+                }
+
+                var paidAmount = $("#paid_amount").val() ? $("#paid_amount").val() : 0;
+                var dueAmount = parseFloat($("#due_amount").text());
+
+                if (paidAmount > dueAmount) {
+                    Toastr.fire({
+                        icon: 'error',
+                        title: 'Invalid payment amount',
+                    })
+                    return false;
+                }
+
+
                 $(this).text('Processing ...').prop('disabled', true);
 
                 $(".salesCreateForm").submit();
@@ -366,9 +408,7 @@
         });
 
 
-        // const createTransactionModal = () => {
 
-        // };
 
 
         const handleBarcodeScan = () => {
@@ -396,7 +436,7 @@
             $("#grand_total_amount").text(grand_total_amount);
             $("#set_grand_total_amount").val(grand_total_amount);
 
-            var paidAmount = $("#paid_amount").val()? $("#paid_amount").val() : 0;
+            var paidAmount = $("#paid_amount").val() ? $("#paid_amount").val() : 0;
             var dueAmount = parseFloat(grand_total_amount) - parseFloat(paidAmount);
             $("#due_amount").text(dueAmount);
             $("#set_due_amount").val(dueAmount);

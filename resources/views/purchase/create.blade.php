@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Add New Sales'])
+@extends('layouts.app', ['title' => 'Add New Purchase'])
 
 @section('head')
     <style type="text/css">
@@ -158,7 +158,8 @@
                                                             Supplier Name
                                                         </label>
                                                         <select class="form-control select2" id="supplier"
-                                                            name="purchase_order[supplier_id]" style="width: 100%;"></select>
+                                                            name="purchase_order[supplier_id]"
+                                                            style="width: 100%;"></select>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 col-12">
@@ -303,7 +304,8 @@
                                                     <input type="hidden" class="bg-focus form-control"
                                                         id="set_total_amount" name="purchase_order[total_amount]">
                                                     <input type="text" class="bg-focus form-control"
-                                                        name="purchase_order[paid_amount]" id="paid_amount" />
+                                                        name="purchase_order[paid_amount]" value="0"
+                                                        id="paid_amount" />
                                                     <p class="d-flex mt-2 ">
                                                         <label class="form-label mx-2 font-size-14px">Due Amount:</label>
                                                         <label class="form-label text-danger font-size-14px"
@@ -323,7 +325,7 @@
                                         <div class="d-flex justify-content-end">
                                             <a class="btn btn-outline-danger" style="margin-right: 10px;"
                                                 href="{{ route('sales.create') }}">Reset</a>
-                                            <button type="button" class="btn btn-success me-2 salesCreateSubmitBtn"
+                                            <button type="button" class="btn btn-success me-2 purchaseCreateSubmitBtn"
                                                 style="width: 20vw;">
                                                 Submit
                                             </button>
@@ -357,7 +359,50 @@
             handlePaidAmount();
             handleBarcodeScan();
 
-            $(".salesCreateSubmitBtn").click(function() {
+            $(".purchaseCreateSubmitBtn").click(function() {
+
+                const supplier = $("#supplier").val();
+                const transaction_type = $("#purchase_order_transaction_type").val();
+
+                if (supplier == null) {
+                    Toastr.fire({
+                        icon: 'error',
+                        title: 'Please select a supplier',
+                    })
+                    return false;
+                }
+
+                if (!transaction_type) {
+                    Toastr.fire({
+                        icon: 'error',
+                        title: 'Please select a transaction type',
+                    })
+                    return false;
+
+                }
+
+                if ($(".slsord_line").length < 2) {
+                    Toastr.fire({
+                        icon: 'error',
+                        title: 'Please Insert product item',
+                    })
+                    return false;
+                }
+
+
+                var paidAmount = $("#paid_amount").val() ? $("#paid_amount").val() : 0;
+                var dueAmount = parseFloat($("#due_amount").text());
+
+                if (paidAmount > dueAmount) {
+                    Toastr.fire({
+                        icon: 'error',
+                        title: 'Invalid payment amount',
+                    })
+                    return false;
+                }
+
+
+
                 $(this).text('Processing ...').prop('disabled', true);
 
                 $(".salesCreateForm").submit();
@@ -396,7 +441,7 @@
             $("#grand_total_amount").text(grand_total_amount);
             $("#set_grand_total_amount").val(grand_total_amount);
 
-            var paidAmount = $("#paid_amount").val()? $("#paid_amount").val() : 0;
+            var paidAmount = $("#paid_amount").val() ? $("#paid_amount").val() : 0;
             var dueAmount = parseFloat(grand_total_amount) - parseFloat(paidAmount);
             $("#due_amount").text(dueAmount);
             $("#set_due_amount").val(dueAmount);
@@ -575,7 +620,7 @@
 
             if (rowWithId.length == 0) {
                 var SETQTY = 1;
-                if(item.qty > 0) SETQTY = item.qty;
+                if (item.qty > 0) SETQTY = item.qty;
                 var rowHTML = `
             <tr id="${id}" class="slsord_line">
                 <td class="col-3">
