@@ -114,7 +114,7 @@
                         <button type="button" class="btn btn-secondary" onclick="quickPurchasePayModalHide()">
                             Close
                         </button>
-                        <button type="button" class="btn btn-primary" onclick="handleSubmit()">
+                        <button type="button" class="btn btn-primary paymentSubmitBtn" onclick="handleSubmit()">
                             Submit
                         </button>
                     </div>
@@ -230,6 +230,9 @@
 
         const handleSubmit = (event) => {
 
+
+            $('.paymentSubmitBtn').prop('disabled', true);
+            $('.paymentSubmitBtn').text('Processing...');
             const data = {
                 payment_amount: $("#paymentAmount").val(),
                 supplier_id: $("#supplierId").val(),
