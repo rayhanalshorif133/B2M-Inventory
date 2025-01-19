@@ -169,7 +169,7 @@
                                             </div>
                                         </div>
 
-                                        <button type="submit" class="btn btn-success btn-sm mt-3">
+                                        <button type="submit" class="btn btn-success btn-sm mt-3 submitBtn">
                                             Submit
                                         </button>
                                     </form>
@@ -587,5 +587,22 @@
                 }
             });
         };
+
+
+        $(document).on("keyup", '#product-code', function(e){
+            const code = $(this).val();
+            const thisInput = $(this);
+            axios.get(`/product/check-duplicate-code/${code}`).then(function(response) {
+                const status = response.data.status;
+                thisInput.siblings('span').hide();
+                if(status == true) {
+                    thisInput.after(`<span class="text-success text-bold">${response.data.data}</span>`);
+                    $(".submitBtn").attr('disabled', false);
+                }else{
+                    thisInput.after(`<span class="text-danger text-bold">${response.data.data}</span>`);
+                    $(".submitBtn").attr('disabled', true);
+                }
+            });
+        });
     </script>
 @endpush
