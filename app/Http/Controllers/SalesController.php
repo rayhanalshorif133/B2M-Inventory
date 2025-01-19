@@ -341,12 +341,10 @@ class SalesController extends Controller
 
         if ($request->type == 'customer') {
             $total_amount = DB::table('sales')
-                ->where('invoice_date', $request->date)
                 ->where('customer_id', $request->customer_id)
-                ->sum('total_amount');
+                ->sum('grand_total');
             $total_pay_amount = DB::table('sales_payments')
                 ->where('customer_id', $request->customer_id)
-                ->where('created_date', $request->date)
                 ->sum('amount');
             $due_amount = floatval($total_amount) - floatval($total_pay_amount);
             return $this->respondWithSuccess('Successfully fetch Sales invoice', $due_amount);

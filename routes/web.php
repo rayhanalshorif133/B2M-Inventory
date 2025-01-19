@@ -174,6 +174,7 @@ Route::middleware('auth')
         Route::match(['get', 'post'], '/create', 'create')->name('create');
         Route::get('/list', 'index')->name('index');
         Route::get('/fetch/{id}', 'fetch')->name('fetch');
+        Route::get('/fetch-invoice', 'fetchInvoice')->name('invoice.fetch-invoice');
         Route::match(['get', 'put'], '/{id}/edit/', 'edit')->name('edit');
         Route::delete('/{id}/delete/', 'delete')->name('delete');
         Route::get('/payment-list', 'paymentList')->name('payment-list');
