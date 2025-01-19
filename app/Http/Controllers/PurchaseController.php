@@ -368,12 +368,10 @@ class PurchaseController extends Controller
 
         if ($request->type == 'supplier') {
             $total_amount = DB::table('purchases')
-                ->where('invoice_date', $request->date)
                 ->where('supplier_id', $request->supplier_id)
-                ->sum('total_amount');
+                ->sum('grand_total');
             $total_pay_amount = DB::table('purchase_payments')
                 ->where('supplier_id', $request->supplier_id)
-                ->where('created_date', $request->date)
                 ->sum('amount');
             $due_amount = floatval($total_amount) - floatval($total_pay_amount);
             return $this->respondWithSuccess('Successfully fetch Purchases invoice', $due_amount);
