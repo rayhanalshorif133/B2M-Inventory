@@ -42,7 +42,8 @@
                             <div class="tab-content" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
                                     aria-labelledby="nav-home-tab">
-                                    <form class="mt-3" action="{{ route('product.create') }}" method="POST">
+                                    <form class="mt-3 productCreateForm" action="{{ route('product.create') }}"
+                                        method="POST">
                                         @csrf
                                         @method('POST')
                                         <h3 class="text-lg font-medium">Product's Basic Information</h3>
@@ -169,7 +170,7 @@
                                             </div>
                                         </div>
 
-                                        <button type="submit" class="btn btn-success btn-sm mt-3 submitBtn">
+                                        <button type="button" class="btn btn-success btn-sm mt-3 submitBtn">
                                             Submit
                                         </button>
                                     </form>
@@ -589,12 +590,12 @@
         };
 
 
-        $(document).on("keyup", '#product-code', function(e){
+        $(document).on("keyup", '#product-code', function(e) {
             const code = $(this).val();
             const thisInput = $(this);
             console.log(code);
 
-            if(!code){
+            if (!code) {
                 thisInput.siblings('span').hide();
                 return false;
             }
@@ -602,14 +603,48 @@
             axios.get(`/product/check-duplicate-code/${code}`).then(function(response) {
                 const status = response.data.status;
                 thisInput.siblings('span').hide();
-                if(status == true) {
+                if (status == true) {
                     thisInput.after(`<span class="text-success text-bold">${response.data.data}</span>`);
                     $(".submitBtn").attr('disabled', false);
-                }else{
+                } else {
                     thisInput.after(`<span class="text-danger text-bold">${response.data.data}</span>`);
                     $(".submitBtn").attr('disabled', true);
                 }
             });
+        });
+
+
+        $(document).on('click', '.submitBtn', function(e) {
+
+            const category = $('#selectCategory').val();
+            const subCategory = $('#selectSubCategory').val();
+            const productName = $('#productName').val();
+
+            if (!category) {
+                Toastr.fire({
+                    icon: 'error',
+                    title: 'Please select a category',
+                })
+                return false;
+            }
+
+            if (!subCategory) {
+                Toastr.fire({
+                    icon: 'error',
+                    title: 'Please select a sub category',
+                })
+                return false;
+            }
+
+            if (!productName) {
+                Toastr.fire({
+                    icon: 'error',
+                    title: 'Please enter a product name',
+                })
+                return false;
+            }
+
+            $(".productCreateForm").submit();
         });
     </script>
 @endpush
