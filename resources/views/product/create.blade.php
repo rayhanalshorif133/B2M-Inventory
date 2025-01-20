@@ -592,6 +592,13 @@
         $(document).on("keyup", '#product-code', function(e){
             const code = $(this).val();
             const thisInput = $(this);
+            console.log(code);
+
+            if(!code){
+                thisInput.siblings('span').hide();
+                return false;
+            }
+
             axios.get(`/product/check-duplicate-code/${code}`).then(function(response) {
                 const status = response.data.status;
                 thisInput.siblings('span').hide();
