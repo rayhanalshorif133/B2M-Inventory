@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Company;
+use App\Models\Customer;
 use App\Models\Product;
+use App\Models\TransactionType;
 use App\Models\ProductAttribute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -170,16 +172,6 @@ class ProductController extends Controller
             $product->save();
 
 
-
-
-
-
-
-
-
-
-
-
             $productDetailsInfos = $request->product_details;
 
             foreach ($productDetailsInfos as $item) {
@@ -290,7 +282,6 @@ class ProductController extends Controller
 
             $products = $request->selectedProducts;
             return view('product.barcode-print', compact('products'));
-
         }
     }
 

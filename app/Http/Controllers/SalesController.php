@@ -153,7 +153,6 @@ class SalesController extends Controller
             return redirect()->route('type.invoice', ['type' => 'sales', 'id' => $sales->id]);
         } catch (\Throwable $th) {
             DB::rollBack();
-            dd($th->getMessage());
             return redirect()->route('sales.index')->with('error', $th->getMessage());
         }
     }
@@ -232,7 +231,7 @@ class SalesController extends Controller
                     $salesDetails->total = $item['total'];
                     $salesDetails->created_time = $sales->created_time;
                     $salesDetails->created_date = $sales->created_date;
-                    $salesDetails->current_unit_cost = $productAttribute->unit_cost;
+                    $salesDetails->current_unit_cost = $productAttribute->unit_cost ? $productAttribute->unit_cost : 0;
                     $salesDetails->save();
 
                     $productAttribute->current_stock = intval($productAttribute->current_stock) +  intval($beforeQty) - intval($salesDetails->qty);

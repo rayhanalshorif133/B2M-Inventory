@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Add New Sales'])
+@extends('layouts.app', ['title' => 'Update Sales'])
 
 @section('head')
     <style type="text/css">
@@ -93,14 +93,14 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Add New Sales</h1>
+                        <h1 class="m-0">Update Sales</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">
                                 <a href="{{ route('home') }}" class="text-capitalize">home</a>
                                 <span class="text-gray"> / </span>
-                                <span class="text-gray">Add New Sales</span>
+                                <span class="text-gray">Update Sales</span>
                             </li>
                         </ol>
                     </div>
@@ -598,12 +598,17 @@
             const tbody = $("#insertProductItemForSales");
             const tfoot = $("#insertProductItemForSales").next();
             const hasNoRecord = tbody.find("tr#no_record");
-            const id = `row-${item.id}`;
+            const id = `row-${item.code}`;
             if (hasNoRecord) {
                 hasNoRecord.addClass('hidden');
             }
             const rowWithId = tbody.find('#' + id) ? tbody.find('#' + id) :
                 false;
+
+            if(item.discount == undefined){
+                item.discount = 0;
+            }
+
 
             if (rowWithId.length == 0) {
                 var rowHTML = `
@@ -611,7 +616,7 @@
                 <td class="col-3">
                     <input type="hidden" name="product_details[${item.id}][id]" value="${item.id}">
                     <input type="hidden" name="product_details[${item.id}][product_id]" value="${item.product_id}">
-                    <input type="hidden" name="product_details[${item.id}][product_attribute_id]" value="${item.id}">
+                    <input type="hidden" name="product_details[${item.id}][product_attribute_id]" value="${item.product_attribute_id}">
                     <small class="text-xs font-semibold">${item.product?.name ? item.product.name : ''}</small><br/>
                     <small class="text-xs font-semibold">${item.code ? item.code : ''} ${item.model ? ' / ' + item.model : ''} ${item.size ? ' / ' + item.size : ''} ${item.color ? ' / ' + item.color : ''}</small><br/>
                 </td>

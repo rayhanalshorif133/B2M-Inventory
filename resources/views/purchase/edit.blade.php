@@ -591,15 +591,13 @@
         // Function to populate product details
         const setProductDetails = (item) => {
 
-            console.clear();
-            console.log(item);
 
             item.qty = item.qty ? item.qty : 1;
 
             const tbody = $("#insertProductItemForpurchase");
             const tfoot = $("#insertProductItemForpurchase").next();
             const hasNoRecord = tbody.find("tr#no_record");
-            const id = `row-${item.id}`;
+            const id = `row-${item.code}`;
             if (hasNoRecord) {
                 hasNoRecord.addClass('hidden');
             }
@@ -612,7 +610,7 @@
                 <td class="col-3">
                     <input type="hidden" name="product_details[${item.id}][id]" value="${item.id}">
                     <input type="hidden" name="product_details[${item.id}][product_id]" value="${item.product_id}">
-                    <input type="hidden" name="product_details[${item.id}][product_attribute_id]" value="${item.product_attribute_id}">
+                    <input type="hidden" name="product_details[${item.id}][product_attribute_id]" value="${item.id}">
                     <small class="text-xs font-semibold">${item.product?.name ? item.product.name : ''}</small><br/>
                     <small class="text-xs font-semibold">${item.code ? item.code : ''} ${item.model ? ' / ' + item.model : ''} ${item.size ? ' / ' + item.size : ''} ${item.color ? ' / ' + item.color : ''}</small><br/>
                 </td>

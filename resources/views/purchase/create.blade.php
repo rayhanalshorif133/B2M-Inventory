@@ -393,13 +393,6 @@
                 var paidAmount = $("#paid_amount").val() ? $("#paid_amount").val() : 0;
                 var dueAmount = parseFloat($("#due_amount").text());
 
-                if (paidAmount > dueAmount) {
-                    Toastr.fire({
-                        icon: 'error',
-                        title: 'Invalid payment amount',
-                    })
-                    return false;
-                }
 
 
 
@@ -437,7 +430,10 @@
         const handleTotalGrandAmount = () => {
             const total_discount = parseFloat($("#total_discount").val());
             const total_amount = parseFloat($("#set_total_amount").val());
-            const grand_total_amount = total_amount - total_discount;
+            var grand_total_amount = total_amount - total_discount;
+            if (isNaN(grand_total_amount)) {
+                grand_total_amount = total_amount;
+            }
             $("#grand_total_amount").text(grand_total_amount);
             $("#set_grand_total_amount").val(grand_total_amount);
 
@@ -606,12 +602,10 @@
         // Function to populate product details
         const setProductDetails = (item) => {
 
-            console.log(item);
             const tbody = $("#insertProductItemForSales");
             const tfoot = $("#insertProductItemForSales").next();
             const hasNoRecord = tbody.find("tr#no_record");
             const id = `row-${item.id}`;
-            console.log(item);
             if (hasNoRecord) {
                 hasNoRecord.addClass('hidden');
             }
