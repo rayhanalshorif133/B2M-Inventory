@@ -5,7 +5,6 @@
 
 @section('content')
     <div class="content-wrapper">
-
         @include(
             '_partials.breadcrumb',
             ['title' => $title],

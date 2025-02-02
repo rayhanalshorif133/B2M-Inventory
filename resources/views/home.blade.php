@@ -40,7 +40,7 @@
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <div class="info-box">
-                            <span class="info-box-icon bg-warning"><i class="fa fa-dollar"></i></span>
+                            <span class="info-box-icon bg-warning"><i class="ion ion-stats-bars"></i></span>
                             <div class="info-box-content">
                                 <span class="text-bold text-uppercase">Total Sales Due</span>
                                 <span class="info-box-number" id="totalSalesDue">৳ 0</span>
@@ -78,7 +78,7 @@
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <div class="info-box">
-                            <span class="info-box-icon bg-yellow"><i class="fa fa-dollar"></i></span>
+                            <span class="info-box-icon bg-yellow"><i class="ion ion-stats-bars"></i></span>
                             <div class="info-box-content">
                                 <span class="text-bold text-uppercase">Today Payment Received (Sales)</span>
                                 <span class="info-box-number" id="todaysPaymentReceived">৳ 0</span>

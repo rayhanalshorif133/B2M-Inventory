@@ -166,6 +166,7 @@ class ReportController extends Controller
                 ->join('products', 'sales_details.product_id', '=', 'products.id') // Join 'product' table
                 ->join('product_attributes', 'sales_details.product_attribute_id', '=', 'product_attributes.id')
                 ->join('sales', 'sales_details.sales_id', '=', 'sales.id')
+                ->where('sales.company_id', Auth::user()->company_id)
                 ->select(
                     'sales_details.product_id',
                     'sales_details.product_attribute_id',
@@ -196,7 +197,7 @@ class ReportController extends Controller
 
 
         if ($request->type == 'fetch' && $request->based == 'invoice' && request()->ajax()) {
-            $query = Sales::select()->with('customer');
+            $query = Sales::select()->where('company_id', Auth::user()->company_id)->with('customer');
             if ($request->start_date && $request->end_date) {
                 $query->whereBetween('invoice_date', [$request->start_date, $request->end_date]);
             } elseif ($request->start_date) {

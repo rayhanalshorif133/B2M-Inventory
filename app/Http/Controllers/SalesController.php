@@ -153,6 +153,7 @@ class SalesController extends Controller
             return redirect()->route('type.invoice', ['type' => 'sales', 'id' => $sales->id]);
         } catch (\Throwable $th) {
             DB::rollBack();
+            dd($th->getMessage());
             return redirect()->route('sales.index')->with('error', $th->getMessage());
         }
     }

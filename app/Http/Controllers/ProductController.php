@@ -41,6 +41,15 @@ class ProductController extends Controller
             return $this->respondWithSuccess('Successfully fetched product data', $products);
         }
 
+        
+        if ($request->type == 'new-purchase-create') {
+            $products = ProductAttribute::select()
+                ->where('company_id', Auth::user()->company_id)
+                ->with('product')
+                ->get();
+            return $this->respondWithSuccess('Successfully fetched product data', $products);
+        }
+
 
         if ($request->type == 'new-sales') {
             $products = ProductAttribute::select()

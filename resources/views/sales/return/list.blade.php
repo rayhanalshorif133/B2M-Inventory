@@ -74,7 +74,7 @@
                             </a>
                         </h5>
                         <button type="button" class="btn-close text-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                            aria-label="Close" onclick="hideShowSalesDetailsModal()"></button>
                     </div>
                     <div class="modal-body">
                         <div id="salesReturnData" class="row">
@@ -109,7 +109,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal"  onclick="hideShowSalesDetailsModal()">Close</button>
                     </div>
                 </div>
             </div>
