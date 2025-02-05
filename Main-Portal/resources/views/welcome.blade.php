@@ -60,7 +60,7 @@
                                 <li class="dropdown_item-1"> <a href="{{ route('auth.login') }}" value="0"
                                         id="login" class="scrollto">Login </a>
                                 </li>
-                                <li class="dropdown_item-2"><a href="{{ route('auth.register') }}" id="signup"
+                                <li class="dropdown_item-2"><a href="{{ route('auth.otp-send') }}" id="signup"
                                         class="scrollto"> Sign Up </a></li>
                             @endif
 
@@ -78,7 +78,7 @@
                         <li class="dropdown_item-1"> <a href="{{ route('auth.login') }}" value="0" id="login"
                                 class="scrollto">Login </a>
                         </li>
-                        <li class="dropdown_item-2"><a href="{{ route('auth.register') }}" id="signup"
+                        <li class="dropdown_item-2"><a href="{{ route('auth.otp-send') }}" id="signup"
                                 class="scrollto">
                                 Sign Up </a></li>
                     @endif

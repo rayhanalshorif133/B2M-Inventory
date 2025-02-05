@@ -118,6 +118,48 @@ class UserController extends Controller
             return view('user.profile', compact('user', 'roles'));
         }
 
+
+        if($request->type == 'update-password') {
+
+            if($request->password != $request->confirm_password){
+                Session::flash('error', 'Password & confirm password doesn\'t match');
+                return redirect()->back();  
+            }
+
+            $userID = $request->session()->get('loginId');
+            $findUser = User::find($userID);
+            $findUser->password = Hash::make($request->password);
+            $findUser->save();
+            Session::flash('success', 'Password successfully updated!');
+            return redirect()->back();
+        }
+
+        if($request->type == 'update-email') {
+
+            if(!$request->email){
+                Session::flash('error', 'Please enter a valid email address');
+                return redirect()->back();  
+            }
+
+            $userID = $request->session()->get('loginId');
+            $hasEmail = User::select()->where('email',$request->email)->where('id', '!=', $userID)->first();
+            if($hasEmail){
+                Session::flash('error', 'Email already exists, please try another email');
+                return redirect()->back();  
+            }
+
+            
+            $findUser = User::find($userID);
+            $findUser->email = $request->email;
+            $findUser->save();
+            $emailController = new EmailController();
+            $emailController->sendEmailVarify();
+
+            Session::flash('success', 'Check your email for a verification link.');
+            return redirect()->back();
+        }
+
+
         try {
 
 

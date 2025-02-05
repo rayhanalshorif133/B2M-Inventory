@@ -1,3 +1,6 @@
+@php
+    $user = Auth::user();
+@endphp
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <ul class="navbar-nav">
         <li class="nav-item">
@@ -9,7 +12,27 @@
     </ul>
 
     <ul class="navbar-nav ml-auto px-2">
+        <li class="nav-item mr-5">
+            @if (!$user->password)
+                <form class="d-flex" action="{{ route('user.profile') }}?type=update-password" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="text" class="form-control mx-2" required name="password" placeholder="Password" />
+                    <input type="text" class="form-control mx-2"  required name="confirm_password"
+                        placeholder="Confirm Password" />
+                    <button type="submit" class="btn btn-sm btn-navy" style="margin: 4px 0 10px;">Update</button>
+                </form>
+            @endif
 
+            @if ($user->password && !$user->email_verified_at)
+                <form class="d-flex" action="{{ route('user.profile') }}?type=update-email" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="email" class="form-control mx-2" name="email" required placeholder="Enter your email" />
+                    <button type="submit" class="btn btn-sm btn-navy" style="margin: 4px 0 10px;">Update</button>
+                </form>
+            @endif
+        </li>
         <li class="nav-item">
             <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                 <i class="fas fa-expand-arrows-alt"></i>
@@ -23,6 +46,4 @@
     </ul>
 </nav>
 
-<script>
-
-</script>
+<script></script>

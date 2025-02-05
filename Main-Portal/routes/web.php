@@ -24,6 +24,7 @@ use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TipsAndTourController;
 use App\Http\Controllers\CommonController;
+use App\Http\Controllers\EmailController;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\User;
 
@@ -37,6 +38,14 @@ use App\Models\User;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('clear', function () {
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    return 'Clear';
+});
 
 Route::get('/', function (Request $request) {
     // return redirect()->route('auth.login');
@@ -59,10 +68,19 @@ Route::middleware('auth')->get('/home', [HomeController::class, 'index'])->name(
 // LoginController
 Route::controller(AuthController::class)->name('auth.')->group(function () {
     Route::middleware('isLoggedIn')->match(['get', 'post'], '/login', 'login')->name('login');
-    Route::match(['get', 'post'], '/register', 'register')->name('register');
+    Route::match(['get', 'post'], '/otp-send', 'otpSend')->name('otp-send');
+    Route::match(['get', 'post'], '/otp-verify/{msisdn}', 'otpVerify')->name('otp-verify');
+    Route::match(['get', 'post'], '/register/{msisdn}', 'register')->name('register');
     Route::match(['get', 'post'], '/forgot-password', 'forgotPassword')->name('forgot-password');
     Route::match(['get', 'post'], '/reset-password', 'resetPassword')->name('reset-password');
 });
+
+
+Route::controller(EmailController::class)->prefix('email')->name('email.')->group(function () {
+    Route::middleware('auth')->match(['get', 'post'], '/send-mail', 'sendEmailVarify')->name('send');
+    Route::match(['get', 'post'], '/verify/{token}', 'verify')->name('verify');
+});
+
 
 Route::middleware('auth')->get('/user-logout', [AuthController::class, 'logout'])->name('logout');
 

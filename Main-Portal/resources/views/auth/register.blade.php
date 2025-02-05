@@ -22,7 +22,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('auth.register') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('auth.register', $msisdn) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
                     <div class="card card-outline p-3 card-info">
@@ -98,7 +98,7 @@
                                 <label for="phone" class="form-label required">Phone Number</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control" id="phone" name="company_phone"
-                                        placeholder="Contact number" value="{{ old('company_phone') }}">
+                                        placeholder="Contact number" required value="{{ old('company_phone') }}">
                                     <div class="input-group-append">
                                         <div class="input-group-text">
                                             <span class="fa-solid fa-phone"></span>
