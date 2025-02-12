@@ -13,18 +13,12 @@ class HomeController extends Controller
     public function home()
     {
 
-        if(!Auth::check()){
-            $user = User::select()->where('id', '!=', 1)->first();
-            Auth::login($user);
-        }
 
-    
-        $campaigns = Campaign::select()
-            ->get()
-            ->each(function ($campaign) {
-                $campaign = $campaign->calculateTimeForCampaign($campaign);
-            });
-        return view('home', compact('campaigns'));
+        if (Auth::check() && Auth::user()->roles[0]->name == "admin") {
+            return redirect()->route('admin.dashboard');
+        }else{
+            return redirect()->route('login');
+        }
     }
 
 
@@ -32,14 +26,6 @@ class HomeController extends Controller
 
     public function admin()
     {
-        if (Auth::check()) {
-            if (Auth::user()->roles[0]->name == "admin") {
-                return redirect()->route('admin.dashboard');
-            } else {
-                return redirect()->route('home');
-            }
-        } else {
-            return redirect()->route('login');
-        }
+        dd('admin');
     }
 }
