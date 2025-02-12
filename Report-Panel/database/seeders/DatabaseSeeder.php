@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
         $userSeeder = new UserSeeder();
         $userSeeder->run();
 
-        $gameSeeder = new GameSeeder();
-        $gameSeeder->run();
+        $userLogSeeder = new UserLogsSeeder();
+        $userLogSeeder->run();
 
-        $campaign = new CampaignSeeder();
-        $campaign->run();
+        $visitLogDetailSeeder = new VisitLogDetailSeeder();
+        $visitLogDetailSeeder->run();
     }
 }
