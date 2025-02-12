@@ -42,6 +42,34 @@ nav ul li a:hover{
     scale: 1.1;
 }
 
+.pointer-events {
+    pointer-events: none;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+.table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+.table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.table tr:hover {
+    background-color: #f1f1f1;
+}
+.table td:first-child {
+    width: 5%;
+}
+
 
 
 

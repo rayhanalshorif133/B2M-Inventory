@@ -2,24 +2,27 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Dashboard') }}</div>
-
-                    <div class="card-body">
-                        @if (Auth::check())
-                            {{ Auth::user()->roles[0]->name }}
-                        @endif
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
+        <div class="row justify-content-center py-2">
+            <div class="col-md-3">
+                <div class="card text-white bg-primary shadow-lg mb-3" style="width: 18rem;">
+                    <div class="card-body text-center">
+                        <i class="fa-solid fa-users fa-3x mb-2"></i>
+                        <h5 class="card-title">User Count</h5>
+                        <p class="card-text display-5 fw-bold">1,245</p>
                     </div>
                 </div>
             </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-success shadow-lg mb-3" style="width: 18rem;">
+                <div class="card-body text-center">
+                    <i class="fa-solid fa-box fa-3x mb-2"></i>
+                    <h5 class="card-title">Product Count</h5>
+                    <p class="card-text display-5 fw-bold">675</p>
+                </div>
+                </div>
+            </div>
         </div>
+
+
     </div>
 @endsection
