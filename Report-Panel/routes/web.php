@@ -3,6 +3,7 @@
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,5 +19,14 @@ use App\Http\Controllers\HomeController;
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
 
-Route::get('/login', [LoginController::class, 'login'])->name('login');
+Route::match(['get', 'post'], '/login', [LoginController::class, 'login'])->name('login');
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+
+
+    Route::prefix('/user')->name('user.')->group(function () {
+        Route::get('/logs', [UserController::class, 'userLogs'])->name('logs');
+    });
+
+});
