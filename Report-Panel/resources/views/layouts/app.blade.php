@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
@@ -41,9 +42,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item sub-item" href="#"><i class="fa-solid fa-angle-right"></i>
-                                    Guest
-                                    User Activites</a>
+                                <a class="dropdown-item sub-item" href="{{ route('admin.user.guest-activites') }}"><i class="fa-solid fa-angle-right"></i>
+                                    Guest User Activites</a>
                             </li>
                         </ul>
                     </li>
@@ -103,7 +103,26 @@
         $(document).on('click', '.sub-item', function(e) {
             window.location.href = $(this).attr('href');
         });
+
+        
+        function formatDuration(timeString) {
+            const duration = moment.duration(moment.utc(timeString, "HH:mm:ss").diff(moment.utc().startOf('day')));
+
+            const hours = duration.hours();
+            const minutes = duration.minutes();
+            const seconds = duration.seconds();
+
+            if (hours > 0) {
+                return `${hours} hr ${minutes} min ${seconds} sec`;
+            } else if (minutes > 0) {
+                return `${minutes} min ${seconds} sec`;
+            } else {
+                return `${seconds} sec`;
+            }
+        }
     </script>
+
+    
 
     @stack('scripts')
 </body>

@@ -27,6 +27,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::prefix('/user')->name('user.')->group(function () {
         Route::get('/logs', [UserController::class, 'userLogs'])->name('logs');
+        Route::get('/guest-activites', [UserController::class, 'guestActivites'])->name('guest-activites');
     });
 
 });

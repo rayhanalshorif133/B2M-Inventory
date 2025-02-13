@@ -96,9 +96,8 @@
                     },
                     {
                         render: function(data, type, row) {
-                            console.log(row)
-
-                            return row.last_login_time + ' ' + row.last_login_date;
+                            return moment(row.created_at).format('LT') + ' ' + moment(row.created_at).format('ll');
+                            // row.last_login_time + ' ' + row.last_login_date;
                         },
                         targets: 0,
                     },
