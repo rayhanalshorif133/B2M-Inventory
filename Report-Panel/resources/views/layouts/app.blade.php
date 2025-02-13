@@ -55,6 +55,10 @@
                         <p style="margin: auto 5px">{{ Auth::user()->name }}</p>
                     </div>
                     <div class="drop-container">
+                        <a class="dropdown-item" href="{{ route('admin.profile') }}">
+                            <i class="bx bx-power-off me-2"></i>
+                            <span class="align-middle">Profile</span>
+                        </a>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="bx bx-power-off me-2"></i>
@@ -71,6 +75,7 @@
 
 
     <div class="container">
+
         @yield('content')
     </div>
 

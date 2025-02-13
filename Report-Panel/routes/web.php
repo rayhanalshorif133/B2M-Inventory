@@ -21,13 +21,17 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 
 Route::match(['get', 'post'], '/login', [LoginController::class, 'login'])->name('login');
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
 
     Route::prefix('/user')->name('user.')->group(function () {
         Route::get('/logs', [UserController::class, 'userLogs'])->name('logs');
         Route::get('/guest-activites', [UserController::class, 'guestActivites'])->name('guest-activites');
+    });
+
+    Route::prefix('/')->group(function () {
+        Route::match(['get', 'post'], '/profile', [LoginController::class, 'profile'])->name('profile');
     });
 
 });

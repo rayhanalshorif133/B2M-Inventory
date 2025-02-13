@@ -77,21 +77,33 @@ nav ul li a:hover{
 }
 
 .user_profile_container .drop-container{
-    background: #e6e6e6;
+    background: #f2f2f2;
     position: absolute;
     top: 100%;
     right: -10rem;
     height: auto;
     width: auto;
     transition: all ease-in-out 0.2s;
+    border-radius: 5px;
+    border: #ddd solid 1px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .user_profile_container:hover .drop-container {
     right: 0; /* Adjust this as needed */
 }
 
-.drop-container:hover{
-    background-color: #6750ff;
+.drop-container .dropdown-item:hover{
+    background-color: #5425d6;
+    color: #ffffff;
+}
+
+.passIconBtn{
+    border: 1px solid #CED4DA;
+}
+
+.passIconBtn:hover{
+    background-color: #e8e8e8;
 }
 
 
