@@ -8,6 +8,7 @@
 
 body {
     background: #F5F7FB;
+    overflow: hidden;
 }
 
 
@@ -68,6 +69,29 @@ nav ul li a:hover{
 }
 .table td:first-child {
     width: 5%;
+}
+
+.user_profile_container{
+    position: relative;
+    right: 5px;
+}
+
+.user_profile_container .drop-container{
+    background: #e6e6e6;
+    position: absolute;
+    top: 100%;
+    right: -10rem;
+    height: auto;
+    width: auto;
+    transition: all ease-in-out 0.2s;
+}
+
+.user_profile_container:hover .drop-container {
+    right: 0; /* Adjust this as needed */
+}
+
+.drop-container:hover{
+    background-color: #6750ff;
 }
 
 

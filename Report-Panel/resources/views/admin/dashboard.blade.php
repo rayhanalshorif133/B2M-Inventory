@@ -16,8 +16,8 @@
                 <div class="card text-white bg-success shadow-lg mb-3" style="width: 18rem;">
                     <div class="card-body text-center">
                         <i class="fa-solid fa-person-walking-arrow-loop-left fa-3x mb-2"></i>
-                        <h5 class="card-title">User Acivity Count</h5>
-                        <p class="card-text display-5 fw-bold">675</p>
+                        <h5 class="card-title">Guest User Acivity Count</h5>
+                        <p class="card-text display-5 fw-bold">{{ $user_acivity }}</p>
                     </div>
                 </div>
             </div>

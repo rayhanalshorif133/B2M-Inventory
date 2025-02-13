@@ -42,23 +42,28 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item sub-item" href="{{ route('admin.user.guest-activites') }}"><i class="fa-solid fa-angle-right"></i>
+                                <a class="dropdown-item sub-item" href="{{ route('admin.user.guest-activites') }}"><i
+                                        class="fa-solid fa-angle-right"></i>
                                     Guest User Activites</a>
                             </li>
                         </ul>
                     </li>
                 </ul>
-                <div class="d-flex align-items-center cursor-pointer">
-                    <i class="fa-solid fa-user" style="font-size: 20px"></i>
-                    <p style="margin: auto 5px">{{ Auth::user()->name }}</p>
-                    <a class="dropdown-item" href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="bx bx-power-off me-2"></i>
-                        <span class="align-middle">Log Out</span>
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
+                <div class="d-flex align-items-center user_profile_container cursor-pointer dropdown">
+                    <div class="d-flex userProfileBtn">
+                        <i class="fa-solid fa-user" style="font-size: 20px"></i>
+                        <p style="margin: auto 5px">{{ Auth::user()->name }}</p>
+                    </div>
+                    <div class="drop-container">
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="bx bx-power-off me-2"></i>
+                            <span class="align-middle">Log Out</span>
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -104,7 +109,7 @@
             window.location.href = $(this).attr('href');
         });
 
-        
+
         function formatDuration(timeString) {
             const duration = moment.duration(moment.utc(timeString, "HH:mm:ss").diff(moment.utc().startOf('day')));
 
@@ -122,7 +127,7 @@
         }
     </script>
 
-    
+
 
     @stack('scripts')
 </body>

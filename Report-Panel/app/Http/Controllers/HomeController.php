@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Campaign;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Models\VisitLogDetail;
 use App\Models\UserLog;
 
 class HomeController extends Controller
@@ -28,6 +28,7 @@ class HomeController extends Controller
     public function dashboard()
     {
         $user_logs = UserLog::all()->count();
-        return view('admin.dashboard', compact('user_logs'));
+        $user_acivity = VisitLogDetail::all()->count();
+        return view('admin.dashboard', compact('user_logs','user_acivity'));
     }
 }
